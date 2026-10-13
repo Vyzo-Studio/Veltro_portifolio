@@ -53,6 +53,8 @@ let selectedDate = null;
 let selectedTime = null;
 
 let blockedSlots = new Map();
+let availabilityState = "idle";
+let availabilityRequestId = 0;
 
 let bookingRequestInProgress = false;
 
@@ -2935,6 +2937,7 @@ function hasAvailableTime(
   dateKey
 ) {
   if (
+    availabilityState !== "ready" ||
     !selectedBarberId ||
     !bookingService ||
     !bookingService.value
@@ -2991,127 +2994,95 @@ function showSelectionRequiredState(
 }
 
 async function loadBookedSlots() {
-  if (
-    !bookingService ||
-    !bookingService.value
-  ) {
+  const requestId = ++availabilityRequestId;
+  const service = bookingService ? bookingService.value : "";
+  const barberId = selectedBarberId;
+
+  if (!service || !barberId) {
+    availabilityState = "idle";
     clearBlockedSlots();
-
     showSelectionRequiredState(
-      "Escolha um serviço para visualizar a disponibilidade."
+      !service
+        ? "Escolha um serviço para visualizar a disponibilidade."
+        : "Escolha um barbeiro para visualizar a disponibilidade."
     );
-
     updateSubmitState();
-
     syncMobileBookingFlow();
-
-    return;
+    return false;
   }
 
-  if (
-    !selectedBarberId
-  ) {
-    clearBlockedSlots();
-
-    showSelectionRequiredState(
-      "Escolha um barbeiro para visualizar a disponibilidade."
-    );
-
-    updateSubmitState();
-
-    syncMobileBookingFlow();
-
-    return;
-  }
+  availabilityState = "loading";
+  updateSubmitState();
 
   try {
-    const today =
-      getTodayDate();
-
-    const finalDate =
-      addDays(
-        today,
-        BOOKING_DAYS_COUNT - 1
-      );
-
-    const data =
-      await supabaseRpc(
-        "get_public_unavailable_slots_by_barber",
-        {
-          p_barber_id:
-            selectedBarberId,
-
-          p_service:
-            bookingService.value,
-
-          p_start_date:
-            dateToKey(
-              today
-            ),
-
-          p_end_date:
-            dateToKey(
-              finalDate
-            )
-        }
-      );
-
-    clearBlockedSlots();
+    const today = getTodayDate();
+    const finalDate = addDays(today, BOOKING_DAYS_COUNT - 1);
+    const data = await supabaseRpc("get_public_unavailable_slots_by_barber", {
+      p_barber_id: barberId,
+      p_service: service,
+      p_start_date: dateToKey(today),
+      p_end_date: dateToKey(finalDate)
+    });
 
     if (
-      Array.isArray(
-        data
-      )
+      requestId !== availabilityRequestId ||
+      selectedBarberId !== barberId ||
+      !bookingService ||
+      bookingService.value !== service
     ) {
-      data.forEach(
-        function (item) {
-          addBlockedSlot(
-            item.booking_date,
-            normalizeDatabaseTime(
-              item.booking_time
-            )
-          );
-        }
-      );
+      return false;
     }
+
+    if (!Array.isArray(data)) {
+      throw new Error("Resposta de disponibilidade inválida.");
+    }
+
+    const nextBlockedSlots = new Map();
+
+    data.forEach(function (item) {
+      if (!item || typeof item.booking_date !== "string" || !item.booking_time) {
+        throw new Error("Horário inválido recebido do servidor.");
+      }
+
+      const date = item.booking_date;
+      const time = normalizeDatabaseTime(item.booking_time);
+      if (!nextBlockedSlots.has(date)) {
+        nextBlockedSlots.set(date, new Set());
+      }
+      nextBlockedSlots.get(date).add(time);
+    });
+
+    blockedSlots = nextBlockedSlots;
+    availabilityState = "ready";
 
     if (
       selectedDate &&
-      selectedTime
+      selectedTime &&
+      isSlotBlocked(dateToKey(selectedDate), selectedTime)
     ) {
-      const dateKey =
-        dateToKey(
-          selectedDate
-        );
-
-      if (
-        isSlotBlocked(
-          dateKey,
-          selectedTime
-        )
-      ) {
-        selectedTime =
-          null;
-
-        updateTimeSummary();
-      }
+      selectedTime = null;
+      updateTimeSummary();
     }
 
     updateSubmitState();
-
     syncMobileBookingFlow();
-
+    return true;
   } catch (error) {
-    console.error(
-      "Erro ao carregar horários ocupados:",
-      error
-    );
+    if (requestId !== availabilityRequestId) {
+      return false;
+    }
 
+    console.error("Erro ao carregar horários ocupados:", error);
+    availabilityState = "error";
+    selectedTime = null;
     clearBlockedSlots();
-
+    updateTimeSummary();
     showSelectionRequiredState(
-      "Não foi possível carregar a disponibilidade. Atualize a página e tente novamente."
+      "Não foi possível verificar a disponibilidade. Aguarde e tente novamente."
     );
+    updateSubmitState();
+    syncMobileBookingFlow();
+    return false;
   }
 }
 
@@ -3219,6 +3190,7 @@ function updateSubmitState() {
       : "";
 
   bookingSubmit.disabled =
+    availabilityState !== "ready" ||
     bookingRequestInProgress ||
     !bookingService.value ||
     !selectedBarberId ||
@@ -3297,6 +3269,15 @@ function renderDays() {
       "Escolha um barbeiro para visualizar a disponibilidade."
     );
 
+    return;
+  }
+
+  if (availabilityState !== "ready") {
+    showSelectionRequiredState(
+      availabilityState === "error"
+        ? "Não foi possível verificar a disponibilidade. Tente novamente em instantes."
+        : "Carregando disponibilidade..."
+    );
     return;
   }
 
@@ -3548,6 +3529,16 @@ function renderTimes() {
     return;
   }
 
+  if (availabilityState !== "ready") {
+    bookingTimes.innerHTML =
+      '<div class="booking-empty">' +
+      (availabilityState === "error"
+        ? "Não foi possível verificar os horários. Tente novamente."
+        : "Carregando horários...") +
+      "</div>";
+    return;
+  }
+
   if (
     !selectedDate
   ) {
@@ -3696,6 +3687,7 @@ function selectTime(
   button
 ) {
   if (
+    availabilityState !== "ready" ||
     !selectedDate ||
     !selectedBarberId ||
     !bookingService.value
@@ -3778,6 +3770,8 @@ async function handleBarberChange() {
   selectedTime =
     null;
 
+  availabilityRequestId += 1;
+  availabilityState = "idle";
   clearBlockedSlots();
 
   updateBarberSummary();
@@ -3824,13 +3818,10 @@ async function handleBarberChange() {
     "Carregando horários..." +
     "</div>";
 
-  await loadBookedSlots();
-
-  renderDays();
-
-  advanceMobileBookingFlow(
-    true
-  );
+  if (await loadBookedSlots()) {
+    renderDays();
+    advanceMobileBookingFlow(true);
+  }
 }
 
 async function handleServiceChange() {
@@ -3848,6 +3839,8 @@ async function handleServiceChange() {
 
   updateTimeSummary();
 
+  availabilityRequestId += 1;
+  availabilityState = "idle";
   clearBlockedSlots();
 
   if (
@@ -3893,13 +3886,10 @@ async function handleServiceChange() {
     "Atualizando horários..." +
     "</div>";
 
-  await loadBookedSlots();
-
-  renderDays();
-
-  advanceMobileBookingFlow(
-    true
-  );
+  if (await loadBookedSlots()) {
+    renderDays();
+    advanceMobileBookingFlow(true);
+  }
 }
 
 function findServiceOption(
@@ -4120,191 +4110,135 @@ function sendWhatsappToWindow(
   link.remove();
 }
 
-async function submitBooking() {
-  const customerName =
-    bookingCustomerName
-      ? bookingCustomerName
-          .value
-          .trim()
-      : "";
+function showBookingFeedback(message, type, whatsappUrl = "") {
+  if (!bookingSubmit || !bookingSubmit.parentElement) return;
 
-  const customerPhone =
-    bookingCustomerPhone
-      ? bookingCustomerPhone.value
-      : "";
+  let feedback = document.getElementById("booking-feedback");
+  if (!feedback) {
+    feedback = document.createElement("div");
+    feedback.id = "booking-feedback";
+    feedback.className = "booking-feedback";
+    feedback.setAttribute("role", "status");
+    feedback.setAttribute("aria-live", "polite");
+    bookingSubmit.insertAdjacentElement("afterend", feedback);
+  }
+
+  feedback.replaceChildren();
+  feedback.hidden = !message;
+  feedback.classList.toggle("is-success", type === "success");
+  feedback.classList.toggle("is-error", type === "error");
+
+  if (!message) return;
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = message;
+  feedback.appendChild(paragraph);
+
+  if (whatsappUrl) {
+    const link = document.createElement("a");
+    link.href = whatsappUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Abrir conversa no WhatsApp";
+    feedback.appendChild(link);
+  }
+}
+
+async function submitBooking() {
+  const customerName = bookingCustomerName ? bookingCustomerName.value.trim() : "";
+  const customerPhone = bookingCustomerPhone ? bookingCustomerPhone.value : "";
 
   if (
     bookingRequestInProgress ||
+    availabilityState !== "ready" ||
     !bookingService ||
     !bookingService.value ||
     !selectedBarberId ||
     !selectedDate ||
     !selectedTime ||
-    !isValidName(
-      customerName
-    ) ||
-    !isValidPhone(
-      customerPhone
-    )
+    !isValidName(customerName) ||
+    !isValidPhone(customerPhone)
   ) {
     return;
   }
 
-  const bookingDate =
-    dateToKey(
-      selectedDate
-    );
-
-  if (
-    isSlotBlocked(
-      bookingDate,
-      selectedTime
-    )
-  ) {
-    alert(
-      "Esse horário acabou de ser ocupado. Escolha outro horário."
-    );
-
-    await loadBookedSlots();
-
-    renderDays();
-
+  const bookingDate = dateToKey(selectedDate);
+  if (isSlotBlocked(bookingDate, selectedTime)) {
+    alert("Esse horário acabou de ser ocupado. Escolha outro horário.");
+    if (await loadBookedSlots()) renderDays();
     return;
   }
 
-  const whatsappMessage =
-    buildWhatsappMessage();
-
-  if (
-    !whatsappMessage
-  ) {
-    alert(
-      "Não foi possível montar a mensagem do WhatsApp. Revise os dados e tente novamente."
-    );
-
+  const whatsappMessage = buildWhatsappMessage();
+  if (!whatsappMessage) {
+    alert("Confira os dados antes de confirmar o agendamento.");
     return;
   }
 
-  const whatsappUrl =
-    buildWhatsappUrlFromMessage(
-      whatsappMessage
-    );
+  const whatsappUrl = buildWhatsappUrlFromMessage(whatsappMessage);
+  const whatsappWindow = prepareWhatsappWindow();
+  bookingRequestInProgress = true;
+  showBookingFeedback("", "");
 
-  const whatsappWindow =
-    prepareWhatsappWindow();
-
-  bookingRequestInProgress =
-    true;
-
-  const originalText =
-    bookingSubmit
-      ? bookingSubmit.textContent
-      : "";
-
-  if (
-    bookingSubmit
-  ) {
-    bookingSubmit.disabled =
-      true;
-
-    bookingSubmit.textContent =
-      "Reservando horário...";
-  }
+  const originalText = bookingSubmit ? bookingSubmit.textContent : "";
+  if (bookingSubmit) bookingSubmit.textContent = "Registrando solicitação...";
+  updateSubmitState();
+  let bookingCreated = false;
 
   try {
-    await supabaseRpc(
-      "create_booking_request_by_barber",
-      {
-        p_customer_name:
-          customerName,
+    await supabaseRpc("create_booking_request_by_barber", {
+      p_customer_name: customerName,
+      p_customer_phone: digitsOnly(customerPhone),
+      p_service: bookingService.value,
+      p_barber_id: selectedBarberId,
+      p_booking_date: bookingDate,
+      p_booking_time: selectedTime
+    });
+    bookingCreated = true;
 
-        p_customer_phone:
-          digitsOnly(
-            customerPhone
-          ),
-
-        p_service:
-          bookingService.value,
-
-        p_barber_id:
-          selectedBarberId,
-
-        p_booking_date:
-          bookingDate,
-
-        p_booking_time:
-          selectedTime
-      }
-    );
-
-    sendWhatsappToWindow(
-      whatsappWindow,
+    showBookingFeedback(
+      "Solicitação registrada! Seu horário ainda precisa ser confirmado pela barbearia. Se o WhatsApp não abrir, use o link abaixo.",
+      "success",
       whatsappUrl
     );
 
-    await loadBookedSlots();
+    try {
+      sendWhatsappToWindow(whatsappWindow, whatsappUrl);
+    } catch (error) {
+      console.warn("A solicitação foi registrada, mas o WhatsApp não abriu:", error);
+      if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
+    }
 
-    selectedTime =
-      null;
-
+    selectedTime = null;
     updateTimeSummary();
-
-    renderDays();
-
+    if (await loadBookedSlots()) renderDays();
     updateSubmitState();
-
-    advanceMobileBookingFlow(
-      false
-    );
-
+    advanceMobileBookingFlow(false);
   } catch (error) {
-    if (
-      whatsappWindow &&
-      !whatsappWindow.closed
-    ) {
-      whatsappWindow.close();
+    if (bookingCreated) {
+      console.error("Falha após o registro da solicitação:", error);
+      showBookingFeedback(
+        "Sua solicitação foi registrada. Caso o WhatsApp não tenha aberto, use o link abaixo.",
+        "success",
+        whatsappUrl
+      );
+    } else {
+      if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
+      console.error("Não foi possível registrar o agendamento:", error);
+      showBookingFeedback(
+        "Não foi possível registrar sua solicitação. Confira a disponibilidade e tente novamente.",
+        "error"
+      );
+      selectedTime = null;
+      updateTimeSummary();
+      if (await loadBookedSlots()) renderDays();
     }
-
-    await loadBookedSlots();
-
-    renderDays();
-
-    const message =
-      error &&
-      error.message
-        ? error.message
-        : "Não foi possível reservar esse horário.";
-
-    alert(
-      message +
-      "\n\nRevise os dados ou escolha outro horário e tente novamente."
-    );
-
-    selectedTime =
-      null;
-
-    updateTimeSummary();
-
-    renderTimes();
-
-    advanceMobileBookingFlow(
-      false
-    );
-
   } finally {
-    bookingRequestInProgress =
-      false;
-
-    if (
-      bookingSubmit
-    ) {
-      bookingSubmit.textContent =
-        originalText ||
-        "Confirmar pelo WhatsApp";
+    bookingRequestInProgress = false;
+    if (bookingSubmit) {
+      bookingSubmit.textContent = originalText || "Confirmar pelo WhatsApp";
     }
-
     updateSubmitState();
-
     syncMobileBookingFlow();
   }
 }
@@ -4477,9 +4411,9 @@ async function refreshAvailability() {
     return;
   }
 
-  await loadBookedSlots();
-
-  renderDays();
+  if (await loadBookedSlots()) {
+    renderDays();
+  }
 }
 
 function refreshDeviceSettings() {

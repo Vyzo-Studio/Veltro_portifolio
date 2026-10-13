@@ -1126,18 +1126,25 @@
       error
     } =
       await client.rpc(
-        "admin_list_active_pending_bookings"
+        "admin_list_active_pending_bookings_v2"
       );
 
     if (error) {
       throw error;
     }
 
-    return Array.isArray(
-      data
-    )
-      ? data
-      : [];
+    if (!Array.isArray(data)) {
+      throw new Error("Resposta de agendamentos inválida.");
+    }
+
+    return data.map(function (booking) {
+      return {
+        ...booking,
+        service: booking.barber_name
+          ? booking.service + " • " + booking.barber_name
+          : booking.service
+      };
+    });
   }
 
   async function pollPendingBookings() {
