@@ -7,7 +7,6 @@
   let blockSlotBarber = null;
   let originalRenderBookings = null;
   let originalOpenBookingModal = null;
-  let originalClientRpc = null;
 
   function getClient() {
     return window.supabaseClient || null;
@@ -109,40 +108,6 @@
       console.error("Erro ao carregar barbeiros no painel:", error);
       setMessage(adminGlobalMessage, "Não foi possível carregar os barbeiros.", "error");
     }
-  }
-
-  function patchNotificationRpc() {
-    const client = getClient();
-    if (!client || client.__gngBarberRpcPatched) return;
-
-    originalClientRpc = client.rpc.bind(client);
-
-    client.rpc = async function (functionName, payload, options) {
-      if (functionName === "admin_list_active_pending_bookings") {
-        const result = await originalClientRpc(
-          "admin_list_active_pending_bookings_v2",
-          payload,
-          options
-        );
-
-        if (!result.error && Array.isArray(result.data)) {
-          result.data = result.data.map(function (booking) {
-            return {
-              ...booking,
-              service: booking.barber_name
-                ? booking.service + " • " + booking.barber_name
-                : booking.service
-            };
-          });
-        }
-
-        return result;
-      }
-
-      return originalClientRpc(functionName, payload, options);
-    };
-
-    client.__gngBarberRpcPatched = true;
   }
 
   function patchBookingData() {
@@ -256,9 +221,19 @@
 
   function patchAvailability() {
     refreshTimeSelectAvailability = async function (select, dateKey) {
-      if (!select || !dateKey) return;
+      if (!select) return;
+      if (!dateKey) {
+        markSelectWaiting(select, "Escolha uma data");
+        return;
+      }
 
+      const requestId = String(Number(select.dataset.availabilityRequestId || 0) + 1);
+      select.dataset.availabilityRequestId = requestId;
       const selectedValue = select.value;
+      const requestedBarber = select === manualBookingTime
+        ? (manualBarber ? manualBarber.value : "")
+        : (blockSlotBarber ? blockSlotBarber.value : "");
+      const requestedService = manualService ? manualService.value : "";
       let slots = [];
 
       try {
@@ -301,10 +276,22 @@
           return;
         }
 
+        if (select.dataset.availabilityRequestId !== requestId) return;
+        if (select === manualBookingTime && (
+          (manualBookingDate && manualBookingDate.value !== dateKey) ||
+          !manualBarber || manualBarber.value !== requestedBarber ||
+          !manualService || manualService.value !== requestedService
+        )) return;
+        if (select === blockSlotTime && (
+          (blockSlotDate && blockSlotDate.value !== dateKey) ||
+          (blockSlotBarber && blockSlotBarber.value !== requestedBarber)
+        )) return;
+
+        if (!Array.isArray(slots)) {
+          throw new Error("Resposta de disponibilidade inválida.");
+        }
         const occupied = new Set(
-          Array.isArray(slots)
-            ? slots.map(function (item) { return normalizeTime(item.booking_time); })
-            : []
+          slots.map(function (item) { return normalizeTime(item.booking_time); })
         );
 
         const today = getTodayKey();
@@ -329,7 +316,9 @@
 
         select.value = selectedOption && !selectedOption.disabled ? selectedValue : "";
       } catch (error) {
+        if (select.dataset.availabilityRequestId !== requestId) return;
         console.error("Erro ao carregar disponibilidade por barbeiro:", error);
+        markSelectWaiting(select, "Falha ao carregar horários");
       }
     };
 
@@ -343,9 +332,13 @@
     };
   }
 
+  let manualBookingInProgress = false;
+  let blockSlotInProgress = false;
+
   async function handleManualBookingByBarber(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
+    if (manualBookingInProgress) return;
 
     if (!manualCustomerName || !manualCustomerPhone || !manualService || !manualBarber || !manualBookingDate || !manualBookingTime) return;
 
@@ -371,7 +364,8 @@
       danger: false
     });
 
-    if (!confirmed) return;
+    if (!confirmed || manualBookingInProgress) return;
+    manualBookingInProgress = true;
 
     const originalText = manualBookingSubmit ? manualBookingSubmit.textContent : "";
     setButtonLoading(manualBookingSubmit, true, "CRIANDO...");
@@ -403,6 +397,7 @@
     } catch (error) {
       setMessage(manualBookingMessage, error.message, "error");
     } finally {
+      manualBookingInProgress = false;
       setButtonLoading(manualBookingSubmit, false, "", originalText || "CRIAR AGENDAMENTO");
     }
   }
@@ -455,6 +450,7 @@
   async function handleBlockSlotByBarber(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
+    if (blockSlotInProgress) return;
 
     if (!blockSlotDate || !blockSlotTime) return;
 
@@ -476,7 +472,8 @@
       danger: false
     });
 
-    if (!confirmed) return;
+    if (!confirmed || blockSlotInProgress) return;
+    blockSlotInProgress = true;
 
     const originalText = blockSlotSubmit ? blockSlotSubmit.textContent : "";
     setButtonLoading(blockSlotSubmit, true, "BLOQUEANDO...");
@@ -499,6 +496,7 @@
     } catch (error) {
       setMessage(blockSlotMessage, error.message, "error");
     } finally {
+      blockSlotInProgress = false;
       setButtonLoading(blockSlotSubmit, false, "", originalText || "BLOQUEAR HORÁRIO");
     }
   }
@@ -559,7 +557,6 @@
     }
 
     injectBarberFields();
-    patchNotificationRpc();
     patchBookingData();
     patchBookingRendering();
     patchAvailability();
