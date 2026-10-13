@@ -123,13 +123,13 @@ function loadScriptOnce({ src, dataAttribute, errorMessage }) {
 async function loadAdminModules() {
   try {
     await loadScriptOnce({
-      src: "admin-barbers.js?v=1.2",
+      src: "admin-barbers.js?v=1.3",
       dataAttribute: "data-gng-admin-barbers",
       errorMessage: "Não foi possível carregar o módulo de barbeiros."
     });
 
     await loadScriptOnce({
-      src: "admin-notifications.js?v=3.0",
+      src: "admin-notifications.js?v=3.1",
       dataAttribute: "data-gng-admin-notifications",
       errorMessage: "Não foi possível carregar o sistema de notificações."
     });
