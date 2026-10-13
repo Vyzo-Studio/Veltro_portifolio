@@ -2901,3 +2901,18 @@ input:focus-visible {
     animation: none !important;
   }
 }
+
+.booking-feedback {
+  margin-top: 14px;
+  border: 1px solid var(--border, #ccd5df);
+  border-radius: 12px;
+  padding: 14px 16px;
+  line-height: 1.5;
+}
+.booking-feedback[hidden] { display: none; }
+.booking-feedback p { margin: 0 0 8px; }
+.booking-feedback p:last-child { margin-bottom: 0; }
+.booking-feedback.is-success { border-color: #267a50; background: #edf8f0; color: #174d32; }
+.booking-feedback.is-error { border-color: #c64c42; background: #fff1f0; color: #832a23; }
+.booking-feedback a { color: inherit; text-decoration: underline; font-weight: 700; }
+.booking-feedback a:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
