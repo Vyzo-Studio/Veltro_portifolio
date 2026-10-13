@@ -1116,35 +1116,51 @@ function timeToMinutes(
   );
 }
 
-async function rpc(
-  functionName,
-  payload = {}
-) {
-  if (
-    !supabaseClient
-  ) {
-    throw new Error(
-      "O Supabase não foi iniciado."
-    );
+const bookingMutationsInProgress = new Map();
+const bookingMutationNames = new Set([
+  "admin_confirm_booking",
+  "admin_reject_booking",
+  "admin_cancel_booking",
+  "admin_refund_booking",
+  "admin_complete_booking"
+]);
+
+async function rpc(functionName, payload = {}) {
+  if (!supabaseClient) {
+    throw new Error("O Supabase não foi iniciado.");
   }
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.rpc(
-      functionName,
-      payload
-    );
+  const bookingId = payload && payload.p_booking_id;
+  const mutationKey = bookingId && bookingMutationNames.has(functionName)
+    ? String(bookingId)
+    : null;
 
-  if (error) {
-    throw new Error(
-      error.message ||
-      "Não foi possível concluir a operação."
-    );
+  if (mutationKey && bookingMutationsInProgress.has(mutationKey)) {
+    const existing = bookingMutationsInProgress.get(mutationKey);
+    if (existing.functionName === functionName) return existing.promise;
+    throw new Error("Aguarde a conclusão da operação em andamento para este agendamento.");
   }
 
-  return data;
+  const operation = (async function () {
+    const { data, error } = await supabaseClient.rpc(functionName, payload);
+    if (error) {
+      throw new Error(error.message || "Não foi possível concluir a operação.");
+    }
+    return data;
+  })();
+
+  if (!mutationKey) return operation;
+
+  bookingMutationsInProgress.set(mutationKey, {
+    functionName,
+    promise: operation
+  });
+
+  try {
+    return await operation;
+  } finally {
+    bookingMutationsInProgress.delete(mutationKey);
+  }
 }
 
 function showLogin() {
@@ -3125,7 +3141,7 @@ async function refundBooking(
           formatMoney(
             booking.service_amount_cents
           ) +
-          " será removido do faturamento.",
+          " será removido do faturamento. Esta ação não devolve dinheiro automaticamente ao cliente.",
 
         actionLabel:
           "ESTORNAR",
@@ -3152,7 +3168,7 @@ async function refundBooking(
 
     setMessage(
       adminGlobalMessage,
-      "Pagamento estornado com sucesso.",
+      "Estorno registrado no sistema. Confirme separadamente a devolução do valor ao cliente.",
       "success"
     );
 
