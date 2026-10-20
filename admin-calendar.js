@@ -596,10 +596,13 @@
     input.setAttribute("aria-hidden", "true");
     input.tabIndex = -1;
 
+    let adjustedClosedDay = false;
+
     if (input.value) {
       const current = keyToDate(input.value);
       if (current && isSunday(current)) {
         input.value = dateToKey(nextBusinessDay(current));
+        adjustedClosedDay = true;
       }
     }
 
@@ -637,6 +640,13 @@
     input.addEventListener("change", function () {
       trigger.textContent = formatTriggerValue(input.value);
     });
+
+    if (adjustedClosedDay) {
+      window.setTimeout(function () {
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      }, 0);
+    }
   }
 
   function enhanceAll() {
