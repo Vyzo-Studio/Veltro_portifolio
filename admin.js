@@ -432,6 +432,90 @@ const paymentOptions =
     )
   );
 
+const paymentBookingService =
+  document.getElementById(
+    "payment-booking-service"
+  );
+
+const paymentBookingTotal =
+  document.getElementById(
+    "payment-booking-total"
+  );
+
+const paymentModeButtons =
+  Array.from(
+    document.querySelectorAll(
+      "[data-payment-mode]"
+    )
+  );
+
+const paymentSinglePanel =
+  document.getElementById(
+    "payment-single-panel"
+  );
+
+const paymentSplitPanel =
+  document.getElementById(
+    "payment-split-panel"
+  );
+
+const paymentSingleConfirm =
+  document.getElementById(
+    "payment-single-confirm"
+  );
+
+const paymentSingleCashBox =
+  document.getElementById(
+    "payment-single-cash-box"
+  );
+
+const paymentSingleCashReceived =
+  document.getElementById(
+    "payment-single-cash-received"
+  );
+
+const paymentSingleCashChange =
+  document.getElementById(
+    "payment-single-cash-change"
+  );
+
+const paymentSplitInputs =
+  Array.from(
+    document.querySelectorAll(
+      "[data-payment-split-input]"
+    )
+  );
+
+const paymentSplitDistributed =
+  document.getElementById(
+    "payment-split-distributed"
+  );
+
+const paymentSplitRemaining =
+  document.getElementById(
+    "payment-split-remaining"
+  );
+
+const paymentSplitCashBox =
+  document.getElementById(
+    "payment-split-cash-box"
+  );
+
+const paymentSplitCashReceived =
+  document.getElementById(
+    "payment-split-cash-received"
+  );
+
+const paymentSplitCashChange =
+  document.getElementById(
+    "payment-split-cash-change"
+  );
+
+const paymentSplitConfirm =
+  document.getElementById(
+    "payment-split-confirm"
+  );
+
 const adminConfirm =
   document.getElementById(
     "admin-confirm"
@@ -488,6 +572,12 @@ const state = {
   paymentBookingId:
     null,
 
+  paymentMode:
+    "single",
+
+  selectedPaymentMethod:
+    null,
+
   refreshing:
     false,
 
@@ -529,7 +619,10 @@ const PAYMENT_LABELS = {
     "Débito",
 
   credit:
-    "Crédito"
+    "Crédito",
+
+  split:
+    "Pagamento dividido"
 };
 
 function escapeHtml(value) {
@@ -911,6 +1004,159 @@ function formatMoney(
   );
 }
 
+function parseMoneyInputToCents(
+  value
+) {
+  let raw =
+    String(
+      value ?? ""
+    )
+      .trim()
+      .replace(
+        /\s/g,
+        ""
+      )
+      .replace(
+        /R\$/gi,
+        ""
+      );
+
+  if (!raw) {
+    return 0;
+  }
+
+  if (
+    raw.includes(
+      ","
+    )
+  ) {
+    raw =
+      raw
+        .replace(
+          /\./g,
+          ""
+        )
+        .replace(
+          ",",
+          "."
+        );
+  }
+
+  raw =
+    raw.replace(
+      /[^0-9.-]/g,
+      ""
+    );
+
+  const numeric =
+    Number(
+      raw
+    );
+
+  if (
+    !Number.isFinite(
+      numeric
+    ) ||
+    numeric <= 0
+  ) {
+    return 0;
+  }
+
+  return Math.round(
+    numeric * 100
+  );
+}
+
+function centsToInputValue(
+  cents
+) {
+  return (
+    Number(
+      cents || 0
+    ) / 100
+  )
+    .toFixed(
+      2
+    )
+    .replace(
+      ".",
+      ","
+    );
+}
+
+function getBookingPaymentDescription(
+  booking
+) {
+  const breakdown =
+    booking &&
+    booking.payment_breakdown &&
+    typeof booking.payment_breakdown ===
+      "object"
+      ? booking.payment_breakdown
+      : null;
+
+  if (breakdown) {
+    const parts =
+      [
+        "cash",
+        "pix",
+        "debit",
+        "credit"
+      ]
+        .map(
+          function (method) {
+            const amount =
+              Number(
+                breakdown[
+                  method
+                ] || 0
+              );
+
+            if (
+              amount <= 0
+            ) {
+              return null;
+            }
+
+            return (
+              PAYMENT_LABELS[
+                method
+              ] +
+              ": " +
+              formatMoney(
+                amount
+              )
+            );
+          }
+        )
+        .filter(
+          Boolean
+        );
+
+    if (
+      parts.length
+    ) {
+      return parts.join(
+        " + "
+      );
+    }
+  }
+
+  if (
+    booking &&
+    booking.payment_method
+  ) {
+    return (
+      PAYMENT_LABELS[
+        booking.payment_method
+      ] ||
+      booking.payment_method
+    );
+  }
+
+  return "Não informado";
+}
+
 function pluralize(
   count,
   singular,
@@ -1122,7 +1368,8 @@ const bookingMutationNames = new Set([
   "admin_reject_booking",
   "admin_cancel_booking",
   "admin_refund_booking",
-  "admin_complete_booking"
+  "admin_complete_booking",
+  "admin_complete_booking_split"
 ]);
 
 async function rpc(functionName, payload = {}) {
@@ -2272,7 +2519,7 @@ async function loadBookingsForDate(
 ) {
   const data =
     await rpc(
-      "admin_list_bookings",
+      "admin_list_bookings_v3",
       {
         p_booking_date:
           dateKey
@@ -2514,12 +2761,9 @@ function openBookingModal(
     booking.status;
 
   const paymentMethod =
-    booking.payment_method
-      ? PAYMENT_LABELS[
-          booking.payment_method
-        ] ||
-        booking.payment_method
-      : "Não informado";
+    getBookingPaymentDescription(
+      booking
+    );
 
   const paymentStatus =
     booking.payment_status ===
@@ -2626,6 +2870,44 @@ function openBookingModal(
               )}
             </strong>
           </div>
+
+          ${
+            Number(
+              booking.cash_received_cents || 0
+            ) > 0
+              ? `
+                <div class="booking-detail-item">
+                  <span>Valor entregue em dinheiro</span>
+                  <strong>
+                    ${escapeHtml(
+                      formatMoney(
+                        booking.cash_received_cents
+                      )
+                    )}
+                  </strong>
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            Number(
+              booking.change_cents || 0
+            ) > 0
+              ? `
+                <div class="booking-detail-item">
+                  <span>Troco entregue</span>
+                  <strong>
+                    ${escapeHtml(
+                      formatMoney(
+                        booking.change_cents
+                      )
+                    )}
+                  </strong>
+                </div>
+              `
+              : ""
+          }
 
           <div class="booking-detail-item">
             <span>Criado em</span>
@@ -2790,6 +3072,539 @@ function renderBookingModalActions(
     html;
 }
 
+function getActivePaymentBooking() {
+  if (
+    !state.paymentBookingId
+  ) {
+    return null;
+  }
+
+  return findBooking(
+    state.paymentBookingId
+  );
+}
+
+function getPaymentDueCents() {
+  const booking =
+    getActivePaymentBooking();
+
+  return booking
+    ? Math.max(
+        Number(
+          booking.service_amount_cents || 0
+        ),
+        1
+      )
+    : 0;
+}
+
+function setPaymentMode(
+  mode
+) {
+  state.paymentMode =
+    mode === "split"
+      ? "split"
+      : "single";
+
+  paymentModeButtons.forEach(
+    function (button) {
+      const active =
+        button.dataset.paymentMode ===
+        state.paymentMode;
+
+      button.classList.toggle(
+        "is-active",
+        active
+      );
+
+      button.setAttribute(
+        "aria-selected",
+        active
+          ? "true"
+          : "false"
+      );
+    }
+  );
+
+  if (
+    paymentSinglePanel
+  ) {
+    paymentSinglePanel.hidden =
+      state.paymentMode !==
+      "single";
+  }
+
+  if (
+    paymentSplitPanel
+  ) {
+    paymentSplitPanel.hidden =
+      state.paymentMode !==
+      "split";
+  }
+
+  if (
+    state.paymentMode ===
+    "single"
+  ) {
+    updateSinglePaymentState();
+  } else {
+    updateSplitPaymentState();
+  }
+}
+
+function resetPaymentModalForm() {
+  state.paymentMode =
+    "single";
+
+  state.selectedPaymentMethod =
+    null;
+
+  paymentOptions.forEach(
+    function (button) {
+      button.classList.remove(
+        "is-selected"
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        "false"
+      );
+    }
+  );
+
+  paymentSplitInputs.forEach(
+    function (input) {
+      input.value =
+        "";
+    }
+  );
+
+  if (
+    paymentSingleCashReceived
+  ) {
+    paymentSingleCashReceived.value =
+      "";
+  }
+
+  if (
+    paymentSplitCashReceived
+  ) {
+    paymentSplitCashReceived.value =
+      "";
+  }
+
+  if (
+    paymentSingleCashBox
+  ) {
+    paymentSingleCashBox.hidden =
+      true;
+  }
+
+  if (
+    paymentSplitCashBox
+  ) {
+    paymentSplitCashBox.hidden =
+      true;
+  }
+
+  if (
+    paymentSingleCashChange
+  ) {
+    paymentSingleCashChange.textContent =
+      "Selecione Dinheiro para calcular o troco.";
+
+    paymentSingleCashChange.className =
+      "payment-change-value";
+  }
+
+  if (
+    paymentSplitCashChange
+  ) {
+    paymentSplitCashChange.textContent =
+      "Informe o valor entregue pelo cliente.";
+
+    paymentSplitCashChange.className =
+      "payment-change-value";
+  }
+
+  if (
+    paymentSplitDistributed
+  ) {
+    paymentSplitDistributed.textContent =
+      formatMoney(
+        0
+      );
+  }
+
+  if (
+    paymentSplitRemaining
+  ) {
+    paymentSplitRemaining.textContent =
+      formatMoney(
+        getPaymentDueCents()
+      );
+
+    paymentSplitRemaining.className =
+      "payment-split-value";
+  }
+
+  if (
+    paymentSingleConfirm
+  ) {
+    paymentSingleConfirm.disabled =
+      true;
+  }
+
+  if (
+    paymentSplitConfirm
+  ) {
+    paymentSplitConfirm.disabled =
+      true;
+  }
+
+  setPaymentMode(
+    "single"
+  );
+}
+
+function updateCashChangeDisplay(
+  element,
+  cashDue,
+  cashReceived
+) {
+  if (!element) {
+    return false;
+  }
+
+  element.className =
+    "payment-change-value";
+
+  if (
+    cashDue <= 0
+  ) {
+    element.textContent =
+      "Nenhum valor em dinheiro.";
+
+    return true;
+  }
+
+  if (
+    cashReceived <= 0
+  ) {
+    element.textContent =
+      "Informe o valor entregue pelo cliente.";
+
+    return false;
+  }
+
+  if (
+    cashReceived <
+    cashDue
+  ) {
+    element.textContent =
+      "Faltam " +
+      formatMoney(
+        cashDue -
+          cashReceived
+      );
+
+    element.classList.add(
+      "is-error"
+    );
+
+    return false;
+  }
+
+  const change =
+    cashReceived -
+    cashDue;
+
+  if (
+    change === 0
+  ) {
+    element.textContent =
+      "Sem troco.";
+
+    element.classList.add(
+      "is-ok"
+    );
+
+    return true;
+  }
+
+  element.textContent =
+    "Troco: " +
+    formatMoney(
+      change
+    );
+
+  element.classList.add(
+    "is-change"
+  );
+
+  return true;
+}
+
+function selectSinglePaymentMethod(
+  method
+) {
+  if (
+    !PAYMENT_LABELS[
+      method
+    ] ||
+    method ===
+      "split"
+  ) {
+    return;
+  }
+
+  state.selectedPaymentMethod =
+    method;
+
+  paymentOptions.forEach(
+    function (button) {
+      const active =
+        button.dataset.paymentMethod ===
+        method;
+
+      button.classList.toggle(
+        "is-selected",
+        active
+      );
+
+      button.setAttribute(
+        "aria-pressed",
+        active
+          ? "true"
+          : "false"
+      );
+    }
+  );
+
+  updateSinglePaymentState();
+}
+
+function updateSinglePaymentState() {
+  const method =
+    state.selectedPaymentMethod;
+
+  const due =
+    getPaymentDueCents();
+
+  const cashSelected =
+    method ===
+    "cash";
+
+  if (
+    paymentSingleCashBox
+  ) {
+    paymentSingleCashBox.hidden =
+      !cashSelected;
+  }
+
+  let valid =
+    Boolean(
+      method
+    );
+
+  if (
+    cashSelected
+  ) {
+    if (
+      paymentSingleCashReceived &&
+      !paymentSingleCashReceived.value
+    ) {
+      paymentSingleCashReceived.value =
+        centsToInputValue(
+          due
+        );
+    }
+
+    const received =
+      parseMoneyInputToCents(
+        paymentSingleCashReceived
+          ? paymentSingleCashReceived.value
+          : ""
+      );
+
+    valid =
+      updateCashChangeDisplay(
+        paymentSingleCashChange,
+        due,
+        received
+      );
+  }
+
+  if (
+    paymentSingleConfirm
+  ) {
+    paymentSingleConfirm.disabled =
+      !valid;
+  }
+}
+
+function getSplitPayments() {
+  const payments = {
+    cash:
+      0,
+    pix:
+      0,
+    debit:
+      0,
+    credit:
+      0
+  };
+
+  paymentSplitInputs.forEach(
+    function (input) {
+      const method =
+        input.dataset.paymentSplitInput;
+
+      if (
+        Object.prototype.hasOwnProperty.call(
+          payments,
+          method
+        )
+      ) {
+        payments[
+          method
+        ] =
+          parseMoneyInputToCents(
+            input.value
+          );
+      }
+    }
+  );
+
+  return payments;
+}
+
+function updateSplitPaymentState() {
+  const due =
+    getPaymentDueCents();
+
+  const payments =
+    getSplitPayments();
+
+  const distributed =
+    payments.cash +
+    payments.pix +
+    payments.debit +
+    payments.credit;
+
+  const difference =
+    due -
+    distributed;
+
+  if (
+    paymentSplitDistributed
+  ) {
+    paymentSplitDistributed.textContent =
+      formatMoney(
+        distributed
+      );
+  }
+
+  if (
+    paymentSplitRemaining
+  ) {
+    paymentSplitRemaining.className =
+      "payment-split-value";
+
+    if (
+      difference > 0
+    ) {
+      paymentSplitRemaining.textContent =
+        "Falta " +
+        formatMoney(
+          difference
+        );
+
+      paymentSplitRemaining.classList.add(
+        "is-pending"
+      );
+    } else if (
+      difference < 0
+    ) {
+      paymentSplitRemaining.textContent =
+        "Excede " +
+        formatMoney(
+          Math.abs(
+            difference
+          )
+        );
+
+      paymentSplitRemaining.classList.add(
+        "is-error"
+      );
+    } else {
+      paymentSplitRemaining.textContent =
+        "Valor completo";
+
+      paymentSplitRemaining.classList.add(
+        "is-ok"
+      );
+    }
+  }
+
+  const hasCash =
+    payments.cash > 0;
+
+  if (
+    paymentSplitCashBox
+  ) {
+    paymentSplitCashBox.hidden =
+      !hasCash;
+  }
+
+  let cashValid =
+    true;
+
+  if (
+    hasCash
+  ) {
+    if (
+      paymentSplitCashReceived &&
+      !paymentSplitCashReceived.value
+    ) {
+      paymentSplitCashReceived.value =
+        centsToInputValue(
+          payments.cash
+        );
+    }
+
+    const received =
+      parseMoneyInputToCents(
+        paymentSplitCashReceived
+          ? paymentSplitCashReceived.value
+          : ""
+      );
+
+    cashValid =
+      updateCashChangeDisplay(
+        paymentSplitCashChange,
+        payments.cash,
+        received
+      );
+  } else if (
+    paymentSplitCashReceived
+  ) {
+    paymentSplitCashReceived.value =
+      "";
+  }
+
+  if (
+    paymentSplitConfirm
+  ) {
+    paymentSplitConfirm.disabled =
+      distributed !==
+        due ||
+      distributed <=
+        0 ||
+      !cashValid;
+  }
+}
+
 function closePaymentModal() {
   if (
     !paymentModal
@@ -2808,6 +3623,9 @@ function closePaymentModal() {
   state.paymentBookingId =
     null;
 
+  state.selectedPaymentMethod =
+    null;
+
   setMessage(
     paymentModalMessage,
     ""
@@ -2819,8 +3637,38 @@ function closePaymentModal() {
 function openPaymentModal(
   bookingId
 ) {
+  const booking =
+    findBooking(
+      bookingId
+    );
+
+  if (
+    !booking
+  ) {
+    return;
+  }
+
   state.paymentBookingId =
     bookingId;
+
+  if (
+    paymentBookingService
+  ) {
+    paymentBookingService.textContent =
+      booking.service ||
+      "Atendimento";
+  }
+
+  if (
+    paymentBookingTotal
+  ) {
+    paymentBookingTotal.textContent =
+      formatMoney(
+        booking.service_amount_cents
+      );
+  }
+
+  resetPaymentModalForm();
 
   if (
     paymentModal
@@ -3198,7 +4046,8 @@ async function refundBooking(
 
 async function completeBooking(
   bookingId,
-  paymentMethod
+  payments,
+  cashReceivedCents = null
 ) {
   const booking =
     findBooking(
@@ -3215,17 +4064,45 @@ async function completeBooking(
     "info"
   );
 
+  if (
+    paymentSingleConfirm
+  ) {
+    paymentSingleConfirm.disabled =
+      true;
+  }
+
+  if (
+    paymentSplitConfirm
+  ) {
+    paymentSplitConfirm.disabled =
+      true;
+  }
+
   try {
     await rpc(
-      "admin_complete_booking",
+      "admin_complete_booking_split",
       {
         p_booking_id:
           bookingId,
 
-        p_payment_method:
-          paymentMethod
+        p_payments:
+          payments,
+
+        p_cash_received_cents:
+          cashReceivedCents
       }
     );
+
+    const methodCount =
+      Object.values(
+        payments
+      ).filter(
+        function (amount) {
+          return Number(
+            amount || 0
+          ) > 0;
+        }
+      ).length;
 
     closePaymentModal();
 
@@ -3233,7 +4110,9 @@ async function completeBooking(
 
     setMessage(
       adminGlobalMessage,
-      "Atendimento finalizado e pagamento registrado.",
+      methodCount > 1
+        ? "Atendimento finalizado com pagamento dividido registrado."
+        : "Atendimento finalizado e pagamento registrado.",
       "success"
     );
 
@@ -3244,6 +4123,10 @@ async function completeBooking(
       error.message,
       "error"
     );
+
+    updateSinglePaymentState();
+
+    updateSplitPaymentState();
   }
 }
 
@@ -3500,24 +4383,138 @@ function setupPaymentOptions() {
     function (button) {
       button.addEventListener(
         "click",
-        async function () {
-          if (
-            !state.paymentBookingId
-          ) {
-            return;
-          }
-
-          const method =
-            button.dataset.paymentMethod;
-
-          await completeBooking(
-            state.paymentBookingId,
-            method
+        function () {
+          selectSinglePaymentMethod(
+            button.dataset.paymentMethod
           );
         }
       );
     }
   );
+
+  paymentModeButtons.forEach(
+    function (button) {
+      button.addEventListener(
+        "click",
+        function () {
+          setPaymentMode(
+            button.dataset.paymentMode
+          );
+        }
+      );
+    }
+  );
+
+  if (
+    paymentSingleCashReceived
+  ) {
+    paymentSingleCashReceived.addEventListener(
+      "input",
+      updateSinglePaymentState
+    );
+  }
+
+  paymentSplitInputs.forEach(
+    function (input) {
+      input.addEventListener(
+        "input",
+        updateSplitPaymentState
+      );
+    }
+  );
+
+  if (
+    paymentSplitCashReceived
+  ) {
+    paymentSplitCashReceived.addEventListener(
+      "input",
+      updateSplitPaymentState
+    );
+  }
+
+  if (
+    paymentSingleConfirm
+  ) {
+    paymentSingleConfirm.addEventListener(
+      "click",
+      async function () {
+        if (
+          !state.paymentBookingId ||
+          !state.selectedPaymentMethod
+        ) {
+          return;
+        }
+
+        const due =
+          getPaymentDueCents();
+
+        const payments = {
+          cash:
+            0,
+          pix:
+            0,
+          debit:
+            0,
+          credit:
+            0
+        };
+
+        payments[
+          state.selectedPaymentMethod
+        ] =
+          due;
+
+        const cashReceived =
+          state.selectedPaymentMethod ===
+            "cash"
+            ? parseMoneyInputToCents(
+                paymentSingleCashReceived
+                  ? paymentSingleCashReceived.value
+                  : ""
+              )
+            : null;
+
+        await completeBooking(
+          state.paymentBookingId,
+          payments,
+          cashReceived
+        );
+      }
+    );
+  }
+
+  if (
+    paymentSplitConfirm
+  ) {
+    paymentSplitConfirm.addEventListener(
+      "click",
+      async function () {
+        if (
+          !state.paymentBookingId
+        ) {
+          return;
+        }
+
+        const payments =
+          getSplitPayments();
+
+        const cashReceived =
+          payments.cash > 0
+            ? parseMoneyInputToCents(
+                paymentSplitCashReceived
+                  ? paymentSplitCashReceived.value
+                  : ""
+              )
+            : null;
+
+        await completeBooking(
+          state.paymentBookingId,
+          payments,
+          cashReceived
+        );
+      }
+    );
+  }
 }
 
 function updateCountdowns() {
