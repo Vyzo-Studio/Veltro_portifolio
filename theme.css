@@ -1,0 +1,436 @@
+.gng-theme-toggle {
+  position: fixed;
+  left: 18px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  z-index: 1800;
+  min-height: 46px;
+  padding: 6px 13px 6px 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(34, 51, 79, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #17243a;
+  box-shadow: 0 12px 30px rgba(13, 23, 40, 0.18);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  font-family: "Inter", Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gng-theme-toggle:focus-visible {
+  outline: 3px solid rgba(88, 119, 164, 0.4);
+  outline-offset: 3px;
+}
+
+.gng-theme-icon-wrap {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #edf1f5;
+}
+
+.gng-theme-icon {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    opacity 0.32s ease,
+    transform 0.42s cubic-bezier(.2,.7,.2,1);
+}
+
+.gng-theme-sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.gng-theme-moon {
+  opacity: 0;
+  transform: rotate(-55deg) scale(0.55);
+}
+
+html[data-theme="dark"] .gng-theme-toggle {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(28, 45, 70, 0.96);
+  color: #f4f7fb;
+  box-shadow: 0 14px 34px rgba(4, 11, 22, 0.34);
+}
+
+html[data-theme="dark"] .gng-theme-icon-wrap {
+  background: #2d466c;
+}
+
+html[data-theme="dark"] .gng-theme-sun {
+  opacity: 0;
+  transform: rotate(75deg) scale(0.55);
+}
+
+html[data-theme="dark"] .gng-theme-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+html.gng-theme-switching *,
+html.gng-theme-switching *::before,
+html.gng-theme-switching *::after {
+  transition:
+    background-color 0.34s ease,
+    border-color 0.34s ease,
+    color 0.34s ease,
+    box-shadow 0.34s ease,
+    fill 0.34s ease !important;
+}
+
+html[data-theme="dark"] {
+  --navy: #314b74 !important;
+  --navy-dark: #172a46 !important;
+  --navy-deep: #101d32 !important;
+  --navy-light: #6684b0 !important;
+  --steel: #9babc1 !important;
+  --steel-light: #304765 !important;
+  --bone: #142238 !important;
+  --ice: #192a43 !important;
+  --white: #213451 !important;
+  --ink: #f5f8fc !important;
+  --text: #e6edf7 !important;
+  --muted: #afbdd0 !important;
+  --line: rgba(224, 234, 247, 0.14) !important;
+  --shadow: 0 18px 50px rgba(3, 10, 20, 0.28) !important;
+}
+
+html[data-theme="dark"] body {
+  background: #142238;
+  color: #e6edf7;
+}
+
+html[data-theme="dark"] .site-header {
+  border-color: rgba(224, 234, 247, 0.12);
+  background: rgba(20, 34, 56, 0.94);
+}
+
+html[data-theme="dark"] .main-nav a {
+  color: #c3cede;
+}
+
+html[data-theme="dark"] .main-nav a:hover {
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .menu-toggle,
+html[data-theme="dark"] .main-nav,
+html[data-theme="dark"] .quick-info div,
+html[data-theme="dark"] .trust-grid,
+html[data-theme="dark"] .trust-grid div,
+html[data-theme="dark"] .price-table-shell,
+html[data-theme="dark"] .booking-step,
+html[data-theme="dark"] .booking-select,
+html[data-theme="dark"] .booking-input,
+html[data-theme="dark"] .booking-day,
+html[data-theme="dark"] .booking-time,
+html[data-theme="dark"] .benefits div,
+html[data-theme="dark"] .plan-card:not(.plan-featured),
+html[data-theme="dark"] .contact-panel {
+  background-color: #20334f;
+  border-color: rgba(224, 234, 247, 0.14);
+  color: #eef3fa;
+}
+
+html[data-theme="dark"] .hero {
+  background:
+    radial-gradient(circle at 88% 10%, rgba(102, 132, 176, 0.18), transparent 26rem),
+    linear-gradient(135deg, #142238 0%, #172a46 48%, #1c304d 100%);
+}
+
+html[data-theme="dark"] .hero h1,
+html[data-theme="dark"] .section-head h2,
+html[data-theme="dark"] .location-copy h2,
+html[data-theme="dark"] .quick-info strong,
+html[data-theme="dark"] .trust-grid strong,
+html[data-theme="dark"] .price-table td,
+html[data-theme="dark"] .price-table td strong,
+html[data-theme="dark"] .booking-step-heading strong,
+html[data-theme="dark"] .booking-select-label,
+html[data-theme="dark"] .booking-select,
+html[data-theme="dark"] .booking-input,
+html[data-theme="dark"] .booking-day,
+html[data-theme="dark"] .booking-time,
+html[data-theme="dark"] .benefits strong,
+html[data-theme="dark"] .plan-card:not(.plan-featured) h3,
+html[data-theme="dark"] .plan-card:not(.plan-featured) .price strong,
+html[data-theme="dark"] .contact-panel a {
+  color: #f5f8fc;
+}
+
+html[data-theme="dark"] .hero h1 span {
+  color: #91a9ca;
+}
+
+html[data-theme="dark"] .hero-lead,
+html[data-theme="dark"] .section-head > p,
+html[data-theme="dark"] .quick-info span,
+html[data-theme="dark"] .trust-grid small,
+html[data-theme="dark"] .booking-step-heading small,
+html[data-theme="dark"] .booking-field-hint,
+html[data-theme="dark"] .benefits small,
+html[data-theme="dark"] .plan-card:not(.plan-featured) li,
+html[data-theme="dark"] .address {
+  color: #b7c4d6;
+}
+
+html[data-theme="dark"] #servicos,
+html[data-theme="dark"] .memberships-section,
+html[data-theme="dark"] .final-cta {
+  background: #142238;
+}
+
+html[data-theme="dark"] .space-section,
+html[data-theme="dark"] .location-section {
+  background: #182943;
+}
+
+html[data-theme="dark"] .price-table tbody tr:nth-child(even) {
+  background: #1b2e49;
+}
+
+html[data-theme="dark"] .price-table tbody tr + tr td {
+  border-color: rgba(224, 234, 247, 0.1);
+}
+
+html[data-theme="dark"] .table-action a {
+  background: #304765;
+  color: #f4f7fb;
+}
+
+html[data-theme="dark"] .booking-section {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(102, 132, 176, 0.18), transparent 28rem),
+    linear-gradient(180deg, #182943 0%, #142238 100%);
+}
+
+html[data-theme="dark"] .booking-day span,
+html[data-theme="dark"] .booking-day small {
+  color: #aab8cb;
+}
+
+html[data-theme="dark"] .booking-day.is-selected,
+html[data-theme="dark"] .booking-time.is-selected {
+  background: #45638e;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .booking-day.is-disabled,
+html[data-theme="dark"] .booking-day:disabled,
+html[data-theme="dark"] .booking-time.is-disabled,
+html[data-theme="dark"] .booking-time:disabled,
+html[data-theme="dark"] .booking-time.is-occupied {
+  background: #172842;
+  border-color: rgba(224, 234, 247, 0.09);
+  color: #7f90a7;
+}
+
+html[data-theme="dark"] .booking-empty {
+  background: rgba(31, 50, 78, 0.72);
+  border-color: rgba(224, 234, 247, 0.16);
+  color: #b8c5d7;
+}
+
+html[data-theme="dark"] .mobile-app-nav {
+  border-color: rgba(224, 234, 247, 0.14);
+  background: rgba(24, 41, 67, 0.96);
+}
+
+html[data-theme="dark"] .mobile-app-nav a {
+  color: #aebbd0;
+}
+
+html[data-theme="dark"] .mobile-app-nav a.is-active:not(.is-primary) {
+  background: #2b4262;
+  color: #ffffff;
+}
+
+html[data-theme="dark"] .footer-links {
+  color: #c6d0df;
+}
+
+/* Painel administrativo */
+html[data-theme="dark"] .admin-page,
+html[data-theme="dark"] .admin-login,
+html[data-theme="dark"] .admin-dashboard {
+  background: #142238 !important;
+  color: #e7eef8 !important;
+}
+
+html[data-theme="dark"] .login-shell,
+html[data-theme="dark"] .login-card,
+html[data-theme="dark"] .admin-header,
+html[data-theme="dark"] .admin-section-nav,
+html[data-theme="dark"] .admin-panel-section,
+html[data-theme="dark"] .admin-stat-card,
+html[data-theme="dark"] .admin-booking-card,
+html[data-theme="dark"] .management-card,
+html[data-theme="dark"] .cash-main-card,
+html[data-theme="dark"] .cash-summary-card,
+html[data-theme="dark"] .cash-payment-section,
+html[data-theme="dark"] .cash-payment-card,
+html[data-theme="dark"] .admin-modal-card,
+html[data-theme="dark"] .admin-confirm-card,
+html[data-theme="dark"] .business-card,
+html[data-theme="dark"] .business-item,
+html[data-theme="dark"] .report-card,
+html[data-theme="dark"] .report-table-shell,
+html[data-theme="dark"] .payment-booking-summary,
+html[data-theme="dark"] .payment-panel,
+html[data-theme="dark"] .payment-cash-box {
+  background-color: #1d304c !important;
+  border-color: rgba(224, 234, 247, 0.13) !important;
+  color: #edf3fb !important;
+}
+
+html[data-theme="dark"] .admin-field input,
+html[data-theme="dark"] .admin-field select,
+html[data-theme="dark"] .admin-field textarea,
+html[data-theme="dark"] .business-item input,
+html[data-theme="dark"] .business-item select,
+html[data-theme="dark"] .business-item textarea,
+html[data-theme="dark"] .business-card input,
+html[data-theme="dark"] .business-card select,
+html[data-theme="dark"] .business-card textarea,
+html[data-theme="dark"] .payment-money-input,
+html[data-theme="dark"] .payment-money-input input {
+  background: #162943 !important;
+  border-color: rgba(224, 234, 247, 0.16) !important;
+  color: #f2f6fb !important;
+}
+
+html[data-theme="dark"] .admin-field input::placeholder,
+html[data-theme="dark"] .admin-field textarea::placeholder,
+html[data-theme="dark"] input::placeholder {
+  color: #8091a8 !important;
+}
+
+html[data-theme="dark"] .admin-section-head h2,
+html[data-theme="dark"] .login-card-head h2,
+html[data-theme="dark"] .admin-booking-card strong,
+html[data-theme="dark"] .cash-main-info strong,
+html[data-theme="dark"] .cash-summary-card strong,
+html[data-theme="dark"] .cash-payment-card strong,
+html[data-theme="dark"] .business-card-head h3,
+html[data-theme="dark"] .business-gallery-body strong,
+html[data-theme="dark"] .report-card strong,
+html[data-theme="dark"] .admin-modal-head h2,
+html[data-theme="dark"] .admin-confirm-card h2 {
+  color: #f5f8fc !important;
+}
+
+html[data-theme="dark"] .admin-section-head p,
+html[data-theme="dark"] .admin-field label,
+html[data-theme="dark"] .admin-field span,
+html[data-theme="dark"] .admin-field small,
+html[data-theme="dark"] .business-card-head p,
+html[data-theme="dark"] .business-item label,
+html[data-theme="dark"] .business-gallery-body small,
+html[data-theme="dark"] .payment-help {
+  color: #aebdd0 !important;
+}
+
+html[data-theme="dark"] .admin-section-nav-button,
+html[data-theme="dark"] .business-tab,
+html[data-theme="dark"] .business-small-button,
+html[data-theme="dark"] .booking-action-button,
+html[data-theme="dark"] .payment-mode-button,
+html[data-theme="dark"] .payment-option,
+html[data-theme="dark"] .admin-secondary-button {
+  border-color: rgba(224, 234, 247, 0.15) !important;
+  background: #253b5b !important;
+  color: #eaf0f8 !important;
+}
+
+html[data-theme="dark"] .admin-section-nav-button.is-active,
+html[data-theme="dark"] .business-tab.is-active,
+html[data-theme="dark"] .payment-mode-button.is-active,
+html[data-theme="dark"] .payment-option.is-selected {
+  background: #45638e !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .report-table th {
+  background: #203653 !important;
+  color: #c4d0df !important;
+}
+
+html[data-theme="dark"] .report-table td {
+  border-color: rgba(224, 234, 247, 0.08) !important;
+  color: #dbe4f0 !important;
+}
+
+html[data-theme="dark"] .business-message,
+html[data-theme="dark"] .admin-message,
+html[data-theme="dark"] .cash-message,
+html[data-theme="dark"] .admin-modal-message {
+  background: #243b5c;
+  color: #eaf0f8;
+}
+
+html[data-theme="dark"] .login-brand-panel,
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] .section-navy,
+html[data-theme="dark"] .booking-summary,
+html[data-theme="dark"] .plan-featured,
+html[data-theme="dark"] .final-cta-inner {
+  background: linear-gradient(145deg, #1e3557, #101d32);
+}
+
+@media (max-width: 680px) {
+  html:not(.gng-admin-context) .gng-theme-toggle {
+    left: 11px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .gng-theme-toggle {
+    min-height: 42px;
+    padding: 5px 9px 5px 5px;
+    gap: 6px;
+    font-size: 0.62rem;
+  }
+
+  .gng-theme-icon-wrap {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+}
+
+@media (max-width: 390px) {
+  .gng-theme-label {
+    display: none;
+  }
+
+  .gng-theme-toggle {
+    width: 42px;
+    padding: 5px;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gng-theme-icon,
+  html.gng-theme-switching *,
+  html.gng-theme-switching *::before,
+  html.gng-theme-switching *::after {
+    transition: none !important;
+  }
+}
