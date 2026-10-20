@@ -1623,25 +1623,159 @@ function normalizeDatabaseTime(
   );
 }
 
+function getRuntimeSchedule() {
+  const runtime =
+    window.GNG_RUNTIME_CONFIG ||
+    {};
+
+  const openTime =
+    String(
+      runtime.open_time ||
+      padNumber(SLOT_START_HOUR) +
+        ":" +
+        padNumber(SLOT_START_MINUTE)
+    );
+
+  const closeTime =
+    String(
+      runtime.close_time ||
+      padNumber(SLOT_END_HOUR) +
+        ":" +
+        padNumber(SLOT_END_MINUTE)
+    );
+
+  const interval =
+    Number(
+      runtime.slot_interval_minutes ||
+      SLOT_INTERVAL
+    );
+
+  const weekdays =
+    Array.isArray(
+      runtime.open_weekdays
+    )
+      ? runtime.open_weekdays
+          .map(Number)
+          .filter(
+            function (day) {
+              return (
+                day >= 1 &&
+                day <= 7
+              );
+            }
+          )
+      : [1, 2, 3, 4, 5, 6, 7];
+
+  return {
+    openTime,
+    closeTime,
+    interval:
+      [10, 15, 20, 30, 60].includes(
+        interval
+      )
+        ? interval
+        : SLOT_INTERVAL,
+    weekdays:
+      weekdays.length
+        ? weekdays
+        : [1, 2, 3, 4, 5, 6, 7]
+  };
+}
+
+function getIsoWeekdayFromDateKey(
+  dateKey
+) {
+  if (!dateKey) {
+    return null;
+  }
+
+  const parts =
+    String(
+      dateKey
+    )
+      .split("-")
+      .map(Number);
+
+  if (
+    parts.length !== 3 ||
+    parts.some(
+      function (part) {
+        return !Number.isFinite(
+          part
+        );
+      }
+    )
+  ) {
+    return null;
+  }
+
+  const date =
+    new Date(
+      Date.UTC(
+        parts[0],
+        parts[1] - 1,
+        parts[2],
+        12,
+        0,
+        0
+      )
+    );
+
+  const day =
+    date.getUTCDay();
+
+  return day === 0
+    ? 7
+    : day;
+}
+
+function isBusinessOpenOnDate(
+  dateKey
+) {
+  const schedule =
+    getRuntimeSchedule();
+
+  const weekday =
+    getIsoWeekdayFromDateKey(
+      dateKey
+    );
+
+  return (
+    weekday !== null &&
+    schedule.weekdays.includes(
+      weekday
+    )
+  );
+}
+
 function generateSlots() {
   const slots =
     [];
 
+  const schedule =
+    getRuntimeSchedule();
+
   const start =
-    SLOT_START_HOUR *
-      60 +
-    SLOT_START_MINUTE;
+    timeToMinutes(
+      schedule.openTime
+    );
 
   const end =
-    SLOT_END_HOUR *
-      60 +
-    SLOT_END_MINUTE;
+    timeToMinutes(
+      schedule.closeTime
+    );
+
+  if (
+    end < start
+  ) {
+    return slots;
+  }
 
   for (
     let minutes = start;
     minutes <= end;
     minutes +=
-      SLOT_INTERVAL
+      schedule.interval
   ) {
     const hour =
       Math.floor(
@@ -2940,7 +3074,10 @@ function hasAvailableTime(
     availabilityState !== "ready" ||
     !selectedBarberId ||
     !bookingService ||
-    !bookingService.value
+    !bookingService.value ||
+    !isBusinessOpenOnDate(
+      dateKey
+    )
   ) {
     return false;
   }
@@ -4007,8 +4144,14 @@ function buildWhatsappMessage() {
 function buildWhatsappUrlFromMessage(
   message
 ) {
+  const runtimeWhatsapp =
+    window.GNG_RUNTIME_CONFIG &&
+    window.GNG_RUNTIME_CONFIG.whatsapp_digits
+      ? window.GNG_RUNTIME_CONFIG.whatsapp_digits
+      : WHATSAPP_NUMBER;
+
   return buildWhatsappUrl(
-    WHATSAPP_NUMBER,
+    runtimeWhatsapp,
     message
   );
 }
