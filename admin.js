@@ -1557,7 +1557,21 @@ function setupPasswordToggle() {
 function switchAdminSection(
   sectionName
 ) {
-  adminSectionNavButtons.forEach(
+  const currentNavButtons =
+    Array.from(
+      document.querySelectorAll(
+        "[data-admin-section]"
+      )
+    );
+
+  const currentPanels =
+    Array.from(
+      document.querySelectorAll(
+        "[data-admin-panel]"
+      )
+    );
+
+  currentNavButtons.forEach(
     function (button) {
       const active =
         button.dataset.adminSection ===
@@ -1570,7 +1584,7 @@ function switchAdminSection(
     }
   );
 
-  adminPanels.forEach(
+  currentPanels.forEach(
     function (panel) {
       const active =
         panel.dataset.adminPanel ===
