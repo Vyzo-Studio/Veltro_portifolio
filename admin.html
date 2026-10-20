@@ -20,7 +20,7 @@
 
   <meta
     name="color-scheme"
-    content="light"
+    content="light dark"
   >
 
   <meta
@@ -46,6 +46,8 @@
   <title>
     Painel Administrativo | GNG Barbearia
   </title>
+
+  <script src="theme.js?v=1.0"></script>
 
   <link
     rel="icon"
@@ -87,9 +89,14 @@
   >
 
   <link
-  rel="stylesheet"
-  href="admin.css?v=1.2"
->
+    rel="stylesheet"
+    href="admin.css?v=1.2"
+  >
+
+  <link
+    rel="stylesheet"
+    href="theme.css?v=1.0"
+  >
 </head>
 
 <body>
@@ -1180,6 +1187,10 @@
 
             </div>
 
+            <p class="cash-automation-note">
+              Abre automaticamente às 09:00 e, se continuar aberto, fecha automaticamente às 23:59. O fechamento manual continua disponível a qualquer momento.
+            </p>
+
             <div class="cash-main-card">
 
               <div class="cash-main-info">
@@ -1991,6 +2002,8 @@
   <script src="config.js?v=2.4"></script>
 
   <script src="admin.js?v=1.4"></script>
+
+  <script src="admin-calendar.js?v=1.0"></script>
 
 </body>
 </html>
