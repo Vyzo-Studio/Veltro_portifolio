@@ -1,42 +1,176 @@
-# Correções de confiabilidade — GNG Barbearia
+# GNG Barbearia — implementação administrativa e confiabilidade
 
-Este pacote parte exatamente do ZIP `gng_barbearia-main.zip` fornecido e corresponde aos arquivos do branch `main` consultados em 12/10/2026. O pacote foi enviado a uma branch de revisão no GitHub; não foi incorporado à main nem publicado em produção.
+Atualizado em 20/10/2026.
 
-## Alterações
+## Situação atual
 
-- `script.js`: consultas de horários falham em modo seguro; dados inesperados são tratados como erro; respostas obsoletas não sobrescrevem o estado atual; envio permanece bloqueado enquanto a disponibilidade não estiver confirmada; sucesso no cadastro é independente da abertura do WhatsApp; cliente recebe link manual de continuidade.
-- `style.css`: interface discreta para mensagens persistentes de sucesso e erro.
-- `index.html`: versões de cache atualizadas para JavaScript e CSS público.
-- `admin.js`: chamadas concorrentes de mutação para a mesma reserva são agrupadas ou bloqueadas, evitando duplicação no cliente; mensagem de estorno passa a informar que o registro contábil não faz uma devolução financeira automática.
-- `admin-barbers.js`: disponibilidade administrativa desativada em falhas, prevenção de resultados assíncronos antigos, bloqueio de repetição de formulários e remoção de interceptação global de `supabaseClient.rpc`.
-- `admin-notifications.js`: consulta diretamente a RPC `admin_list_active_pending_bookings_v2` e exibe o profissional sem interceptar o cliente compartilhado.
-- `config.js`, `admin.html`: versões dos scripts de administração atualizadas para invalidar cache.
-- `tests/*.test.cjs`: testes isolados de falhas, concorrência e dupla mutação.
+O painel administrativo e o site público foram ampliados sobre a arquitetura existente, preservando o agendamento, autenticação, Supabase e identidade visual da GNG.
 
-## Testes realizados
+O Supabase foi auditado e está ativo. As alterações abaixo foram aplicadas ao banco e ao branch `main`.
 
-- `node --check` para todos os arquivos JavaScript: passou.
-- `node tests/booking-reliability.test.cjs`: passou.
-- `node tests/admin-mutations.test.cjs`: passou.
+## Funcionalidades já existentes e preservadas
 
-## Limitações e validações obrigatórias
+- Agenda administrativa por data.
+- Pendentes, agendados, finalizados e histórico.
+- Confirmação, rejeição, cancelamento e finalização de atendimentos.
+- Seleção de forma de pagamento.
+- Estorno lógico de pagamentos.
+- Criação manual de agendamentos.
+- Bloqueio e liberação de horários.
+- Barbeiros individuais.
+- Caixa diário com abertura e fechamento.
+- Resumo de faturamento e formas de pagamento.
+- Reserva pública por barbeiro com prevenção de conflitos por duração.
+- Notificações administrativas de novas solicitações.
 
-A implementação SQL das RPCs e políticas RLS não faz parte do ZIP. O projeto Supabase apareceu como `INACTIVE` e a tentativa de conexão SQL terminou em timeout. Não foi possível verificar nem corrigir regras de concorrência, durações, autorização ou estornos no banco.
+## Implementação adicionada em 20/10/2026
 
-É obrigatório testar o sistema com o Supabase ativo antes de publicar. Execute reserva pública, troca rápida de barbeiro, conflito de horários com duração, criação manual, bloqueios, confirmação, cancelamento, finalização, registro de estorno e notificações, em desktop e celular. A proteção de mutações no JavaScript não substitui idempotência transacional no backend.
+### Banco de dados
 
-## Como executar testes locais
+Foram adicionados:
 
-```bash
-node --check script.js
-node --check admin.js
-node --check admin-barbers.js
-node --check admin-notifications.js
-node --check config.js
-node tests/booking-reliability.test.cjs
-node tests/admin-mutations.test.cjs
-```
+- `services`: catálogo persistente de serviços, duração, preço, ordem e status.
+- `business_settings`: logotipo, cores, textos, contato, endereço, mapa e horários de funcionamento.
+- `gallery_images`: portfólio, interior e fachada.
+- `payment_transactions`: razão financeira de pagamentos e estornos.
+- `bookings.service_duration_minutes`: preservação histórica da duração.
+- `barbers.profile_note`: informação administrativa do profissional.
+- bucket público `gng-media` com escrita restrita a administradores autenticados.
 
-## Publicação
+Os 13 serviços atuais foram migrados para a tabela de serviços sem alterar os valores existentes.
 
-Revise o pull request da branch `fix/booking-reliability-2026-10`, execute os testes no ambiente e valide os fluxos com Supabase ativo antes de integrar à branch `main`.
+As imagens atuais de portfólio, interior e fachada foram cadastradas como conteúdo inicial da galeria para poderem ser substituídas pelo painel.
+
+### Financeiro
+
+- Pagamentos e estornos agora possuem transações próprias.
+- Receita recebida usa a data real do pagamento.
+- Data do atendimento e data do pagamento ficam separadas.
+- Proteção contra pagamento duplicado.
+- Proteção contra estorno duplicado.
+- Caixa não pode ser aberto duas vezes no mesmo dia nem reaberto depois de encerrado.
+- Resumo diário, mensal e anual calcula movimentação real.
+- Dinheiro, Pix, débito e crédito são calculados separadamente.
+- Nova RPC de relatório financeiro por período.
+- Histórico financeiro detalhado.
+- Exportação CSV pelo painel.
+
+### Agendamento manual
+
+- Nome do cliente passou a ser opcional.
+- Telefone passou a ser opcional e é validado quando informado.
+- Serviço e barbeiro continuam obrigatórios.
+- É possível escolher datas passadas, atuais e futuras.
+- É possível registrar atendimento histórico na data original.
+- É possível marcar o atendimento manual como concluído.
+- É possível registrar Dinheiro, Pix, Débito ou Crédito no lançamento.
+- Pagamentos históricos feitos hoje mantêm a data original do atendimento e a data real do recebimento.
+- Conflitos de horário continuam protegidos pelo backend.
+
+### Bloqueios e agenda
+
+- Bloqueios continuam podendo atingir um profissional específico ou todos.
+- Bloqueios são persistentes no Supabase.
+- Bloqueios refletem na disponibilidade do site público.
+- A duração do serviço é considerada nos conflitos.
+- Horários que ultrapassam o fechamento da barbearia ficam indisponíveis.
+- Horário de abertura, fechamento, intervalo e dias de funcionamento passaram a ser configuráveis.
+
+### Personalização
+
+Foi adicionado ao painel um módulo de PERSONALIZAÇÃO com:
+
+- upload e troca do logotipo;
+- cores principais;
+- textos do site;
+- telefone;
+- WhatsApp;
+- endereço;
+- link do Google Maps;
+- horário de abertura;
+- horário de fechamento;
+- intervalo da agenda;
+- dias de funcionamento;
+- serviços;
+- preços;
+- duração dos serviços;
+- status ativo/inativo dos serviços;
+- profissionais;
+- informações dos profissionais;
+- status ativo/inativo dos profissionais;
+- galeria;
+- portfólio;
+- fotos internas;
+- fotos externas.
+
+O site público agora consulta a configuração persistente e usa os dados administrativos sem exigir edição manual do HTML para essas informações.
+
+### Segurança
+
+- RLS permanece ativado.
+- Foi adicionada negação explícita de acesso direto às tabelas do domínio.
+- RPCs administrativas não podem mais ser executadas pelo papel anônimo.
+- Somente quatro RPCs necessárias ao site público permanecem disponíveis sem login:
+  - `get_public_barbers`
+  - `get_public_unavailable_slots_by_barber`
+  - `create_booking_request_by_barber`
+  - `get_public_site_config`
+- Escrita no bucket de imagens exige usuário autenticado reconhecido como administrador.
+- Nenhuma chave `service_role` ou segredo administrativo foi colocado no frontend.
+
+## Arquivos alterados/adicionados
+
+- `index.html`
+- `style.css`
+- `script.js`
+- `site-data.js` — novo
+- `admin.html`
+- `admin.js`
+- `admin-barbers.js`
+- `config.js`
+- `admin-business.js` — novo
+- `ALTERACOES_2026-10.md`
+
+## Migrações aplicadas
+
+- `gng_admin_business_management_v1`
+- `gng_rpc_privilege_hardening_v1`
+- `gng_schedule_duration_and_gallery_seed_v1`
+
+## Verificações executadas
+
+- Sintaxe JavaScript verificada para:
+  - `script.js`
+  - `site-data.js`
+  - `admin.js`
+  - `admin-barbers.js`
+  - `admin-business.js`
+  - `config.js`
+  - `admin-notifications.js`
+- Catálogo persistente validado com 13 serviços.
+- Preço e duração dinâmicos validados no banco.
+- Horários fora do expediente validados.
+- Duração que ultrapassa o fechamento validada.
+- Reserva pública temporária testada dentro de transação com rollback.
+- Bloqueio temporário testado e refletido como indisponível, com rollback.
+- Abertura e fechamento de caixa testados dentro de transação com rollback.
+- Agendamento histórico com pagamento em Pix testado dentro de transação com rollback.
+- Relatório financeiro executado com sucesso.
+- Permissões verificadas: RPCs administrativas sem execução anônima.
+- Testes temporários não deixaram registros em `bookings`, `blocked_slots`, `cash_sessions` ou `payment_transactions`.
+
+## Validações ainda manuais
+
+O código e o banco foram verificados tecnicamente, mas ainda é recomendável validar visualmente, em sessão administrativa real:
+
+1. Login do administrador.
+2. Navegação para Relatórios.
+3. Navegação para Personalização.
+4. Upload real de uma imagem.
+5. Alteração de um texto e confirmação no site público.
+6. Alteração temporária de cor e restauração.
+7. Criação manual real.
+8. Finalização e estorno de um atendimento real.
+9. Layout do painel em celular e desktop.
+
+Esses itens dependem da interação visual/autenticada do navegador e não foram marcados como aprovados sem execução real.
