@@ -88,7 +88,7 @@
 
   <link
   rel="stylesheet"
-  href="admin.css?v=1.1"
+  href="admin.css?v=1.2"
 >
 </head>
 
@@ -1557,7 +1557,7 @@
     ></div>
 
     <div
-      class="admin-modal-card admin-modal-small"
+      class="admin-modal-card payment-modal-card"
       role="dialog"
       aria-modal="true"
       aria-labelledby="payment-modal-title"
@@ -1572,7 +1572,7 @@
           </span>
 
           <h2 id="payment-modal-title">
-            Forma de pagamento
+            Registrar pagamento
           </h2>
 
         </div>
@@ -1588,62 +1588,331 @@
 
       </div>
 
-      <div class="payment-options">
+      <div class="payment-booking-summary">
 
-        <button
-          class="payment-option"
-          type="button"
-          data-payment-method="cash"
-        >
+        <div>
+
           <span>
-            $
+            ATENDIMENTO
           </span>
 
-          <strong>
-            Dinheiro
+          <strong id="payment-booking-service">
+            —
           </strong>
+
+        </div>
+
+        <div class="payment-booking-total">
+
+          <span>
+            TOTAL
+          </span>
+
+          <strong id="payment-booking-total">
+            R$ 0,00
+          </strong>
+
+        </div>
+
+      </div>
+
+      <div
+        class="payment-mode-switch"
+        role="tablist"
+        aria-label="Tipo de pagamento"
+      >
+
+        <button
+          class="payment-mode-button is-active"
+          type="button"
+          data-payment-mode="single"
+          role="tab"
+          aria-selected="true"
+        >
+          UM MÉTODO
         </button>
 
         <button
-          class="payment-option"
+          class="payment-mode-button"
           type="button"
-          data-payment-method="pix"
+          data-payment-mode="split"
+          role="tab"
+          aria-selected="false"
         >
-          <span>
-            P
-          </span>
-
-          <strong>
-            Pix
-          </strong>
+          DIVIDIR PAGAMENTO
         </button>
 
-        <button
-          class="payment-option"
-          type="button"
-          data-payment-method="debit"
-        >
-          <span>
-            D
-          </span>
+      </div>
 
-          <strong>
-            Débito
-          </strong>
+      <div
+        class="payment-panel"
+        id="payment-single-panel"
+      >
+
+        <p class="payment-help">
+          Selecione a forma usada para pagar o valor integral.
+        </p>
+
+        <div class="payment-options">
+
+          <button
+            class="payment-option"
+            type="button"
+            data-payment-method="cash"
+            aria-pressed="false"
+          >
+            <span>
+              $
+            </span>
+
+            <strong>
+              Dinheiro
+            </strong>
+          </button>
+
+          <button
+            class="payment-option"
+            type="button"
+            data-payment-method="pix"
+            aria-pressed="false"
+          >
+            <span>
+              P
+            </span>
+
+            <strong>
+              Pix
+            </strong>
+          </button>
+
+          <button
+            class="payment-option"
+            type="button"
+            data-payment-method="debit"
+            aria-pressed="false"
+          >
+            <span>
+              D
+            </span>
+
+            <strong>
+              Débito
+            </strong>
+          </button>
+
+          <button
+            class="payment-option"
+            type="button"
+            data-payment-method="credit"
+            aria-pressed="false"
+          >
+            <span>
+              C
+            </span>
+
+            <strong>
+              Crédito
+            </strong>
+          </button>
+
+        </div>
+
+        <div
+          class="payment-cash-box"
+          id="payment-single-cash-box"
+          hidden
+        >
+
+          <label for="payment-single-cash-received">
+            Valor entregue pelo cliente em dinheiro
+          </label>
+
+          <div class="payment-money-input">
+            <span>R$</span>
+
+            <input
+              id="payment-single-cash-received"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="0,00"
+            >
+          </div>
+
+          <div class="payment-change-row">
+
+            <span>
+              Cálculo automático
+            </span>
+
+            <strong
+              class="payment-change-value"
+              id="payment-single-cash-change"
+            >
+              Informe o valor entregue pelo cliente.
+            </strong>
+
+          </div>
+
+        </div>
+
+        <button
+          class="admin-primary-button payment-confirm-button"
+          id="payment-single-confirm"
+          type="button"
+          disabled
+        >
+          REGISTRAR PAGAMENTO
         </button>
 
-        <button
-          class="payment-option"
-          type="button"
-          data-payment-method="credit"
-        >
-          <span>
-            C
-          </span>
+      </div>
 
-          <strong>
-            Crédito
-          </strong>
+      <div
+        class="payment-panel"
+        id="payment-split-panel"
+        hidden
+      >
+
+        <p class="payment-help">
+          Informe quanto foi pago em cada forma. Você pode combinar
+          Pix, dinheiro, débito e crédito no mesmo atendimento.
+        </p>
+
+        <div class="payment-split-grid">
+
+          <label class="payment-split-field">
+            <span>Dinheiro</span>
+
+            <div class="payment-money-input">
+              <span>R$</span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="0,00"
+                data-payment-split-input="cash"
+              >
+            </div>
+          </label>
+
+          <label class="payment-split-field">
+            <span>Pix</span>
+
+            <div class="payment-money-input">
+              <span>R$</span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="0,00"
+                data-payment-split-input="pix"
+              >
+            </div>
+          </label>
+
+          <label class="payment-split-field">
+            <span>Débito</span>
+
+            <div class="payment-money-input">
+              <span>R$</span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="0,00"
+                data-payment-split-input="debit"
+              >
+            </div>
+          </label>
+
+          <label class="payment-split-field">
+            <span>Crédito</span>
+
+            <div class="payment-money-input">
+              <span>R$</span>
+
+              <input
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                placeholder="0,00"
+                data-payment-split-input="credit"
+              >
+            </div>
+          </label>
+
+        </div>
+
+        <div class="payment-split-summary">
+
+          <div>
+            <span>Distribuído</span>
+            <strong id="payment-split-distributed">
+              R$ 0,00
+            </strong>
+          </div>
+
+          <div>
+            <span>Situação</span>
+            <strong
+              class="payment-split-value"
+              id="payment-split-remaining"
+            >
+              R$ 0,00
+            </strong>
+          </div>
+
+        </div>
+
+        <div
+          class="payment-cash-box"
+          id="payment-split-cash-box"
+          hidden
+        >
+
+          <label for="payment-split-cash-received">
+            Valor entregue pelo cliente em dinheiro
+          </label>
+
+          <div class="payment-money-input">
+            <span>R$</span>
+
+            <input
+              id="payment-split-cash-received"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="0,00"
+            >
+          </div>
+
+          <div class="payment-change-row">
+
+            <span>
+              Troco sobre a parte paga em dinheiro
+            </span>
+
+            <strong
+              class="payment-change-value"
+              id="payment-split-cash-change"
+            >
+              Informe o valor entregue pelo cliente.
+            </strong>
+
+          </div>
+
+        </div>
+
+        <button
+          class="admin-primary-button payment-confirm-button"
+          id="payment-split-confirm"
+          type="button"
+          disabled
+        >
+          REGISTRAR PAGAMENTO DIVIDIDO
         </button>
 
       </div>
@@ -1721,7 +1990,7 @@
 
   <script src="config.js?v=2.4"></script>
 
-  <script src="admin.js?v=1.3"></script>
+  <script src="admin.js?v=1.4"></script>
 
 </body>
 </html>
