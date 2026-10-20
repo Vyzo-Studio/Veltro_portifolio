@@ -1664,7 +1664,7 @@ function getRuntimeSchedule() {
               );
             }
           )
-      : [1, 2, 3, 4, 5, 6, 7];
+      : [1, 2, 3, 4, 5, 6];
 
   return {
     openTime,
@@ -1678,7 +1678,7 @@ function getRuntimeSchedule() {
     weekdays:
       weekdays.length
         ? weekdays
-        : [1, 2, 3, 4, 5, 6, 7]
+        : [1, 2, 3, 4, 5, 6]
   };
 }
 
@@ -3458,6 +3458,14 @@ function renderDays() {
       dateToKey(
         date
       );
+
+    if (
+      !isBusinessOpenOnDate(
+        dateKey
+      )
+    ) {
+      continue;
+    }
 
     const button =
       document.createElement(
