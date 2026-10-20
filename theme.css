@@ -434,3 +434,22 @@ html[data-theme="dark"] .final-cta-inner {
     transition: none !important;
   }
 }
+
+
+.cash-automation-note {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid rgba(34, 51, 79, 0.12);
+  border-radius: 11px;
+  background: #edf1f5;
+  color: #53627a;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+html[data-theme="dark"] .cash-automation-note {
+  border-color: rgba(224, 234, 247, 0.12);
+  background: #203653;
+  color: #c5d1e0;
+}
