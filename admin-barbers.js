@@ -340,27 +340,65 @@
     event.stopImmediatePropagation();
     if (manualBookingInProgress) return;
 
-    if (!manualCustomerName || !manualCustomerPhone || !manualService || !manualBarber || !manualBookingDate || !manualBookingTime) return;
+    if (!manualService || !manualBarber || !manualBookingDate || !manualBookingTime) return;
 
     setMessage(manualBookingMessage, "");
 
-    const name = manualCustomerName.value.trim();
-    const phone = manualCustomerPhone.value.trim();
+    const name = manualCustomerName ? manualCustomerName.value.trim() : "";
+    const phone = manualCustomerPhone ? manualCustomerPhone.value.trim() : "";
     const service = manualService.value;
     const barberId = manualBarber.value;
     const barberName = getBarberName(barberId);
     const date = manualBookingDate.value;
     const time = manualBookingTime.value;
+    const statusSelect = document.getElementById("manual-booking-state");
+    const paymentSelect = document.getElementById("manual-payment-method");
+    const markCompleted = statusSelect ? statusSelect.value === "completed" : false;
+    const paymentMethod = paymentSelect ? paymentSelect.value : "";
 
-    if (!name || !phone || !service || !barberId || !date || !time) {
-      setMessage(manualBookingMessage, "Preencha todos os campos obrigatórios.", "error");
+    const phoneDigits = String(phone || "").replace(/\D/g, "");
+
+    if (!service || !barberId || !date || !time) {
+      setMessage(
+        manualBookingMessage,
+        "Selecione serviço, barbeiro, data e horário.",
+        "error"
+      );
       return;
     }
 
+    if (name && (name.length < 2 || name.length > 80)) {
+      setMessage(manualBookingMessage, "Nome inválido.", "error");
+      return;
+    }
+
+    if (phone && (phoneDigits.length < 10 || phoneDigits.length > 13)) {
+      setMessage(manualBookingMessage, "Telefone inválido.", "error");
+      return;
+    }
+
+    const paymentLabels = {
+      cash: "dinheiro",
+      pix: "Pix",
+      debit: "débito",
+      credit: "crédito"
+    };
+
     const confirmed = await askConfirmation({
-      title: "Criar agendamento",
-      text: "Confirmar " + service + " com " + barberName + " em " + formatDateShort(date) + " às " + time + "?",
-      actionLabel: "CRIAR",
+      title: markCompleted ? "Registrar atendimento" : "Criar agendamento",
+      text:
+        "Confirmar " +
+        service +
+        " com " +
+        barberName +
+        " em " +
+        formatDateShort(date) +
+        " às " +
+        time +
+        (markCompleted ? " como atendimento concluído" : "") +
+        (paymentMethod ? " com pagamento em " + paymentLabels[paymentMethod] : "") +
+        "?",
+      actionLabel: markCompleted ? "REGISTRAR" : "CRIAR",
       danger: false
     });
 
@@ -368,25 +406,36 @@
     manualBookingInProgress = true;
 
     const originalText = manualBookingSubmit ? manualBookingSubmit.textContent : "";
-    setButtonLoading(manualBookingSubmit, true, "CRIANDO...");
+    setButtonLoading(manualBookingSubmit, true, markCompleted ? "REGISTRANDO..." : "CRIANDO...");
 
     try {
-      await rpc("admin_create_booking_by_barber", {
-        p_customer_name: name,
-        p_customer_phone: phone,
+      await rpc("admin_create_booking_extended", {
+        p_customer_name: name || null,
+        p_customer_phone: phone || null,
         p_service: service,
         p_barber_id: barberId,
         p_booking_date: date,
-        p_booking_time: time
+        p_booking_time: time,
+        p_mark_completed: markCompleted,
+        p_payment_method: paymentMethod || null
       });
 
-      setMessage(manualBookingMessage, "Agendamento criado e confirmado para " + barberName + ".", "success");
+      setMessage(
+        manualBookingMessage,
+        markCompleted
+          ? "Atendimento registrado com sucesso."
+          : "Agendamento criado e confirmado para " + barberName + ".",
+        "success"
+      );
 
-      manualCustomerName.value = "";
-      manualCustomerPhone.value = "";
+      if (manualCustomerName) manualCustomerName.value = "";
+      if (manualCustomerPhone) manualCustomerPhone.value = "";
       manualService.value = "";
       manualBarber.value = "";
       manualBookingTime.value = "";
+
+      if (statusSelect) statusSelect.value = "scheduled";
+      if (paymentSelect) paymentSelect.value = "";
 
       state.selectedDate = date;
       if (adminDateFilter) adminDateFilter.value = date;
@@ -398,7 +447,12 @@
       setMessage(manualBookingMessage, error.message, "error");
     } finally {
       manualBookingInProgress = false;
-      setButtonLoading(manualBookingSubmit, false, "", originalText || "CRIAR AGENDAMENTO");
+      setButtonLoading(
+        manualBookingSubmit,
+        false,
+        "",
+        originalText || "CRIAR AGENDAMENTO"
+      );
     }
   }
 
