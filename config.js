@@ -4,9 +4,6 @@ const SUPABASE_URL =
 const SUPABASE_PUBLIC_KEY =
   "sb_publishable_YqWCSylIzOdQcxuJFpE9dQ_3mVV4oji";
 
-const GNG_ADMIN_EMAIL =
-  "vyzo.studiodesign@gmail.com";
-
 function showStartupError(message) {
   console.error(message);
 
@@ -91,7 +88,9 @@ function normalizeAdminEmail(email) {
 }
 
 function isConfiguredAdminEmail(email) {
-  return normalizeAdminEmail(email) === normalizeAdminEmail(GNG_ADMIN_EMAIL);
+  // Authorization is verified server-side by the is_gng_admin() RPC.
+  // Never embed the authorized account identity in the public JavaScript bundle.
+  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalizeAdminEmail(email));
 }
 
 function loadScriptOnce({ src, dataAttribute, errorMessage }) {
@@ -172,7 +171,6 @@ function scheduleAdminModules() {
 window.GNG_CONFIG = {
   supabaseUrl: SUPABASE_URL,
   publicKey: SUPABASE_PUBLIC_KEY,
-  adminEmail: GNG_ADMIN_EMAIL,
   businessTimezone: "America/Sao_Paulo",
   businessName: "GNG Barbearia",
   whatsapp: "5561994075539"
