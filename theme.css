@@ -770,3 +770,14 @@ html[data-theme="dark"] .footer-privacy-button { color: #d3e6fc; }
   .map-privacy-placeholder strong { font-size: 1rem; }
   .map-privacy-placeholder p { font-size: .76rem; }
 }
+
+/* O estado desabilitado deve ser perceptível mesmo com botões de alto contraste. */
+html[data-theme="dark"] .booking-submit:disabled,
+html[data-theme="dark"] .btn-primary:disabled,
+html[data-theme="dark"] .admin-primary-button:disabled {
+  background: #344156 !important;
+  color: #c3cdd9 !important;
+  border-color: #57657a !important;
+  opacity: .8;
+  cursor: not-allowed;
+}
