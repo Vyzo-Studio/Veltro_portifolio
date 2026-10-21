@@ -179,9 +179,14 @@
       }
     });
 
-    const iframe = document.querySelector(".map-card iframe");
+    // The iframe URL stays inert until the visitor explicitly enables Google Maps.
+    const iframe = document.querySelector(".map-card iframe[data-map-src]");
     if (iframe && settings.address) {
-      iframe.src = "https://www.google.com/maps?q=" + encodeURIComponent(settings.address) + "&output=embed";
+      iframe.dataset.mapSrc = "https://www.google.com/maps?q=" +
+        encodeURIComponent(settings.address) + "&output=embed";
+      if (window.GNG_MAP_ALLOWED === true) {
+        iframe.setAttribute("src", iframe.dataset.mapSrc);
+      }
     }
 
     window.GNG_RUNTIME_CONFIG = Object.assign({}, window.GNG_RUNTIME_CONFIG || {}, settings, {
