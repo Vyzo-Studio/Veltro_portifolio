@@ -1434,7 +1434,7 @@
     const csv = lines.map(function (row) {
       return row.map(function (value, columnIndex) {
         let cell = String(value == null ? "" : value);
-        if ([2, 3, 4].includes(columnIndex) && /^[\\s\\u0000-\\u001f]*[=+@-]/.test(cell)) {
+        if ([2, 3, 4].includes(columnIndex) && /^[\s\u0000-\u001f]*[=+@-]/.test(cell)) {
           cell = "'" + cell;
         }
         return '"' + cell.replace(/"/g, '""') + '"';
