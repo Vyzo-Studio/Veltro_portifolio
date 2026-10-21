@@ -122,7 +122,7 @@ function loadScriptOnce({ src, dataAttribute, errorMessage }) {
 async function loadAdminModules() {
   try {
     await loadScriptOnce({
-      src: "admin-barbers.js?v=1.4",
+      src: "admin-barbers.js?v=1.5",
       dataAttribute: "data-gng-admin-barbers",
       errorMessage: "Não foi possível carregar o módulo de barbeiros."
     });
@@ -134,9 +134,15 @@ async function loadAdminModules() {
     });
 
     await loadScriptOnce({
-      src: "admin-business.js?v=1.1",
+      src: "admin-business.js?v=1.2",
       dataAttribute: "data-gng-admin-business",
       errorMessage: "Não foi possível carregar os módulos de relatórios e personalização."
+    });
+
+    await loadScriptOnce({
+      src: "admin-manual-payment.js?v=1.0",
+      dataAttribute: "data-gng-admin-manual-payment",
+      errorMessage: "Não foi possível carregar o registro financeiro de agendamentos manuais."
     });
   } catch (error) {
     console.error(error);
