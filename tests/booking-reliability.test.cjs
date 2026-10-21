@@ -25,6 +25,7 @@ function harness(rpc) {
     availabilityState: 'idle',
     availabilityRequestId: 0,
     blockedSlots: new Map(),
+    blockedSlotReasons: new Map(),
     BOOKING_DAYS_COUNT: 7,
     supabaseRpc: rpc,
     getTodayDate: () => new Date(Date.UTC(2026, 9, 12)),
@@ -38,7 +39,7 @@ function harness(rpc) {
     updateTimeSummary() {},
     isSlotBlocked: null
   };
-  ctx.clearBlockedSlots = () => {ctx.blockedSlots = new Map();};
+  ctx.clearBlockedSlots = () => {ctx.blockedSlots = new Map();ctx.blockedSlotReasons = new Map();};
   ctx.showSelectionRequiredState = message => {ctx.message = message;};
   ctx.isSlotBlocked = (date,time) => ctx.blockedSlots.has(date) && ctx.blockedSlots.get(date).has(time);
   vm.createContext(ctx);
@@ -72,11 +73,14 @@ async function run() {
   assert.equal(staleHarness.blockedSlots.get('2026-10-12').has('11:00'), false);
 
   let writes = 0;
+  let lastBookingArgs = null;
   const submitHarness = {
     console: {warn() {}, error() {}},
     bookingCustomerName: {value:'Cliente Teste'},
     bookingCustomerPhone: {value:'61999999999'},
     bookingService: {value:'Corte'},
+    bookingPrivacyAck: {checked:true},
+    bookingWhatsappOptIn: {checked:true},
     bookingSubmit: {textContent: 'Confirmar', parentElement:{}},
     bookingRequestInProgress: false,
     availabilityState: 'ready',
@@ -87,7 +91,7 @@ async function run() {
     prepareWhatsappWindow: () => ({closed:false,close() {this.closed=true;}}),
     sendWhatsappToWindow: () => {throw new Error('popup error');},
     digitsOnly: v => v,
-    supabaseRpc: async () => {writes++;},
+    supabaseRpc: async (_,args) => {writes++;lastBookingArgs=args;},
     loadBookedSlots: async () => true,
     renderDays() {}, updateTimeSummary() {}, updateSubmitState() {},
     advanceMobileBookingFlow() {}, syncMobileBookingFlow() {},
@@ -100,11 +104,30 @@ async function run() {
   vm.runInContext(submitFn, submitHarness);
   await submitHarness.submitBooking();
   assert.equal(writes, 1);
+  assert.equal(lastBookingArgs.p_privacy_acknowledged, true);
+  assert.equal(lastBookingArgs.p_whatsapp_share_opt_in, true);
   assert.equal(submitHarness.feedback.type, 'success');
   assert.equal(submitHarness.feedback.url, 'https://wa.me/5511999999999');
   assert.equal(submitHarness.selectedTime, null);
 
-  console.log('PASS: disponibilidade falha em modo seguro, resposta inválida, corrida A/B e sucesso do registro com falha do WhatsApp');
+  // Without WhatsApp consent, the booking is still recorded and the URL stays empty.
+  submitHarness.selectedTime='11:00';
+  submitHarness.bookingPrivacyAck.checked=true;
+  submitHarness.bookingWhatsappOptIn.checked=false;
+  await submitHarness.submitBooking();
+  assert.equal(writes,2);
+  assert.equal(lastBookingArgs.p_whatsapp_share_opt_in,false);
+  assert.equal(submitHarness.feedback.url,'');
+  assert.match(submitHarness.feedback.message,/5 minutos/);
+
+  const sourceMap = fs.readFileSync(path.join(__dirname,'../site-data.js'),'utf8');
+  const consentMap = fs.readFileSync(path.join(__dirname,'../privacy.js'),'utf8');
+  assert.match(sourceMap,/window.GNG_MAP_ALLOWED === true/);
+  assert.match(sourceMap,/iframe.dataset.mapSrc/);
+  assert.match(consentMap,/window.GNG_MAP_ALLOWED = allowed/);
+  assert.doesNotMatch(sourceMap,/iframe.src = "https:\/\/www.google.com\/maps/);
+
+  console.log('PASS: falha segura, corrida de disponibilidade, consentimento de WhatsApp e bloqueio do Maps antes da autorização');
 }
 
 run().catch(err => {console.error(err);process.exitCode=1;});
