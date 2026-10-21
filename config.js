@@ -61,6 +61,12 @@ function createMemoryStorage() {
 }
 
 function resolveAuthStorage() {
+  // Eliminar a sessão persistente da versão anterior deste painel.
+  try {
+    window.localStorage.removeItem("sb-ueqfokfnjsjgocotvdae-auth-token");
+  } catch (error) {
+  }
+
   // Preferir sessão por aba para reduzir persistência de credenciais administrativas.
   try {
     if (storageWorks(window.sessionStorage)) {
