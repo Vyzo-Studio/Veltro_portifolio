@@ -95,346 +95,630 @@ html.gng-theme-switching *::after {
     fill 0.34s ease !important;
 }
 
+
+
+/*
+ * GNG — DARK THEME V2
+ * Camadas: tokens → superfícies → tipografia → controles → estados.
+ * Somente ativo quando data-theme="dark"; o tema claro permanece intacto.
+ */
 html[data-theme="dark"] {
-  --navy: #314b74 !important;
-  --navy-dark: #172a46 !important;
-  --navy-deep: #101d32 !important;
-  --navy-light: #6684b0 !important;
-  --steel: #9babc1 !important;
-  --steel-light: #304765 !important;
-  --bone: #142238 !important;
-  --ice: #192a43 !important;
-  --white: #213451 !important;
-  --ink: #f5f8fc !important;
-  --text: #e6edf7 !important;
-  --muted: #afbdd0 !important;
-  --line: rgba(224, 234, 247, 0.14) !important;
-  --shadow: 0 18px 50px rgba(3, 10, 20, 0.28) !important;
+  color-scheme: dark;
+  --navy: #30547e;
+  --navy-dark: #1b3554;
+  --navy-deep: #111f34;
+  --navy-light: #8cb0da;
+  --steel: #b6c6d9;
+  --steel-light: #324963;
+  --bone: #111e30;
+  --ice: #17283e;
+  --white: #233954;
+  --ink: #f5f8fc;
+  --text: #e7edf6;
+  --muted: #bdccdf;
+  --line: rgba(220, 233, 248, .20);
+  --shadow: 0 18px 42px rgba(1, 9, 20, .25);
+  --shadow-soft: 0 10px 26px rgba(1, 9, 20, .20);
+  --info-on-light: #e7edf6;
+  --info-on-dark: #ffffff;
+  --gng-dark-page: #111e30;
+  --gng-dark-layer: #17283e;
+  --gng-dark-surface: #203651;
+  --gng-dark-surface-raised: #263f60;
+  --gng-dark-field: #14263e;
+  --gng-dark-border: #4a607b;
+  --gng-dark-text: #f5f8fc;
+  --gng-dark-muted: #bdccdf;
+  --gng-dark-accent: #b9d9ff;
+  --gng-dark-action: #365f8b;
+  --gng-dark-action-hover: #4775a4;
 }
 
 html[data-theme="dark"] body {
-  background: #142238;
-  color: #e6edf7;
+  background: var(--gng-dark-page);
+  color: var(--gng-dark-text);
 }
 
+html[data-theme="dark"] :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid #f2b779 !important;
+  outline-offset: 3px;
+}
+
+html[data-theme="dark"] :is(input, textarea)::placeholder {
+  color: #b6c7dd !important;
+  opacity: 1;
+}
+
+html[data-theme="dark"] :is(input, select, textarea) {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] :is(button, input, select, textarea):disabled {
+  cursor: not-allowed;
+}
+
+/* Site — navegação, áreas claras e cartões. */
 html[data-theme="dark"] .site-header {
-  border-color: rgba(224, 234, 247, 0.12);
-  background: rgba(20, 34, 56, 0.94);
+  background: rgba(19, 34, 55, .97);
+  border-color: var(--gng-dark-border);
 }
-
-html[data-theme="dark"] .main-nav a {
-  color: #c3cede;
-}
-
-html[data-theme="dark"] .main-nav a:hover {
-  color: #ffffff;
-}
-
-html[data-theme="dark"] .menu-toggle,
 html[data-theme="dark"] .main-nav,
-html[data-theme="dark"] .quick-info div,
+html[data-theme="dark"] .menu-toggle,
+html[data-theme="dark"] .quick-info > div,
 html[data-theme="dark"] .trust-grid,
-html[data-theme="dark"] .trust-grid div,
+html[data-theme="dark"] .trust-grid > div,
 html[data-theme="dark"] .price-table-shell,
 html[data-theme="dark"] .booking-step,
-html[data-theme="dark"] .booking-select,
-html[data-theme="dark"] .booking-input,
-html[data-theme="dark"] .booking-day,
-html[data-theme="dark"] .booking-time,
-html[data-theme="dark"] .benefits div,
+html[data-theme="dark"] .benefits > div,
 html[data-theme="dark"] .plan-card:not(.plan-featured),
 html[data-theme="dark"] .contact-panel {
-  background-color: #20334f;
-  border-color: rgba(224, 234, 247, 0.14);
-  color: #eef3fa;
+  background: var(--gng-dark-surface);
+  border-color: var(--gng-dark-border);
+  color: var(--gng-dark-text);
 }
+html[data-theme="dark"] .main-nav a:not(.nav-cta) {
+  color: var(--gng-dark-text) !important;
+}
+html[data-theme="dark"] .main-nav a:hover:not(.nav-cta),
+html[data-theme="dark"] .footer-links a:hover {
+  color: var(--gng-dark-accent) !important;
+}
+html[data-theme="dark"] .menu-toggle span { background: #f5f8fc; }
+html[data-theme="dark"] .skip-link { background: #f5f8fc; color: #14263e; }
 
 html[data-theme="dark"] .hero {
-  background:
-    radial-gradient(circle at 88% 10%, rgba(102, 132, 176, 0.18), transparent 26rem),
-    linear-gradient(135deg, #142238 0%, #172a46 48%, #1c304d 100%);
+  background: radial-gradient(circle at 88% 10%, rgba(118, 154, 203, .14), transparent 26rem),
+    linear-gradient(135deg, #121f31 0%, #192e49 55%, #1b3554 100%);
 }
-
-html[data-theme="dark"] .hero h1,
-html[data-theme="dark"] .section-head h2,
-html[data-theme="dark"] .location-copy h2,
-html[data-theme="dark"] .quick-info strong,
-html[data-theme="dark"] .trust-grid strong,
-html[data-theme="dark"] .price-table td,
-html[data-theme="dark"] .price-table td strong,
-html[data-theme="dark"] .booking-step-heading strong,
-html[data-theme="dark"] .booking-select-label,
-html[data-theme="dark"] .booking-select,
-html[data-theme="dark"] .booking-input,
-html[data-theme="dark"] .booking-day,
-html[data-theme="dark"] .booking-time,
-html[data-theme="dark"] .benefits strong,
-html[data-theme="dark"] .plan-card:not(.plan-featured) h3,
-html[data-theme="dark"] .plan-card:not(.plan-featured) .price strong,
-html[data-theme="dark"] .contact-panel a {
-  color: #f5f8fc;
-}
-
-html[data-theme="dark"] .hero h1 span {
-  color: #91a9ca;
-}
-
-html[data-theme="dark"] .hero-lead,
-html[data-theme="dark"] .section-head > p,
-html[data-theme="dark"] .quick-info span,
-html[data-theme="dark"] .trust-grid small,
-html[data-theme="dark"] .booking-step-heading small,
-html[data-theme="dark"] .booking-field-hint,
-html[data-theme="dark"] .benefits small,
-html[data-theme="dark"] .plan-card:not(.plan-featured) li,
-html[data-theme="dark"] .address {
-  color: #b7c4d6;
-}
-
-html[data-theme="dark"] #servicos,
-html[data-theme="dark"] .memberships-section,
-html[data-theme="dark"] .final-cta {
-  background: #142238;
-}
-
-html[data-theme="dark"] .space-section,
-html[data-theme="dark"] .location-section {
-  background: #182943;
-}
-
-html[data-theme="dark"] .price-table tbody tr:nth-child(even) {
-  background: #1b2e49;
-}
-
-html[data-theme="dark"] .price-table tbody tr + tr td {
-  border-color: rgba(224, 234, 247, 0.1);
-}
-
-html[data-theme="dark"] .table-action a {
-  background: #304765;
-  color: #f4f7fb;
-}
-
-html[data-theme="dark"] .booking-section {
-  background:
-    radial-gradient(circle at 90% 10%, rgba(102, 132, 176, 0.18), transparent 28rem),
-    linear-gradient(180deg, #182943 0%, #142238 100%);
-}
-
-html[data-theme="dark"] .booking-day span,
-html[data-theme="dark"] .booking-day small {
-  color: #aab8cb;
-}
-
-html[data-theme="dark"] .booking-day.is-selected,
-html[data-theme="dark"] .booking-time.is-selected {
-  background: #45638e;
-  color: #ffffff;
-}
-
-html[data-theme="dark"] .booking-day.is-disabled,
-html[data-theme="dark"] .booking-day:disabled,
-html[data-theme="dark"] .booking-time.is-disabled,
-html[data-theme="dark"] .booking-time:disabled,
-html[data-theme="dark"] .booking-time.is-occupied {
-  background: #172842;
-  border-color: rgba(224, 234, 247, 0.09);
-  color: #7f90a7;
-}
-
-html[data-theme="dark"] .booking-empty {
-  background: rgba(31, 50, 78, 0.72);
-  border-color: rgba(224, 234, 247, 0.16);
-  color: #b8c5d7;
-}
-
-html[data-theme="dark"] .mobile-app-nav {
-  border-color: rgba(224, 234, 247, 0.14);
-  background: rgba(24, 41, 67, 0.96);
-}
-
-html[data-theme="dark"] .mobile-app-nav a {
-  color: #aebbd0;
-}
-
-html[data-theme="dark"] .mobile-app-nav a.is-active:not(.is-primary) {
-  background: #2b4262;
-  color: #ffffff;
-}
-
-html[data-theme="dark"] .footer-links {
-  color: #c6d0df;
-}
-
-/* Painel administrativo */
-html[data-theme="dark"] .admin-page,
-html[data-theme="dark"] .admin-login,
-html[data-theme="dark"] .admin-dashboard {
-  background: #142238 !important;
-  color: #e7eef8 !important;
-}
-
-html[data-theme="dark"] .login-shell,
-html[data-theme="dark"] .login-card,
-html[data-theme="dark"] .admin-header,
-html[data-theme="dark"] .admin-section-nav,
-html[data-theme="dark"] .admin-panel-section,
-html[data-theme="dark"] .admin-stat-card,
-html[data-theme="dark"] .admin-booking-card,
-html[data-theme="dark"] .management-card,
-html[data-theme="dark"] .cash-main-card,
-html[data-theme="dark"] .cash-summary-card,
-html[data-theme="dark"] .cash-payment-section,
-html[data-theme="dark"] .cash-payment-card,
-html[data-theme="dark"] .admin-modal-card,
-html[data-theme="dark"] .admin-confirm-card,
-html[data-theme="dark"] .business-card,
-html[data-theme="dark"] .business-item,
-html[data-theme="dark"] .report-card,
-html[data-theme="dark"] .report-table-shell,
-html[data-theme="dark"] .payment-booking-summary,
-html[data-theme="dark"] .payment-panel,
-html[data-theme="dark"] .payment-cash-box {
-  background-color: #1d304c !important;
-  border-color: rgba(224, 234, 247, 0.13) !important;
-  color: #edf3fb !important;
-}
-
-html[data-theme="dark"] .admin-field input,
-html[data-theme="dark"] .admin-field select,
-html[data-theme="dark"] .admin-field textarea,
-html[data-theme="dark"] .business-item input,
-html[data-theme="dark"] .business-item select,
-html[data-theme="dark"] .business-item textarea,
-html[data-theme="dark"] .business-card input,
-html[data-theme="dark"] .business-card select,
-html[data-theme="dark"] .business-card textarea,
-html[data-theme="dark"] .payment-money-input,
-html[data-theme="dark"] .payment-money-input input {
-  background: #162943 !important;
-  border-color: rgba(224, 234, 247, 0.16) !important;
-  color: #f2f6fb !important;
-}
-
-html[data-theme="dark"] .admin-field input::placeholder,
-html[data-theme="dark"] .admin-field textarea::placeholder,
-html[data-theme="dark"] input::placeholder {
-  color: #8091a8 !important;
-}
-
-html[data-theme="dark"] .admin-section-head h2,
-html[data-theme="dark"] .login-card-head h2,
-html[data-theme="dark"] .admin-booking-card strong,
-html[data-theme="dark"] .cash-main-info strong,
-html[data-theme="dark"] .cash-summary-card strong,
-html[data-theme="dark"] .cash-payment-card strong,
-html[data-theme="dark"] .business-card-head h3,
-html[data-theme="dark"] .business-gallery-body strong,
-html[data-theme="dark"] .report-card strong,
-html[data-theme="dark"] .admin-modal-head h2,
-html[data-theme="dark"] .admin-confirm-card h2 {
+html[data-theme="dark"] :is(.hero h1, .section-head h2, .location-copy h2,
+  .quick-info strong, .trust-grid strong, .plan-card:not(.plan-featured) h3,
+  .benefits strong, .contact-panel strong, .price-table td strong,
+  .booking-step-heading strong, .booking-customer-field label,
+  .booking-select-label, .booking-step-heading > div > strong) {
   color: #f5f8fc !important;
 }
-
-html[data-theme="dark"] .admin-section-head p,
-html[data-theme="dark"] .admin-field label,
-html[data-theme="dark"] .admin-field span,
-html[data-theme="dark"] .admin-field small,
-html[data-theme="dark"] .business-card-head p,
-html[data-theme="dark"] .business-item label,
-html[data-theme="dark"] .business-gallery-body small,
-html[data-theme="dark"] .payment-help {
-  color: #aebdd0 !important;
+html[data-theme="dark"] :is(.hero-lead, .section-head > p, .quick-info span,
+  .trust-grid small, .trust-grid span, .benefits small, .benefits span,
+  .booking-field-hint, .booking-step-heading small, .address,
+  .contact-panel span, .plan-card:not(.plan-featured) li,
+  .plan-card:not(.plan-featured) .price small, .plan-card:not(.plan-featured) .price span) {
+  color: #bdccdf !important;
+}
+html[data-theme="dark"] .hero h1 span { color: #a4c5ed; }
+html[data-theme="dark"] .eyebrow:not(.eyebrow-light),
+html[data-theme="dark"] .plan-card:not(.plan-featured) .plan-kicker {
+  color: #bad9fe !important;
 }
 
-html[data-theme="dark"] .admin-section-nav-button,
-html[data-theme="dark"] .business-tab,
-html[data-theme="dark"] .business-small-button,
-html[data-theme="dark"] .booking-action-button,
-html[data-theme="dark"] .payment-mode-button,
-html[data-theme="dark"] .payment-option,
-html[data-theme="dark"] .admin-secondary-button {
-  border-color: rgba(224, 234, 247, 0.15) !important;
-  background: #253b5b !important;
-  color: #eaf0f8 !important;
+html[data-theme="dark"] :is(#servicos, .memberships-section, .final-cta) {
+  background: var(--gng-dark-page);
 }
-
-html[data-theme="dark"] .admin-section-nav-button.is-active,
-html[data-theme="dark"] .business-tab.is-active,
-html[data-theme="dark"] .payment-mode-button.is-active,
-html[data-theme="dark"] .payment-option.is-selected {
-  background: #45638e !important;
-  color: #ffffff !important;
+html[data-theme="dark"] :is(.space-section, .location-section) {
+  background: var(--gng-dark-layer);
 }
-
-html[data-theme="dark"] .report-table th {
-  background: #203653 !important;
-  color: #c4d0df !important;
-}
-
-html[data-theme="dark"] .report-table td {
-  border-color: rgba(224, 234, 247, 0.08) !important;
-  color: #dbe4f0 !important;
-}
-
-html[data-theme="dark"] .business-message,
-html[data-theme="dark"] .admin-message,
-html[data-theme="dark"] .cash-message,
-html[data-theme="dark"] .admin-modal-message {
-  background: #243b5c;
-  color: #eaf0f8;
-}
-
-html[data-theme="dark"] .login-brand-panel,
-html[data-theme="dark"] .site-footer,
 html[data-theme="dark"] .section-navy,
-html[data-theme="dark"] .booking-summary,
-html[data-theme="dark"] .plan-featured,
-html[data-theme="dark"] .final-cta-inner {
-  background: linear-gradient(145deg, #1e3557, #101d32);
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] .final-cta-inner,
+html[data-theme="dark"] .hero-brand-card,
+html[data-theme="dark"] .plan-featured {
+  background: linear-gradient(145deg, #203b5c, #101e32);
+  color: #f5f8fc;
+}
+html[data-theme="dark"] :is(.section-navy, .site-footer, .final-cta-inner,
+  .hero-brand-card, .plan-featured) :is(h1, h2, h3, strong, p, span, small, li, a):not(.btn-light) {
+  color: #f1f6fc;
+}
+html[data-theme="dark"] .plan-featured :is(.price small, .price span, li),
+html[data-theme="dark"] .site-footer .footer-bottom,
+html[data-theme="dark"] .footer-links a {
+  color: #cedbea !important;
+}
+html[data-theme="dark"] .featured-label {
+  background: #ac5716;
+  color: #fff !important;
 }
 
-@media (max-width: 680px) {
-  html:not(.gng-admin-context) .gng-theme-toggle {
-    left: 11px;
-    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .gng-theme-toggle {
-    min-height: 42px;
-    padding: 5px 9px 5px 5px;
-    gap: 6px;
-    font-size: 0.62rem;
-  }
-
-  .gng-theme-icon-wrap {
-    width: 30px;
-    height: 30px;
-    flex-basis: 30px;
-  }
+/* Tabela de serviços e opções de agendamento. */
+html[data-theme="dark"] .price-table thead {
+  background: linear-gradient(90deg, #162c48, #29496f);
+  color: #f5f8fc;
+}
+html[data-theme="dark"] .price-table thead :is(th, span, strong) {
+  color: #f5f8fc !important;
+}
+html[data-theme="dark"] .price-table tbody tr:nth-child(even) {
+  background: #1a3049;
+}
+html[data-theme="dark"] .price-table tbody tr:hover {
+  background-color: #284260;
+}
+html[data-theme="dark"] .price-table td,
+html[data-theme="dark"] .price-table td:not(.table-action) {
+  color: #edf4fc !important;
+  border-color: var(--gng-dark-border);
+}
+html[data-theme="dark"] .booking-section {
+  background: radial-gradient(circle at 90% 5%, rgba(118, 154, 203, .12), transparent 28rem),
+    linear-gradient(180deg, #17283e 0%, #111e30 100%);
+}
+html[data-theme="dark"] .booking-step-number {
+  background: #365f8b;
+  color: #fff;
+}
+html[data-theme="dark"] :is(.booking-select, .booking-input,
+  .booking-day, .booking-time) {
+  background-color: var(--gng-dark-field);
+  border-color: var(--gng-dark-border);
+  color: #f5f8fc !important;
+}
+html[data-theme="dark"] .booking-select {
+  background-image: linear-gradient(45deg, transparent 50%, #c9dcf4 50%),
+    linear-gradient(135deg, #c9dcf4 50%, transparent 50%);
+}
+html[data-theme="dark"] :is(.booking-select, .booking-input) option {
+  background: #172c46;
+  color: #fff;
+}
+html[data-theme="dark"] :is(.booking-day, .booking-time):hover:not(:disabled) {
+  background-color: #2c4769;
+  border-color: #a1c2ea;
+}
+html[data-theme="dark"] :is(.booking-day.is-selected, .booking-time.is-selected) {
+  background: #426b99 !important;
+  border-color: #b2d3f5 !important;
+  color: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(211, 230, 252, .18);
+}
+html[data-theme="dark"] .booking-day.is-selected :is(span, small),
+html[data-theme="dark"] .booking-time.is-selected :is(span, small) {
+  color: #fff !important;
+}
+html[data-theme="dark"] .booking-day:not(.is-selected) :is(span, small),
+html[data-theme="dark"] .booking-time:not(.is-selected) :is(span, small) {
+  color: #c2d0e2 !important;
+}
+html[data-theme="dark"] :is(.booking-day:disabled, .booking-day.is-disabled,
+  .booking-time:disabled, .booking-time.is-disabled, .booking-time.is-occupied) {
+  background: #1a293e !important;
+  border-color: #455973 !important;
+  color: #b5c4d7 !important;
+  opacity: 1;
+}
+html[data-theme="dark"] .booking-time.is-occupied :is(.booking-time-value, .booking-time-status) {
+  color: #b5c4d7 !important;
+}
+html[data-theme="dark"] .booking-empty {
+  background: #1c334f;
+  border-color: var(--gng-dark-border);
+  color: #d8e4f2 !important;
 }
 
-@media (max-width: 390px) {
-  .gng-theme-label {
-    display: none;
-  }
-
-  .gng-theme-toggle {
-    width: 42px;
-    padding: 5px;
-    justify-content: center;
-  }
+/* Resumo: contraste próprio, sem herdar cores escuras dos cartões. */
+html[data-theme="dark"] .booking-summary {
+  background: linear-gradient(145deg, #274569, #112039);
+  color: #f5f8fc;
 }
+html[data-theme="dark"] .booking-summary :is(strong, h2, h3) { color: #fff !important; }
+html[data-theme="dark"] .booking-summary-list span,
+html[data-theme="dark"] .booking-summary-top span { color: #c9d9ec !important; }
+html[data-theme="dark"] .booking-summary-list > div {
+  background: rgba(11, 25, 43, .30);
+  border-color: rgba(227, 238, 251, .20);
+}
+html[data-theme="dark"] .booking-notice {
+  background: #2c3544;
+  border-color: #a87b4b;
+}
+html[data-theme="dark"] .booking-notice strong { color: #f7c78e !important; }
+html[data-theme="dark"] .booking-notice p { color: #e2eaf4 !important; }
+html[data-theme="dark"] .booking-privacy-controls {
+  background: rgba(11, 25, 43, .30);
+  border-color: rgba(227, 238, 251, .23);
+}
+html[data-theme="dark"] .booking-privacy-choice,
+html[data-theme="dark"] .booking-privacy-hint { color: #e4edf8 !important; }
+html[data-theme="dark"] .booking-privacy-choice a { color: #b7dcff !important; }
+
+/* Botões públicos: estados distinguíveis e hierarquia clara. */
+html[data-theme="dark"] :is(.btn-primary, .main-nav .nav-cta,
+  .mobile-app-nav a.is-primary, .admin-primary-button) {
+  background: var(--gng-dark-action) !important;
+  background-image: none !important;
+  border-color: #83a8d3 !important;
+  color: #fff !important;
+}
+html[data-theme="dark"] :is(.btn-primary, .main-nav .nav-cta,
+  .mobile-app-nav a.is-primary, .admin-primary-button):hover:not(:disabled) {
+  background: var(--gng-dark-action-hover) !important;
+  color: #fff !important;
+}
+html[data-theme="dark"] :is(.btn-secondary, .table-action a,
+  .map-open-link, #mobile-services-toggle, .booking-step-action, .booking-change) {
+  background: #2c496d !important;
+  border-color: #7898bc !important;
+  color: #f5f8fc !important;
+}
+html[data-theme="dark"] :is(.btn-light, .plan-featured .btn-light,
+  .final-cta-inner .btn-light, .booking-summary .booking-submit,
+  .cash-open-button, .admin-refresh-button:hover:not(:disabled)) {
+  background: #f5f8fc !important;
+  border-color: #f5f8fc !important;
+  color: #172841 !important;
+}
+html[data-theme="dark"] :is(.btn-light, .booking-summary .booking-submit):hover:not(:disabled) {
+  background: #dfeafa !important;
+  color: #14263e !important;
+}
+html[data-theme="dark"] :is(.btn-primary, .booking-submit,
+  .admin-primary-button):disabled {
+  background: #354358 !important;
+  border-color: #64768e !important;
+  color: #c7d4e3 !important;
+  opacity: .85;
+}
+html[data-theme="dark"] .booking-summary .booking-submit:disabled {
+  background: #52647b !important;
+  color: #d4dfec !important;
+  border-color: #71839a !important;
+}
+html[data-theme="dark"] .mobile-app-nav {
+  background: rgba(23, 40, 62, .97);
+  border-color: var(--gng-dark-border);
+}
+html[data-theme="dark"] .mobile-app-nav a:not(.is-primary) {
+  color: #c3d2e4 !important;
+}
+html[data-theme="dark"] .mobile-app-nav a.is-active:not(.is-primary) {
+  background: #325476;
+  color: #fff !important;
+}
+
+/* Painel administrativo — superfícies reais, inclusive módulos JS dinâmicos. */
+html[data-theme="dark"] :is(.admin-page, .admin-login, .admin-dashboard) {
+  background: var(--gng-dark-page) !important;
+  color: var(--gng-dark-text);
+}
+html[data-theme="dark"] :is(.login-shell, .login-card,
+  .admin-header, .admin-section-nav, .admin-booking-workspace,
+  .admin-controls, .admin-bookings-section, .admin-panel-section,
+  .admin-stat-card, .management-card, .cash-section,
+  .cash-summary-card, .cash-payment-section, .cash-payment-card,
+  .admin-modal-card, .admin-confirm-card, .payment-panel,
+  .business-card, .report-card, .report-table-shell) {
+  background: var(--gng-dark-surface) !important;
+  color: var(--gng-dark-text);
+  border-color: var(--gng-dark-border) !important;
+}
+html[data-theme="dark"] :is(.admin-booking-tabs, .admin-loading, .admin-empty,
+  .admin-booking-card, .booking-card, .blocked-slot-card, .blocked-slot-item,
+  .booking-detail-item, .payment-option, .payment-cash-box,
+  .cash-payment-icon, .business-item, .business-weekday,
+  .business-gallery-card, .business-logo-preview,
+  .payment-booking-summary, .payment-mode-switch,
+  .cash-payment-section, .admin-confirm-card,
+  .report-table tbody tr:nth-child(even)) {
+  background: #1b304a !important;
+  color: #e7edf6;
+  border-color: var(--gng-dark-border) !important;
+}
+html[data-theme="dark"] .admin-modal-head {
+  background: #203651 !important;
+  border-color: var(--gng-dark-border);
+}
+html[data-theme="dark"] .login-brand-panel,
+html[data-theme="dark"] .admin-welcome,
+html[data-theme="dark"] .cash-main-card,
+html[data-theme="dark"] .payment-split-summary {
+  background: linear-gradient(145deg, #284669, #101f34) !important;
+  color: #f5f8fc !important;
+  border-color: #4c6786;
+}
+html[data-theme="dark"] :is(.login-brand-panel, .admin-welcome,
+  .cash-main-card, .payment-split-summary) :is(strong, h1, h2, h3, span, p, small) {
+  color: #e8f1fc;
+}
+html[data-theme="dark"] :is(.login-brand-panel, .admin-welcome,
+  .cash-main-card, .payment-split-summary) :is(h1, h2, h3, strong) {
+  color: #fff !important;
+}
+html[data-theme="dark"] .login-feature-list > div {
+  background: rgba(255, 255, 255, .07);
+  border-color: rgba(226, 239, 252, .17);
+}
+html[data-theme="dark"] .admin-header-brand span,
+html[data-theme="dark"] .admin-header-brand strong,
+html[data-theme="dark"] .admin-user-email,
+html[data-theme="dark"] :is(.admin-section-head h2,
+  .admin-booking-workspace-head h2, .admin-selected-day strong,
+  .admin-stat-card > strong, .admin-booking-card strong,
+  .booking-card strong, .booking-time-column strong,
+  .booking-client strong, .booking-service strong,
+  .booking-card-price, .booking-price, .management-card-head h3,
+  .blocked-list-head strong, .blocked-slot-card strong,
+  .blocked-slot-item strong, .cash-summary-card strong,
+  .cash-payment-section-head h3, .cash-payment-card strong,
+  .cash-payment-card-head div > span,
+  .admin-modal-head h2, .admin-confirm-card h2,
+  .booking-detail-item strong, .payment-booking-summary strong,
+  .payment-cash-box > label, .payment-change-value,
+  .payment-split-field > span, .business-card-head h3,
+  .business-gallery-body strong, .report-card strong) {
+  color: #f5f8fc !important;
+}
+html[data-theme="dark"] :is(.login-card-head p, .admin-field label,
+  .admin-section-head p, .admin-section-head > p,
+  .admin-controls label, .admin-control label, .admin-selected-day small,
+  .admin-stat-card > span, .admin-stat-card > small,
+  .booking-time-column span, .booking-client span,
+  .booking-service span, .booking-card-client span,
+  .booking-card-service span, .cash-summary-card > span,
+  .cash-summary-card > small, .cash-payment-card-head small,
+  .cash-payment-count, .cash-date-label, .management-card-head p,
+  .blocked-slot-card span, .blocked-slot-item span,
+  .booking-detail-item span, .payment-help, .payment-change-row > span,
+  .business-card-head p, .business-card-head span,
+  .business-kicker, .business-item label, .business-gallery-body small,
+  .report-card span, .manual-optional-hint) {
+  color: #bdccdf !important;
+}
+html[data-theme="dark"] .login-card-head h2,
+html[data-theme="dark"] .login-card-head > span,
+html[data-theme="dark"] .admin-booking-workspace-head > div > span,
+html[data-theme="dark"] #admin-last-update {
+  color: #d7e4f4 !important;
+}
+
+/* Campos em superfícies escuras (inclui relatório/personalização). */
+html[data-theme="dark"] :is(.admin-field input, .admin-field select,
+  .admin-field textarea, .admin-control input, .business-item input,
+  .business-item select, .business-item textarea,
+  .business-card input, .business-card select, .business-card textarea,
+  .payment-money-input, .payment-money-input input,
+  .gng-calendar-trigger) {
+  background: var(--gng-dark-field) !important;
+  color: #f5f8fc !important;
+  border-color: #59718f !important;
+}
+html[data-theme="dark"] :is(.admin-field input, .admin-field select,
+  .booking-select, .payment-money-input input) option {
+  background: #14263e;
+  color: #fff;
+}
+html[data-theme="dark"] .payment-money-input > span {
+  color: #c8d5e7;
+}
+html[data-theme="dark"] .business-inline-check input {
+  accent-color: #8fb9ed;
+}
+
+/* Guias, filtros e ações administrativas. */
+html[data-theme="dark"] :is(.admin-section-nav-button,
+  .admin-secondary-button, .password-toggle,
+  .booking-action-button, .clear-filters-button, .small-refresh-button,
+  .admin-modal-close, .payment-mode-button, .business-tab,
+  .business-small-button, .cash-close-button,
+  .admin-booking-tab, .unblock-slot-button) {
+  background: #2b4769 !important;
+  color: #f2f7fc !important;
+  border-color: #617d9e !important;
+}
+html[data-theme="dark"] :is(.admin-section-nav-button, .business-tab,
+  .admin-booking-tab, .payment-mode-button,
+  .payment-option):hover:not(:disabled) {
+  background: #375c84 !important;
+  border-color: #96b4d8 !important;
+}
+html[data-theme="dark"] :is(.admin-section-nav-button.is-active,
+  .business-tab.is-active, .admin-booking-tab.is-active,
+  .payment-mode-button.is-active, .payment-option.is-selected) {
+  background: #426b99 !important;
+  border-color: #a6c9f0 !important;
+  color: #fff !important;
+}
+html[data-theme="dark"] .admin-booking-tab > strong {
+  background: #223951 !important;
+  color: #eff5fc !important;
+}
+html[data-theme="dark"] .admin-booking-tab.is-active > strong {
+  background: #152b46 !important;
+  color: #fff !important;
+}
+html[data-theme="dark"] .booking-action-button:is(.is-primary, .accept),
+html[data-theme="dark"] .cash-status-badge.is-open {
+  background: #185b49 !important;
+  border-color: #3c9c7b !important;
+  color: #d8f8e8 !important;
+}
+html[data-theme="dark"] .booking-action-button:is(.is-danger, .reject, .cancel),
+html[data-theme="dark"] :is(.admin-danger-button, .blocked-slot-remove) {
+  background: #683741 !important;
+  border-color: #ac6471 !important;
+  color: #ffe0e5 !important;
+}
+html[data-theme="dark"] .booking-action-button.complete {
+  background: #345d8b !important;
+  border-color: #9cbbe1 !important;
+  color: #fff !important;
+}
+
+/* Badges de status mantém cores sem perder leitura. */
+html[data-theme="dark"] :is(.booking-status, .booking-status-badge,
+  .cash-status-badge) {
+  background: #2b425e;
+  color: #e8f1fc;
+}
+html[data-theme="dark"] :is(.booking-status.is-pending, .booking-status-badge.is-pending) {
+  background: #49371f !important;
+  color: #ffcf91 !important;
+}
+html[data-theme="dark"] :is(.booking-status.is-confirmed, .booking-status-badge.is-confirmed) {
+  background: #1b4035 !important;
+  color: #aff0d4 !important;
+}
+html[data-theme="dark"] :is(.booking-status.is-completed, .booking-status-badge.is-completed) {
+  background: #26456b !important;
+  color: #c7e1ff !important;
+}
+html[data-theme="dark"] :is(.booking-status.is-cancelled, .booking-status.is-rejected,
+  .booking-status-badge.is-cancelled, .booking-status-badge.is-rejected,
+  .cash-status-badge.is-closed) {
+  background: #4b2b35 !important;
+  color: #ffc3cf !important;
+}
+html[data-theme="dark"] :is(.booking-status.is-expired, .booking-status-badge.is-expired) {
+  background: #29394f !important;
+  color: #c0cede !important;
+}
+html[data-theme="dark"] :is(.booking-countdown, .pending-countdown,
+  .payment-split-value.is-pending) {
+  color: #ffca86 !important;
+}
+html[data-theme="dark"] :is(.booking-countdown.is-urgent, .pending-countdown.is-urgent,
+  .payment-change-value.is-error, .payment-split-value.is-error,
+  .report-negative) {
+  color: #ffb4bc !important;
+}
+html[data-theme="dark"] :is(.payment-change-value.is-ok,
+  .payment-change-value.is-change, .payment-split-value.is-ok,
+  .report-positive) {
+  color: #b2efd0 !important;
+}
+
+/* Calendário JS, relatórios e galeria: corrigir estados com especificidade. */
+html[data-theme="dark"] :is(.gng-calendar-popover, .gng-calendar-trigger) {
+  background: #203651 !important;
+  border-color: #587292 !important;
+  color: #f5f8fc !important;
+}
+html[data-theme="dark"] .gng-calendar-title,
+html[data-theme="dark"] .gng-calendar-weekdays span {
+  color: #d9e8fa !important;
+}
+html[data-theme="dark"] :is(.gng-calendar-nav, .gng-calendar-footer button,
+  .gng-calendar-day) {
+  background: #294360 !important;
+  color: #eff6ff !important;
+  border-color: #587292 !important;
+}
+html[data-theme="dark"] .gng-calendar-day.is-selected {
+  background: #426b99 !important;
+  color: #fff !important;
+  border-color: #bad4f4 !important;
+}
+html[data-theme="dark"] .gng-calendar-day.is-today:not(.is-selected) {
+  color: #ffca8e !important;
+  border-color: #b7783d !important;
+}
+html[data-theme="dark"] .gng-calendar-nav:hover,
+html[data-theme="dark"] .gng-calendar-footer button:hover {
+  background: #375d83 !important;
+}
+html[data-theme="dark"] .business-gallery-body {
+  background: #203651;
+}
+html[data-theme="dark"] .business-logo-preview,
+html[data-theme="dark"] .business-gallery-card img {
+  background: #1b304a !important;
+}
+html[data-theme="dark"] .report-table th {
+  background: #304a69 !important;
+  color: #e5edf8 !important;
+  border-color: #526a88 !important;
+}
+html[data-theme="dark"] .report-table td {
+  color: #e9f1fc !important;
+  border-color: #465d78 !important;
+}
+
+/* Mensagens: cada tipo tem o contraste e a semântica preservados. */
+html[data-theme="dark"] :is(.admin-message, .business-message, .cash-message,
+  .management-message, .admin-modal-message, .booking-feedback,
+  .booking-empty) {
+  background: #273f5c;
+  border-color: #5d7796;
+  color: #e9f1fc;
+}
+html[data-theme="dark"] :is(.admin-message, .business-message, .cash-message,
+  .management-message, .admin-modal-message, .booking-feedback).is-error {
+  background: #4b2934 !important;
+  border-color: #b36f7d !important;
+  color: #ffe2e8 !important;
+}
+html[data-theme="dark"] :is(.admin-message, .business-message, .cash-message,
+  .management-message, .admin-modal-message, .booking-feedback).is-success {
+  background: #194037 !important;
+  border-color: #4caa88 !important;
+  color: #d4f6e6 !important;
+}
+html[data-theme="dark"] :is(.admin-message, .business-message, .cash-message,
+  .management-message, .admin-modal-message).is-info {
+  background: #203b5b !important;
+  border-color: #6b9fcf !important;
+  color: #d7eafd !important;
+}
+html[data-theme="dark"] .cash-automation-note {
+  background: #243d59;
+  border-color: #587292;
+  color: #d5e4f5;
+}
+
+/* Componentes auxiliares e preferências: contraste em ambas as opções. */
+html[data-theme="dark"] .gng-theme-toggle {
+  background: #263f5b;
+  border-color: #8aa8c8;
+  color: #f5f8fc;
+}
+html[data-theme="dark"] .gng-theme-icon-wrap {
+  background: #365474;
+}
+html[data-theme="dark"] .gng-theme-sun { opacity: 0; transform: rotate(75deg) scale(.55); }
+html[data-theme="dark"] .gng-theme-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+html[data-theme="dark"] .gng-privacy-dialog {
+  background: #203651;
+  border-color: #91a7c2;
+  color: #edf4fc;
+}
+html[data-theme="dark"] .gng-privacy-dialog a {
+  color: #b7dafa;
+}
+html[data-theme="dark"] .gng-privacy-dialog .gng-privacy-actions button {
+  background: #365f8b;
+  color: #fff;
+  border-color: #87a8ce;
+}
+html[data-theme="dark"] .map-consent-button {
+  background: #f5f8fc;
+  color: #162944;
+}
+html[data-theme="dark"] .footer-privacy-button { color: #d5e9ff; }
 
 @media (prefers-reduced-motion: reduce) {
-  .gng-theme-icon,
   html.gng-theme-switching *,
   html.gng-theme-switching *::before,
   html.gng-theme-switching *::after {
     transition: none !important;
   }
 }
-
 
 .cash-automation-note {
   margin: 0 0 14px;
@@ -454,169 +738,6 @@ html[data-theme="dark"] .cash-automation-note {
   color: #c5d1e0;
 }
 
-/* Contraste refinado: preservar a identidade azul-marinho no tema escuro. */
-html[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-html[data-theme="dark"] a:focus-visible,
-html[data-theme="dark"] button:focus-visible,
-html[data-theme="dark"] input:focus-visible,
-html[data-theme="dark"] select:focus-visible,
-html[data-theme="dark"] textarea:focus-visible {
-  outline: 3px solid #f2b36b !important;
-  outline-offset: 3px;
-}
-
-html[data-theme="dark"] .btn-primary,
-html[data-theme="dark"] .booking-submit,
-html[data-theme="dark"] .admin-primary-button,
-html[data-theme="dark"] .mobile-app-nav a.is-primary {
-  background: #36577e !important;
-  background-image: none !important;
-  color: #ffffff !important;
-  border-color: #698db8 !important;
-}
-
-html[data-theme="dark"] .btn-primary:hover,
-html[data-theme="dark"] .booking-submit:not(:disabled):hover,
-html[data-theme="dark"] .admin-primary-button:hover {
-  background: #47719f !important;
-  color: #ffffff !important;
-}
-
-html[data-theme="dark"] .btn-light,
-html[data-theme="dark"] .plan-featured .btn-light,
-html[data-theme="dark"] .final-cta-inner .btn-light,
-html[data-theme="dark"] .booking-summary .booking-submit.btn-light {
-  background: #f5f8fc !important;
-  color: #101d32 !important;
-  border-color: #f5f8fc !important;
-}
-
-html[data-theme="dark"] .btn-secondary,
-html[data-theme="dark"] .table-action a,
-html[data-theme="dark"] .map-open-link,
-html[data-theme="dark"] #mobile-services-toggle,
-html[data-theme="dark"] .booking-step-action,
-html[data-theme="dark"] .booking-change {
-  background-color: #2c4668 !important;
-  color: #f5f8fc !important;
-  border-color: #718aa8 !important;
-}
-
-html[data-theme="dark"] .booking-summary,
-html[data-theme="dark"] .booking-summary strong,
-html[data-theme="dark"] .booking-summary h2,
-html[data-theme="dark"] .booking-summary h3,
-html[data-theme="dark"] .booking-summary-list strong,
-html[data-theme="dark"] .plan-featured,
-html[data-theme="dark"] .plan-featured h3,
-html[data-theme="dark"] .plan-featured .price strong,
-html[data-theme="dark"] .plan-featured li,
-html[data-theme="dark"] .final-cta-inner,
-html[data-theme="dark"] .site-footer {
-  color: #f5f8fc !important;
-}
-
-html[data-theme="dark"] .booking-summary-list span,
-html[data-theme="dark"] .booking-notice p,
-html[data-theme="dark"] .booking-notice strong,
-html[data-theme="dark"] .plan-featured small,
-html[data-theme="dark"] .footer-bottom,
-html[data-theme="dark"] .footer-links a,
-html[data-theme="dark"] .hero-lead,
-html[data-theme="dark"] .section-head > p,
-html[data-theme="dark"] .booking-step small {
-  color: #c7d6e9 !important;
-}
-
-html[data-theme="dark"] .booking-notice,
-html[data-theme="dark"] .booking-summary-list > div,
-html[data-theme="dark"] .booking-feedback,
-html[data-theme="dark"] .booking-confirmation,
-html[data-theme="dark"] .booking-service-selected,
-html[data-theme="dark"] .contact-panel,
-html[data-theme="dark"] .map-business-label {
-  background-color: #243b5a !important;
-  border-color: rgba(231, 238, 248, 0.2) !important;
-}
-
-html[data-theme="dark"] .booking-select option,
-html[data-theme="dark"] .booking-input,
-html[data-theme="dark"] .admin-field option {
-  background-color: #162943;
-  color: #f5f8fc;
-}
-
-html[data-theme="dark"] .booking-day.is-selected,
-html[data-theme="dark"] .booking-time.is-selected,
-html[data-theme="dark"] .admin-section-nav-button.is-active,
-html[data-theme="dark"] .business-tab.is-active,
-html[data-theme="dark"] .payment-mode-button.is-active,
-html[data-theme="dark"] .payment-option.is-selected {
-  background: #4b709d !important;
-  color: #ffffff !important;
-  border-color: #9db6d5 !important;
-}
-
-html[data-theme="dark"] .booking-day:disabled,
-html[data-theme="dark"] .booking-time:disabled,
-html[data-theme="dark"] .booking-time.is-occupied {
-  background: #18283e !important;
-  color: #abbdd2 !important;
-  border-color: #42536b !important;
-  opacity: 1;
-}
-
-html[data-theme="dark"] .admin-empty,
-html[data-theme="dark"] .admin-stats,
-html[data-theme="dark"] .booking-tab-button,
-html[data-theme="dark"] .admin-filter,
-html[data-theme="dark"] .admin-bookings-empty,
-html[data-theme="dark"] .management-message,
-html[data-theme="dark"] .business-message,
-html[data-theme="dark"] .payment-panel,
-html[data-theme="dark"] .gng-calendar-popover,
-html[data-theme="dark"] .gng-calendar-day {
-  background-color: #1d304c !important;
-  color: #e9f1fa !important;
-  border-color: rgba(224, 234, 247, 0.18) !important;
-}
-
-html[data-theme="dark"] .admin-message.is-success,
-html[data-theme="dark"] .booking-feedback.is-success {
-  background: #153a30 !important;
-  color: #d4f8e8 !important;
-  border-color: #57a987 !important;
-}
-
-html[data-theme="dark"] .admin-message.is-error,
-html[data-theme="dark"] .booking-feedback.is-error {
-  background: #47262b !important;
-  color: #ffe5e7 !important;
-  border-color: #bd7278 !important;
-}
-
-html[data-theme="dark"] .gng-theme-toggle {
-  background: #223953 !important;
-  color: #f5f8fc !important;
-  border-color: #7790ac !important;
-}
-
-html[data-theme="dark"] .price-table th,
-html[data-theme="dark"] .price-table td,
-html[data-theme="dark"] .report-table td,
-html[data-theme="dark"] .admin-booking-card,
-html[data-theme="dark"] .business-item,
-html[data-theme="dark"] .payment-option strong {
-  color: #eef4fd !important;
-}
-
-html[data-theme="dark"] input::placeholder,
-html[data-theme="dark"] textarea::placeholder {
-  color: #bccbe0 !important;
-}
 
 /* Aviso de privacidade do agendamento e controles de serviços externos. */
 .booking-privacy-controls {
@@ -771,13 +892,44 @@ html[data-theme="dark"] .footer-privacy-button { color: #d3e6fc; }
   .map-privacy-placeholder p { font-size: .76rem; }
 }
 
-/* O estado desabilitado deve ser perceptível mesmo com botões de alto contraste. */
-html[data-theme="dark"] .booking-submit:disabled,
-html[data-theme="dark"] .btn-primary:disabled,
-html[data-theme="dark"] .admin-primary-button:disabled {
-  background: #344156 !important;
-  color: #c3cdd9 !important;
-  border-color: #57657a !important;
-  opacity: .8;
-  cursor: not-allowed;
+
+@media (max-width: 680px) {
+  html:not(.gng-admin-context) .gng-theme-toggle {
+    left: 11px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .gng-theme-toggle {
+    min-height: 42px;
+    padding: 5px 9px 5px 5px;
+    gap: 6px;
+    font-size: 0.62rem;
+  }
+
+  .gng-theme-icon-wrap {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
+}
+
+@media (max-width: 390px) {
+  .gng-theme-label {
+    display: none;
+  }
+
+  .gng-theme-toggle {
+    width: 42px;
+    padding: 5px;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gng-theme-icon,
+  html.gng-theme-switching *,
+  html.gng-theme-switching *::before,
+  html.gng-theme-switching *::after {
+    transition: none !important;
+  }
 }
