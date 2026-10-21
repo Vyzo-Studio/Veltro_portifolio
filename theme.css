@@ -969,3 +969,243 @@ html[data-theme="dark"] .footer-privacy-button { color: #d3e6fc; }
     transition: none !important;
   }
 }
+
+
+/* ==============================================================
+   GNG | ACABAMENTO VISUAL V2.1
+   Uma superfície contínua para menu e resumo, sem alterar a marca.
+   Aplica-se ao site público e ao painel administrativo.
+   ============================================================== */
+
+/* Logotipo original: apenas moldura suave, nunca recolorir ou recortar a arte. */
+.brand img,
+.hero-brand-card img,
+.footer-logo,
+.map-business-label img,
+.login-logo-box img,
+.admin-header-brand img,
+.business-logo-preview,
+.gng-policy-header img {
+  border-radius: 14px;
+  object-fit: contain;
+  background: #213756;
+  box-shadow:
+    0 0 0 1px rgba(214, 229, 246, .22),
+    0 9px 24px rgba(6, 15, 29, .20);
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.brand img:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(214, 229, 246, .38),
+    0 13px 28px rgba(6, 15, 29, .24);
+}
+.login-logo-box {
+  padding: 4px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(221, 235, 252, .19), rgba(221, 235, 252, .04));
+  box-shadow: 0 16px 35px rgba(4, 12, 25, .22);
+}
+.login-logo-box img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: none;
+}
+.map-business-label img,
+.admin-header-brand img {
+  border-radius: 11px;
+}
+@media (max-width: 680px) {
+  .brand img { border-radius: 10px; }
+  .footer-logo { border-radius: 12px; }
+}
+
+/* Navegação: links diretamente no cabeçalho, sem bloco retangular atrás. */
+@media (min-width: 861px) {
+  .main-nav {
+    gap: clamp(8px, 1.15vw, 17px);
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+  .main-nav a:not(.nav-cta) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    transition: color .2s ease, background-color .2s ease;
+  }
+  .main-nav a:not(.nav-cta):hover,
+  .main-nav a:not(.nav-cta):focus-visible {
+    background: rgba(122, 151, 185, .10);
+  }
+}
+.main-nav .nav-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.instagram-icon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.nav-social-link .instagram-icon {
+  color: #94bce5;
+}
+@media (min-width: 861px) and (max-width: 1120px) {
+  .header-inner { gap: 14px; }
+  .main-nav { gap: 9px; }
+  .main-nav a { font-size: .81rem; }
+  .main-nav .nav-cta { padding-inline: 16px; }
+}
+@media (min-width: 861px) and (max-width: 1010px) {
+  .main-nav .nav-social-link span { display: none; }
+  .main-nav .nav-social-link { min-width: 38px; justify-content: center; }
+}
+html[data-theme="dark"] .main-nav {
+  background: transparent !important;
+  border: 0;
+  box-shadow: none;
+}
+html[data-theme="dark"] .main-nav a:not(.nav-cta):hover,
+html[data-theme="dark"] .main-nav a:not(.nav-cta):focus-visible {
+  background: rgba(195, 219, 246, .09);
+  color: #ffffff !important;
+}
+@media (max-width: 860px) {
+  html[data-theme="dark"] .main-nav {
+    background: #1c304b !important;
+    border: 1px solid #4e6480;
+    box-shadow: 0 18px 44px rgba(3, 11, 23, .36);
+  }
+  html[data-theme="dark"] .main-nav a:not(.nav-cta) {
+    background: #263e5c;
+    border: 1px solid transparent;
+    color: #eaf2fc !important;
+  }
+  html[data-theme="dark"] .main-nav a:not(.nav-cta):hover {
+    background: #365579;
+    border-color: #6585aa;
+  }
+  .main-nav .nav-social-link span { display: inline; }
+}
+
+/* Seção de contato: Instagram próximo ao WhatsApp, sem competir com o CTA. */
+.contact-panel .instagram-contact-link {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--navy);
+  font-size: .88rem;
+  font-weight: 750;
+}
+.contact-panel .instagram-contact-link:hover,
+.contact-panel .instagram-contact-link:focus-visible {
+  color: #487cab;
+}
+html[data-theme="dark"] .contact-panel .instagram-contact-link {
+  color: #b8dafa !important;
+  border-color: rgba(221, 232, 245, .21);
+}
+
+/* Resumo do agendamento: superfície contínua, linhas leves e ritmo regular. */
+.booking-summary,
+html[data-theme="dark"] .booking-summary {
+  border: 1px solid rgba(166, 188, 215, .30);
+  border-radius: 22px;
+  background: linear-gradient(155deg, #263f5d 0%, #203854 55%, #182d47 100%);
+  box-shadow:
+    0 20px 48px rgba(5, 14, 29, .18),
+    inset 0 1px 0 rgba(255, 255, 255, .07);
+}
+.booking-summary-top {
+  padding: 24px 25px 18px;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(221, 235, 251, .16);
+}
+.booking-summary-top span,
+html[data-theme="dark"] .booking-summary-top span {
+  color: #c1d5eb !important;
+  letter-spacing: .11em;
+}
+.booking-summary-top strong,
+html[data-theme="dark"] .booking-summary-top strong {
+  color: #ffffff !important;
+  font-weight: 800;
+  line-height: 1.35;
+}
+.booking-summary-list {
+  display: grid;
+  gap: 0 14px;
+  padding: 7px 25px 10px;
+  background: transparent !important;
+}
+.booking-summary-list > div,
+html[data-theme="dark"] .booking-summary-list > div {
+  min-width: 0;
+  min-height: 69px;
+  padding: 14px 0;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(221, 235, 251, .14);
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none;
+}
+.booking-summary-list > div:last-child { border-bottom: 0; }
+.booking-summary-list span,
+html[data-theme="dark"] .booking-summary-list span {
+  color: #b9d1eb !important;
+  font-size: .71rem;
+  letter-spacing: .055em;
+}
+.booking-summary-list strong,
+html[data-theme="dark"] .booking-summary-list strong {
+  color: #f7faff !important;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+.booking-notice {
+  border-radius: 13px;
+}
+.booking-privacy-controls {
+  border-radius: 13px;
+}
+@media (max-width: 680px) {
+  .booking-summary {
+    border-radius: 16px;
+  }
+  .booking-summary-top {
+    padding: 16px 17px 13px;
+  }
+  .booking-summary-list {
+    padding: 4px 17px 10px;
+    gap: 0 12px;
+  }
+  .booking-summary-list > div {
+    min-height: 54px;
+    padding: 10px 0;
+  }
+  .booking-summary-list span { font-size: .6rem; }
+  .booking-summary-list strong { font-size: .78rem; line-height: 1.32; }
+}
+@media (max-width: 390px) {
+  .booking-summary-list { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand img { transition: none; }
+}
+
