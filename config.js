@@ -128,7 +128,7 @@ async function loadAdminModules() {
     });
 
     await loadScriptOnce({
-      src: "admin-notifications.js?v=3.1",
+      src: "admin-notifications.js?v=3.2",
       dataAttribute: "data-gng-admin-notifications",
       errorMessage: "Não foi possível carregar o sistema de notificações."
     });
