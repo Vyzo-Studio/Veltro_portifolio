@@ -1209,3 +1209,17 @@ html[data-theme="dark"] .booking-summary-list strong {
   .brand img { transition: none; }
 }
 
+
+/* Booking errors remain visible alongside the disabled action. */
+.booking-validation-hint {
+  margin: 4px 16px 11px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #fff0da;
+  background: rgba(96, 52, 24, .5);
+  border: 1px solid rgba(237, 178, 115, .4);
+  font-size: .78rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.booking-validation-hint[hidden] { display:none !important; }
