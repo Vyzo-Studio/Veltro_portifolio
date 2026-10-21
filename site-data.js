@@ -48,20 +48,41 @@
     document.head.appendChild(style);
   }
 
-  function applyTheme(settings) {
+  let configuredPalette = null;
+
+  function syncBrandPalette() {
+    if (!configuredPalette) return;
     const root = document.documentElement;
-    if (settings.primary_color) {
-      root.style.setProperty("--navy", settings.primary_color);
-      root.style.setProperty("--navy-light", settings.primary_color);
-    }
-    if (settings.secondary_color) {
-      root.style.setProperty("--navy-deep", settings.secondary_color);
-      root.style.setProperty("--navy-dark", settings.secondary_color);
-    }
-    if (settings.accent_color) {
-      root.style.setProperty("--orange", settings.accent_color);
+    const dark = root.dataset.theme === "dark";
+    const brandColors = {
+      "--navy": configuredPalette.primary_color,
+      "--navy-light": configuredPalette.primary_color,
+      "--navy-deep": configuredPalette.secondary_color,
+      "--navy-dark": configuredPalette.secondary_color
+    };
+
+    Object.keys(brandColors).forEach(function (property) {
+      const value = brandColors[property];
+      if (dark || !value) {
+        root.style.removeProperty(property);
+      } else {
+        root.style.setProperty(property, value);
+      }
+    });
+
+    if (configuredPalette.accent_color) {
+      root.style.setProperty("--orange", configuredPalette.accent_color);
+    } else {
+      root.style.removeProperty("--orange");
     }
   }
+
+  function applyTheme(settings) {
+    configuredPalette = settings || {};
+    syncBrandPalette();
+  }
+
+  window.addEventListener("gng:theme-change", syncBrandPalette);
 
   function applyLogo(settings) {
     if (!settings.logo_url) return;
