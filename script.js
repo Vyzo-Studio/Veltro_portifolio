@@ -4374,6 +4374,8 @@ async function submitBooking() {
     }
 
     selectedTime = null;
+    if (bookingPrivacyAck) bookingPrivacyAck.checked = false;
+    if (bookingWhatsappOptIn) bookingWhatsappOptIn.checked = false;
     updateTimeSummary();
     if (await loadBookedSlots()) renderDays();
     updateSubmitState();
@@ -4402,7 +4404,9 @@ async function submitBooking() {
   } finally {
     bookingRequestInProgress = false;
     if (bookingSubmit) {
-      bookingSubmit.textContent = originalText || "Enviar solicitação";
+      bookingSubmit.textContent = bookingWhatsappOptIn && bookingWhatsappOptIn.checked
+        ? "Solicitar e abrir WhatsApp"
+        : "Enviar solicitação";
     }
     updateSubmitState();
     syncMobileBookingFlow();
