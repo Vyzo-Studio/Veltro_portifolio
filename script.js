@@ -1825,7 +1825,7 @@ function isValidPhone(value) {
   const raw=digitsOnly(value);
   const national=(raw.startsWith("55") && (raw.length===12 || raw.length===13))
     ? raw.slice(2) : raw;
-  if (!/^\\d{10,11}$/.test(national) || /^(\\d)\\1+$/.test(national)) return false;
+  if (!/^\d{10,11}$/.test(national) || /^(\d)\1+$/.test(national)) return false;
   const ddd=Number(national.slice(0,2));
   if (ddd<11 || ddd>99) return false;
   const number=national.slice(2);
