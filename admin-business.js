@@ -806,7 +806,7 @@
     select.innerHTML =
       '<option value="">Selecione</option>' +
       active.map(function (service) {
-        return '<option value="' + escapeHtml(service.name) + '">' +
+        return '<option value="' + escapeHtml(service.name) + '" data-price-cents="' + Number(service.price_cents) + '">' +
           escapeHtml(service.name) + " — " + escapeHtml(formatMoney(service.price_cents)) +
           "</option>";
       }).join("");
@@ -1429,9 +1429,15 @@
       ]);
     });
 
+    // Neutralize Excel/LibreOffice formula prefixes in client-controlled text only.
+    // Payment amounts retain their signed numeric representation.
     const csv = lines.map(function (row) {
-      return row.map(function (value) {
-        return '"' + String(value).replace(/"/g, '""') + '"';
+      return row.map(function (value, columnIndex) {
+        let cell = String(value == null ? "" : value);
+        if ([2, 3, 4].includes(columnIndex) && /^[\\s\\u0000-\\u001f]*[=+@-]/.test(cell)) {
+          cell = "'" + cell;
+        }
+        return '"' + cell.replace(/"/g, '""') + '"';
       }).join(";");
     }).join("\n");
 
