@@ -132,6 +132,14 @@ html[data-theme="dark"] {
   --gng-dark-accent: #b9d9ff;
   --gng-dark-action: #365f8b;
   --gng-dark-action-hover: #4775a4;
+  --gng-toast-bg: #203651;
+  --gng-toast-text: #eaf1fc;
+  --gng-toast-title: #ffffff;
+  --gng-toast-label: #ffcd92;
+  --gng-toast-service: #dbe7f6;
+  --gng-toast-muted: #bbcde2;
+  --gng-toast-close-bg: #324c6a;
+  --gng-toast-close-text: #f5f8fc;
 }
 
 html[data-theme="dark"] body {
@@ -486,6 +494,34 @@ html[data-theme="dark"] .login-card-head > span,
 html[data-theme="dark"] .admin-booking-workspace-head > div > span,
 html[data-theme="dark"] #admin-last-update {
   color: #d7e4f4 !important;
+}
+
+html[data-theme="dark"] .admin-refresh-button {
+  background: rgba(221, 236, 251, .11);
+  border-color: rgba(221, 236, 251, .32);
+  color: #f5f8fc !important;
+}
+html[data-theme="dark"] :is(.admin-empty strong, .booking-card-time strong,
+  .booking-card-client strong, .booking-card-service strong,
+  .admin-control label, .payment-money-input > span) {
+  color: #edf5ff !important;
+}
+html[data-theme="dark"] :is(.cash-payment-icon, .payment-option > span) {
+  background: #365e88 !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] .business-small-button.primary {
+  background: #365f8b !important;
+  border-color: #86a6c9 !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] .business-small-button.danger {
+  background: #53323b !important;
+  border-color: #b87680 !important;
+  color: #ffdae0 !important;
+}
+html[data-theme="dark"] .booking-step.is-mobile-complete.is-mobile-collapsed .booking-step-heading::after {
+  color: #b8d8ff !important;
 }
 
 /* Campos em superfícies escuras (inclui relatório/personalização). */
