@@ -1142,9 +1142,17 @@
               <p class="booking-privacy-hint">Se não autorizar o WhatsApp, a solicitação ainda ficará pendente de confirmação e poderá expirar. Seu telefone será usado para assuntos do atendimento, não para anúncios.</p>
             </div>
 
+            <p
+              id="booking-validation-hint"
+              class="booking-validation-hint"
+              role="status"
+              aria-live="polite"
+            >Selecione um serviço.</p>
+
             <button
               class="btn btn-primary full booking-submit"
               id="booking-submit"
+              aria-describedby="booking-validation-hint"
               type="button"
               disabled
             >
@@ -1797,7 +1805,7 @@
 
   </footer>
 
-  <script src="script.js?v=13.3"></script>
+  <script src="script.js?v=13.4"></script>
   <script src="site-data.js?v=1.2"></script>
   <script src="privacy.js?v=1.2"></script>
 
