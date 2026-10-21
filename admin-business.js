@@ -270,6 +270,7 @@
               <thead>
                 <tr>
                   <th>Data do pagamento</th>
+                  <th>Registrado em</th>
                   <th>Tipo</th>
                   <th>Cliente</th>
                   <th>Serviço</th>
@@ -1359,11 +1360,16 @@
     const transactions = Array.isArray(reportData.transactions) ? reportData.transactions : [];
 
     body.innerHTML = transactions.map(function (item) {
-      const occurred = item.occurred_at ? new Date(item.occurred_at).toLocaleString("pt-BR") : "—";
+      const recordedAt = item.occurred_at ? new Date(item.occurred_at).toLocaleString("pt-BR") : "—";
+      const paymentDate = item.payment_effective_date
+        ? new Date(item.payment_effective_date + "T12:00:00").toLocaleDateString("pt-BR")
+        : (item.occurred_at ? new Date(item.occurred_at).toLocaleDateString("pt-BR") : "—");
+      const occurred = paymentDate + (item.is_historical_adjustment ? " · retroativo" : "");
       const amount = Number(item.amount_cents || 0);
       return `
         <tr>
           <td>${escapeHtml(occurred)}</td>
+          <td>${escapeHtml(recordedAt)}</td>
           <td>${item.transaction_type === "refund" ? "Estorno" : "Pagamento"}</td>
           <td>${escapeHtml(item.customer_name || "Cliente não informado")}</td>
           <td>${escapeHtml(item.service || "—")}</td>
@@ -1376,7 +1382,7 @@
     }).join("");
 
     if (!transactions.length) {
-      body.innerHTML = '<tr><td colspan="8">Nenhuma movimentação no período.</td></tr>';
+      body.innerHTML = '<tr><td colspan="9">Nenhuma movimentação no período.</td></tr>';
     }
   }
 
@@ -1412,11 +1418,14 @@
     }
 
     const lines = [
-      ["Data do pagamento","Tipo","Cliente","Serviço","Profissional","Data do atendimento","Horário","Forma de pagamento","Valor"]
+      ["Data do pagamento","Registrado em","Tipo","Cliente","Serviço","Profissional","Data do atendimento","Horário","Forma de pagamento","Valor"]
     ];
 
     reportData.transactions.forEach(function (item) {
       lines.push([
+        item.payment_effective_date
+          ? new Date(item.payment_effective_date + "T12:00:00").toLocaleDateString("pt-BR")
+          : (item.occurred_at ? new Date(item.occurred_at).toLocaleDateString("pt-BR") : ""),
         item.occurred_at ? new Date(item.occurred_at).toLocaleString("pt-BR") : "",
         item.transaction_type === "refund" ? "Estorno" : "Pagamento",
         item.customer_name || "Cliente não informado",
@@ -1434,7 +1443,7 @@
     const csv = lines.map(function (row) {
       return row.map(function (value, columnIndex) {
         let cell = String(value == null ? "" : value);
-        if ([2, 3, 4].includes(columnIndex) && /^[\s\u0000-\u001f]*[=+@-]/.test(cell)) {
+        if ([3, 4, 5].includes(columnIndex) && /^[\s\u0000-\u001f]*[=+@-]/.test(cell)) {
           cell = "'" + cell;
         }
         return '"' + cell.replace(/"/g, '""') + '"';
