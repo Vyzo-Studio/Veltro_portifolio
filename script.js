@@ -55,6 +55,7 @@ let selectedDate = null;
 let selectedTime = null;
 
 let blockedSlots = new Map();
+let blockedSlotReasons = new Map();
 let availabilityState = "idle";
 let availabilityRequestId = 0;
 
@@ -1820,18 +1821,16 @@ function isValidName(
   );
 }
 
-function isValidPhone(
-  value
-) {
-  const digits =
-    digitsOnly(
-      value
-    );
-
-  return (
-    digits.length >= 10 &&
-    digits.length <= 13
-  );
+function isValidPhone(value) {
+  const raw=digitsOnly(value);
+  const national=(raw.startsWith("55") && (raw.length===12 || raw.length===13))
+    ? raw.slice(2) : raw;
+  if (!/^\\d{10,11}$/.test(national) || /^(\\d)\\1+$/.test(national)) return false;
+  const ddd=Number(national.slice(0,2));
+  if (ddd<11 || ddd>99) return false;
+  const number=national.slice(2);
+  if (number.startsWith("0")) return false;
+  return number.length!==9 || number.startsWith("9");
 }
 
 function formatPhoneInput(
@@ -3023,8 +3022,8 @@ function updateCustomerSummary() {
 }
 
 function clearBlockedSlots() {
-  blockedSlots =
-    new Map();
+  blockedSlots = new Map();
+  blockedSlotReasons = new Map();
 }
 
 function addBlockedSlot(
@@ -3177,6 +3176,7 @@ async function loadBookedSlots() {
     }
 
     const nextBlockedSlots = new Map();
+    const nextBlockedReasons = new Map();
 
     data.forEach(function (item) {
       if (!item || typeof item.booking_date !== "string" || !item.booking_time) {
@@ -3189,9 +3189,11 @@ async function loadBookedSlots() {
         nextBlockedSlots.set(date, new Set());
       }
       nextBlockedSlots.get(date).add(time);
+      nextBlockedReasons.set(date+"|"+time, item.slot_status || "unavailable");
     });
 
     blockedSlots = nextBlockedSlots;
+    blockedSlotReasons = nextBlockedReasons;
     availabilityState = "ready";
 
     if (
@@ -3344,6 +3346,25 @@ function updateSubmitState() {
     ) ||
     !bookingPrivacyAck ||
     !bookingPrivacyAck.checked;
+  updateBookingValidationHint();
+}
+
+function updateBookingValidationHint() {
+  const hint=document.getElementById("booking-validation-hint");
+  if (!hint) return;
+  let message="";
+  const name=bookingCustomerName ? bookingCustomerName.value : "";
+  const phone=bookingCustomerPhone ? bookingCustomerPhone.value : "";
+  if (!bookingService || !bookingService.value) message="Selecione um serviço.";
+  else if (!selectedBarberId) message="Escolha um barbeiro.";
+  else if (availabilityState==="error") message="Não foi possível verificar a disponibilidade. Tente novamente.";
+  else if (!selectedDate) message="Escolha uma data disponível de segunda a sábado.";
+  else if (!selectedTime) message="Selecione um horário disponível.";
+  else if (!isValidName(name)) message="Informe um nome válido (2 a 80 caracteres).";
+  else if (!isValidPhone(phone)) message="Informe um telefone brasileiro válido com DDD.";
+  else if (!bookingPrivacyAck || !bookingPrivacyAck.checked) message="Confirme a leitura da Política de Privacidade.";
+  hint.textContent=message;
+  hint.hidden=!message;
 }
 
 function markSelectedDate() {
@@ -3744,29 +3765,19 @@ function renderTimes() {
       if (
         occupied
       ) {
+        const reason = blockedSlotReasons.get(selectedKey+"|"+slot.value);
+        const description = reason==="blocked" ? "Bloqueado pela barbearia"
+          : reason==="outside_hours" ? "Fora do horário de funcionamento"
+          : reason==="occupied" ? "Horário reservado" : "Indisponível";
+        const shortLabel = reason==="blocked" ? "Bloq."
+          : reason==="outside_hours" ? "Fora" : reason==="occupied" ? "Ocup." : "X";
         button.innerHTML =
-          '<span class="booking-time-value">' +
-          slot.value +
-          "</span>" +
-          '<span class="booking-time-status">X</span>';
-
-        button.disabled =
-          true;
-
-        button.classList.add(
-          "is-disabled",
-          "is-occupied"
-        );
-
-        button.setAttribute(
-          "aria-label",
-          slot.value +
-            " ocupado"
-        );
-
-        button.title =
-          slot.value +
-          " — horário ocupado";
+          '<span class="booking-time-value">' + slot.value + '</span>' +
+          '<span class="booking-time-status">' + shortLabel + '</span>';
+        button.disabled = true;
+        button.classList.add("is-disabled","is-occupied");
+        button.setAttribute("aria-label",slot.value+" — "+description);
+        button.title = slot.value+" — "+description;
 
       } else if (
         passed
@@ -4358,8 +4369,8 @@ async function submitBooking() {
 
     showBookingFeedback(
       wantsWhatsapp
-        ? "Solicitação registrada! O horário ainda precisa ser confirmado pela barbearia. Se o WhatsApp não abrir, use o link abaixo."
-        : "Solicitação registrada sem abrir o WhatsApp. Ela ainda precisa ser confirmada pela barbearia e pode expirar caso não seja confirmada a tempo.",
+        ? "Solicitação registrada e pendente por até 5 minutos. A barbearia precisa confirmar. Se o WhatsApp não abrir, use o link abaixo."
+        : "Solicitação registrada, pendente por até 5 minutos. A confirmação depende da barbearia. Sem WhatsApp, ligue ou entre em contato pelos canais do site para acompanhar.",
       "success",
       whatsappUrl
     );
