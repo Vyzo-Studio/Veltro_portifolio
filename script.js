@@ -4344,13 +4344,15 @@ async function submitBooking() {
   let bookingCreated = false;
 
   try {
-    await supabaseRpc("create_booking_request_by_barber", {
+    await supabaseRpc("create_booking_request_by_barber_privacy_v1", {
       p_customer_name: customerName,
       p_customer_phone: digitsOnly(customerPhone),
       p_service: bookingService.value,
       p_barber_id: selectedBarberId,
       p_booking_date: bookingDate,
-      p_booking_time: selectedTime
+      p_booking_time: selectedTime,
+      p_privacy_acknowledged: bookingPrivacyAck.checked,
+      p_whatsapp_share_opt_in: wantsWhatsapp
     });
     bookingCreated = true;
 
