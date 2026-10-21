@@ -2938,3 +2938,81 @@ input:focus-visible {
 .booking-feedback.is-error { border-color: #c64c42; background: #fff1f0; color: #832a23; }
 .booking-feedback a { color: inherit; text-decoration: underline; font-weight: 700; }
 .booking-feedback a:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+
+/* === GNG CONTRASTE INFORMACIONAL === */
+:root {
+  --info-on-light: #000000;
+  --info-on-dark: #ffffff;
+}
+
+/* Informações sobre fundos claros */
+.main-nav a:not(.nav-cta),
+.eyebrow:not(.eyebrow-light),
+.hero-lead,
+.quick-info span,
+.quick-info strong,
+.important-number,
+.trust-grid span,
+.trust-grid strong,
+.trust-grid small,
+.section-head > p,
+.price-table td:not(.table-action),
+.price-table td strong,
+.booking-step-heading strong,
+.booking-step-heading small,
+.booking-select-label,
+.booking-customer-field label,
+.booking-field-hint,
+.booking-select,
+.booking-input,
+.booking-day:not(.is-selected):not(:disabled),
+.booking-day:not(.is-selected):not(:disabled) span,
+.booking-day:not(.is-selected):not(:disabled) small,
+.booking-time:not(.is-selected):not(:disabled):not(.is-occupied),
+.booking-empty,
+.benefits span,
+.benefits strong,
+.benefits small,
+.plan-card:not(.plan-featured) .plan-kicker,
+.plan-card:not(.plan-featured) h3,
+.plan-card:not(.plan-featured) .price span,
+.plan-card:not(.plan-featured) .price strong,
+.plan-card:not(.plan-featured) .price small,
+.plan-card:not(.plan-featured) li,
+.address,
+.contact-panel span,
+.contact-panel strong,
+.contact-panel a,
+.mobile-app-nav a:not(.is-primary) {
+  color: var(--info-on-light) !important;
+}
+
+/* Informações sobre fundos escuros */
+.hero-brand-card :is(p, span, strong, small),
+.section-navy :is(p, span, strong, h2, h3, small),
+.booking-summary :is(p, span, strong, small),
+.plan-featured :is(p, span, strong, h2, h3, small, li),
+.map-business-label :is(p, span, strong, small),
+.final-cta-inner :is(p, span, strong, h2, h3, small),
+.site-footer :is(p, span, strong, small, a) {
+  color: var(--info-on-dark) !important;
+}
+
+.map-open-link,
+.btn-primary,
+.main-nav .nav-cta,
+.table-action a,
+.booking-day.is-selected,
+.booking-day.is-selected span,
+.booking-day.is-selected small,
+.booking-time.is-selected,
+.mobile-app-nav a.is-primary {
+  color: var(--info-on-dark) !important;
+}
+
+/* Botões claros dentro de áreas escuras precisam continuar com texto escuro */
+.plan-featured .btn-light,
+.final-cta-inner .btn-light,
+.booking-summary .booking-submit {
+  color: var(--navy-deep) !important;
+}
