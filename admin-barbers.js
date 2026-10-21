@@ -354,7 +354,16 @@
     const statusSelect = document.getElementById("manual-booking-state");
     const paymentSelect = document.getElementById("manual-payment-method");
     const markCompleted = statusSelect ? statusSelect.value === "completed" : false;
-    const paymentMethod = paymentSelect ? paymentSelect.value : "";
+    const finance = window.GNG_MANUAL_PAYMENTS && window.GNG_MANUAL_PAYMENTS.collect();
+    if (!finance || finance.error) {
+      setMessage(
+        manualBookingMessage,
+        finance && finance.error || "O registro financeiro não foi carregado. Recarregue o painel.",
+        "error"
+      );
+      return;
+    }
+    const paymentDescription = finance.summary;
 
     const phoneDigits = String(phone || "").replace(/\D/g, "");
 
@@ -396,20 +405,32 @@
         " às " +
         time +
         (markCompleted ? " como atendimento concluído" : "") +
-        (paymentMethod ? " com pagamento em " + paymentLabels[paymentMethod] : "") +
+        (finance.paid ? " • " + paymentDescription : " • sem recebimento registrado") +
         "?",
       actionLabel: markCompleted ? "REGISTRAR" : "CRIAR",
       danger: false
     });
 
     if (!confirmed || manualBookingInProgress) return;
+
+    let requestId;
+    try {
+      const fingerprint = JSON.stringify([
+        name, phoneDigits, service, barberId, date, time, markCompleted,
+        finance.payments, finance.cashReceivedCents, finance.paymentDate
+      ]);
+      requestId = window.GNG_MANUAL_PAYMENTS.requestId(fingerprint);
+    } catch (error) {
+      setMessage(manualBookingMessage, error.message, "error");
+      return;
+    }
     manualBookingInProgress = true;
 
     const originalText = manualBookingSubmit ? manualBookingSubmit.textContent : "";
     setButtonLoading(manualBookingSubmit, true, markCompleted ? "REGISTRANDO..." : "CRIANDO...");
 
     try {
-      await rpc("admin_create_booking_extended", {
+      await rpc("admin_create_manual_booking_split_v1", {
         p_customer_name: name || null,
         p_customer_phone: phone || null,
         p_service: service,
@@ -417,7 +438,11 @@
         p_booking_date: date,
         p_booking_time: time,
         p_mark_completed: markCompleted,
-        p_payment_method: paymentMethod || null
+        p_payments: finance.payments,
+        p_cash_received_cents: finance.cashReceivedCents,
+        p_payment_date: finance.paymentDate,
+        p_historical_adjustment: finance.historicalAdjustment,
+        p_request_id: requestId
       });
 
       setMessage(
@@ -436,6 +461,7 @@
 
       if (statusSelect) statusSelect.value = "scheduled";
       if (paymentSelect) paymentSelect.value = "";
+      if (window.GNG_MANUAL_PAYMENTS) window.GNG_MANUAL_PAYMENTS.reset();
 
       state.selectedDate = date;
       if (adminDateFilter) adminDateFilter.value = date;
