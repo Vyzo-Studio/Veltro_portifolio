@@ -61,16 +61,7 @@ function createMemoryStorage() {
 }
 
 function resolveAuthStorage() {
-  try {
-    if (storageWorks(window.localStorage)) {
-      return {
-        storage: window.localStorage,
-        mode: "localStorage"
-      };
-    }
-  } catch (error) {
-  }
-
+  // Preferir sessão por aba para reduzir persistência de credenciais administrativas.
   try {
     if (storageWorks(window.sessionStorage)) {
       return {
@@ -80,6 +71,8 @@ function resolveAuthStorage() {
     }
   } catch (error) {
   }
+
+  // Sem armazenamento temporário, usar somente memória (não persistente).
 
   return {
     storage: createMemoryStorage(),
