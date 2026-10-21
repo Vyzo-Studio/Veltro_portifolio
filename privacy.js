@@ -31,6 +31,7 @@
 
     function setMapAllowed(value, rememberChoice = true) {
       allowed = !!value;
+      window.GNG_MAP_ALLOWED = allowed;
       if (rememberChoice) savePreference(allowed);
       placeholder.hidden = allowed;
       frame.hidden = !allowed;
