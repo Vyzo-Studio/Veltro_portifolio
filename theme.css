@@ -453,3 +453,71 @@ html[data-theme="dark"] .cash-automation-note {
   background: #203653;
   color: #c5d1e0;
 }
+
+/* === GNG DARK: TEXTO BRANCO + BOTOES PRETOS === */
+
+/* No tema escuro, todo texto visível fica branco. */
+html[data-theme="dark"] body,
+html[data-theme="dark"] body * {
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+/* Feedbacks precisam de fundo escuro para manter o texto branco legível. */
+html[data-theme="dark"] .booking-feedback.is-success {
+  background: #10251d !important;
+  border-color: #2f8a62 !important;
+}
+
+html[data-theme="dark"] .booking-feedback.is-error {
+  background: #2a1515 !important;
+  border-color: #c65a52 !important;
+}
+
+/* Botões que no tema escuro usam azul passam a usar preto. */
+html[data-theme="dark"] .gng-theme-toggle,
+html[data-theme="dark"] .menu-toggle,
+html[data-theme="dark"] .main-nav .nav-cta,
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] .btn-light,
+html[data-theme="dark"] .table-action a,
+html[data-theme="dark"] .map-open-link,
+html[data-theme="dark"] .booking-submit,
+html[data-theme="dark"] .booking-day.is-selected,
+html[data-theme="dark"] .booking-time.is-selected,
+html[data-theme="dark"] .mobile-app-nav a.is-primary,
+html[data-theme="dark"] #mobile-services-toggle,
+html[data-theme="dark"] .admin-section-nav-button,
+html[data-theme="dark"] .business-tab,
+html[data-theme="dark"] .business-small-button,
+html[data-theme="dark"] .booking-action-button,
+html[data-theme="dark"] .payment-mode-button,
+html[data-theme="dark"] .payment-option,
+html[data-theme="dark"] .admin-secondary-button {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Controles selecionados/ativos continuam claramente destacados, agora em preto. */
+html[data-theme="dark"] .admin-section-nav-button.is-active,
+html[data-theme="dark"] .business-tab.is-active,
+html[data-theme="dark"] .payment-mode-button.is-active,
+html[data-theme="dark"] .payment-option.is-selected,
+html[data-theme="dark"] .mobile-app-nav a.is-primary.is-active {
+  background: #000000 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+/* Mantém estados indisponíveis diferentes dos botões ativos. */
+html[data-theme="dark"] .booking-day:disabled,
+html[data-theme="dark"] .booking-time:disabled,
+html[data-theme="dark"] .booking-time.is-occupied {
+  color: #ffffff !important;
+}
