@@ -611,10 +611,10 @@
           "15px",
 
         background:
-          "#ffffff",
+          "var(--gng-toast-bg, #ffffff)",
 
         color:
-          "#17243a",
+          "var(--gng-toast-text, #17243a)",
 
         boxShadow:
           "0 22px 60px rgba(13, 23, 40, 0.22)",
@@ -655,7 +655,7 @@
         <span
           style="
             display:block;
-            color:#d97717;
+            color:var(--gng-toast-label, #b75e0d);
             font-size:11px;
             font-weight:800;
             letter-spacing:.08em;
@@ -673,7 +673,7 @@
           style="
             display:block;
             margin-top:5px;
-            color:#0d1728;
+            color:var(--gng-toast-title, #0d1728);
             font-size:16px;
             font-weight:800;
           "
@@ -687,7 +687,7 @@
           style="
             display:block;
             margin-top:3px;
-            color:#354b6e;
+            color:var(--gng-toast-service, #354b6e);
             font-size:13px;
             font-weight:700;
           "
@@ -701,7 +701,7 @@
           style="
             display:block;
             margin-top:7px;
-            color:#657287;
+            color:var(--gng-toast-muted, #657287);
             font-size:12px;
             font-weight:600;
           "
@@ -757,10 +757,10 @@
           "8px",
 
         background:
-          "#edf1f5",
+          "var(--gng-toast-close-bg, #edf1f5)",
 
         color:
-          "#17243a",
+          "var(--gng-toast-close-text, #17243a)",
 
         fontSize:
           "18px",
