@@ -6,6 +6,8 @@ const bookingService = document.getElementById("booking-service");
 const bookingDays = document.getElementById("booking-days");
 const bookingTimes = document.getElementById("booking-times");
 const bookingSubmit = document.getElementById("booking-submit");
+const bookingPrivacyAck = document.getElementById("booking-privacy-ack");
+const bookingWhatsappOptIn = document.getElementById("booking-whatsapp-opt-in");
 
 const summaryService = document.getElementById("summary-service");
 const summaryPrice = document.getElementById("summary-price");
@@ -3339,7 +3341,9 @@ function updateSubmitState() {
     ) ||
     !isValidPhone(
       customerPhone
-    );
+    ) ||
+    !bookingPrivacyAck ||
+    !bookingPrivacyAck.checked;
 }
 
 function markSelectedDate() {
@@ -4298,8 +4302,11 @@ function showBookingFeedback(message, type, whatsappUrl = "") {
 async function submitBooking() {
   const customerName = bookingCustomerName ? bookingCustomerName.value.trim() : "";
   const customerPhone = bookingCustomerPhone ? bookingCustomerPhone.value : "";
+  const wantsWhatsapp = !!(bookingWhatsappOptIn && bookingWhatsappOptIn.checked);
 
   if (
+    !bookingPrivacyAck ||
+    !bookingPrivacyAck.checked ||
     bookingRequestInProgress ||
     availabilityState !== "ready" ||
     !bookingService ||
@@ -4320,14 +4327,14 @@ async function submitBooking() {
     return;
   }
 
-  const whatsappMessage = buildWhatsappMessage();
-  if (!whatsappMessage) {
+  const whatsappMessage = wantsWhatsapp ? buildWhatsappMessage() : "";
+  if (wantsWhatsapp && !whatsappMessage) {
     alert("Confira os dados antes de confirmar o agendamento.");
     return;
   }
 
-  const whatsappUrl = buildWhatsappUrlFromMessage(whatsappMessage);
-  const whatsappWindow = prepareWhatsappWindow();
+  const whatsappUrl = wantsWhatsapp ? buildWhatsappUrlFromMessage(whatsappMessage) : "";
+  const whatsappWindow = wantsWhatsapp ? prepareWhatsappWindow() : null;
   bookingRequestInProgress = true;
   showBookingFeedback("", "");
 
@@ -4348,16 +4355,20 @@ async function submitBooking() {
     bookingCreated = true;
 
     showBookingFeedback(
-      "Solicitação registrada! Seu horário ainda precisa ser confirmado pela barbearia. Se o WhatsApp não abrir, use o link abaixo.",
+      wantsWhatsapp
+        ? "Solicitação registrada! O horário ainda precisa ser confirmado pela barbearia. Se o WhatsApp não abrir, use o link abaixo."
+        : "Solicitação registrada sem abrir o WhatsApp. Ela ainda precisa ser confirmada pela barbearia e pode expirar caso não seja confirmada a tempo.",
       "success",
       whatsappUrl
     );
 
-    try {
-      sendWhatsappToWindow(whatsappWindow, whatsappUrl);
-    } catch (error) {
-      console.warn("A solicitação foi registrada, mas o WhatsApp não abriu:", error);
-      if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
+    if (wantsWhatsapp) {
+      try {
+        sendWhatsappToWindow(whatsappWindow, whatsappUrl);
+      } catch (error) {
+        console.warn("A solicitação foi registrada, mas o WhatsApp não abriu:", error);
+        if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
+      }
     }
 
     selectedTime = null;
@@ -4369,7 +4380,9 @@ async function submitBooking() {
     if (bookingCreated) {
       console.error("Falha após o registro da solicitação:", error);
       showBookingFeedback(
-        "Sua solicitação foi registrada. Caso o WhatsApp não tenha aberto, use o link abaixo.",
+        wantsWhatsapp
+          ? "Sua solicitação foi registrada. Caso o WhatsApp não tenha aberto, use o link abaixo."
+          : "Sua solicitação foi registrada sem WhatsApp e aguarda confirmação da barbearia.",
         "success",
         whatsappUrl
       );
@@ -4387,7 +4400,7 @@ async function submitBooking() {
   } finally {
     bookingRequestInProgress = false;
     if (bookingSubmit) {
-      bookingSubmit.textContent = originalText || "Confirmar pelo WhatsApp";
+      bookingSubmit.textContent = originalText || "Enviar solicitação";
     }
     updateSubmitState();
     syncMobileBookingFlow();
@@ -4428,6 +4441,21 @@ async function setupBooking() {
       "click",
       submitBooking
     );
+  }
+
+  if (bookingPrivacyAck) {
+    bookingPrivacyAck.addEventListener("change", updateSubmitState);
+  }
+
+  if (bookingWhatsappOptIn) {
+    bookingWhatsappOptIn.addEventListener("change", function () {
+      if (bookingSubmit && !bookingRequestInProgress) {
+        bookingSubmit.textContent = bookingWhatsappOptIn.checked
+          ? "Solicitar e abrir WhatsApp"
+          : "Enviar solicitação";
+      }
+      updateSubmitState();
+    });
   }
 
   setupServiceLinks();
