@@ -29,9 +29,9 @@
       '<a href="privacidade.html#mapas">Como usamos seus dados</a>';
     card.insertBefore(placeholder, frame);
 
-    function setMapAllowed(value) {
+    function setMapAllowed(value, rememberChoice = true) {
       allowed = !!value;
-      savePreference(allowed);
+      if (rememberChoice) savePreference(allowed);
       placeholder.hidden = allowed;
       frame.hidden = !allowed;
       if (allowed) {
@@ -87,7 +87,7 @@
       });
     });
 
-    setMapAllowed(allowed);
+    setMapAllowed(allowed, false);
   }
 
   if (document.readyState === "loading") {
