@@ -454,70 +454,166 @@ html[data-theme="dark"] .cash-automation-note {
   color: #c5d1e0;
 }
 
-/* === GNG DARK: TEXTO BRANCO + BOTOES PRETOS === */
+/* Contraste refinado: preservar a identidade azul-marinho no tema escuro. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
 
-/* No tema escuro, todo texto visível fica branco. */
-html[data-theme="dark"] body,
-html[data-theme="dark"] body * {
+html[data-theme="dark"] a:focus-visible,
+html[data-theme="dark"] button:focus-visible,
+html[data-theme="dark"] input:focus-visible,
+html[data-theme="dark"] select:focus-visible,
+html[data-theme="dark"] textarea:focus-visible {
+  outline: 3px solid #f2b36b !important;
+  outline-offset: 3px;
+}
+
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] .booking-submit,
+html[data-theme="dark"] .admin-primary-button,
+html[data-theme="dark"] .mobile-app-nav a.is-primary {
+  background: #36577e !important;
+  background-image: none !important;
   color: #ffffff !important;
+  border-color: #698db8 !important;
+}
+
+html[data-theme="dark"] .btn-primary:hover,
+html[data-theme="dark"] .booking-submit:not(:disabled):hover,
+html[data-theme="dark"] .admin-primary-button:hover {
+  background: #47719f !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] .btn-light,
+html[data-theme="dark"] .plan-featured .btn-light,
+html[data-theme="dark"] .final-cta-inner .btn-light,
+html[data-theme="dark"] .booking-summary .booking-submit.btn-light {
+  background: #f5f8fc !important;
+  color: #101d32 !important;
+  border-color: #f5f8fc !important;
+}
+
+html[data-theme="dark"] .btn-secondary,
+html[data-theme="dark"] .table-action a,
+html[data-theme="dark"] .map-open-link,
+html[data-theme="dark"] #mobile-services-toggle,
+html[data-theme="dark"] .booking-step-action,
+html[data-theme="dark"] .booking-change {
+  background-color: #2c4668 !important;
+  color: #f5f8fc !important;
+  border-color: #718aa8 !important;
+}
+
+html[data-theme="dark"] .booking-summary,
+html[data-theme="dark"] .booking-summary strong,
+html[data-theme="dark"] .booking-summary h2,
+html[data-theme="dark"] .booking-summary h3,
+html[data-theme="dark"] .booking-summary-list strong,
+html[data-theme="dark"] .plan-featured,
+html[data-theme="dark"] .plan-featured h3,
+html[data-theme="dark"] .plan-featured .price strong,
+html[data-theme="dark"] .plan-featured li,
+html[data-theme="dark"] .final-cta-inner,
+html[data-theme="dark"] .site-footer {
+  color: #f5f8fc !important;
+}
+
+html[data-theme="dark"] .booking-summary-list span,
+html[data-theme="dark"] .booking-notice p,
+html[data-theme="dark"] .booking-notice strong,
+html[data-theme="dark"] .plan-featured small,
+html[data-theme="dark"] .footer-bottom,
+html[data-theme="dark"] .footer-links a,
+html[data-theme="dark"] .hero-lead,
+html[data-theme="dark"] .section-head > p,
+html[data-theme="dark"] .booking-step small {
+  color: #c7d6e9 !important;
+}
+
+html[data-theme="dark"] .booking-notice,
+html[data-theme="dark"] .booking-summary-list > div,
+html[data-theme="dark"] .booking-feedback,
+html[data-theme="dark"] .booking-confirmation,
+html[data-theme="dark"] .booking-service-selected,
+html[data-theme="dark"] .contact-panel,
+html[data-theme="dark"] .map-business-label {
+  background-color: #243b5a !important;
+  border-color: rgba(231, 238, 248, 0.2) !important;
+}
+
+html[data-theme="dark"] .booking-select option,
+html[data-theme="dark"] .booking-input,
+html[data-theme="dark"] .admin-field option {
+  background-color: #162943;
+  color: #f5f8fc;
+}
+
+html[data-theme="dark"] .booking-day.is-selected,
+html[data-theme="dark"] .booking-time.is-selected,
+html[data-theme="dark"] .admin-section-nav-button.is-active,
+html[data-theme="dark"] .business-tab.is-active,
+html[data-theme="dark"] .payment-mode-button.is-active,
+html[data-theme="dark"] .payment-option.is-selected {
+  background: #4b709d !important;
+  color: #ffffff !important;
+  border-color: #9db6d5 !important;
+}
+
+html[data-theme="dark"] .booking-day:disabled,
+html[data-theme="dark"] .booking-time:disabled,
+html[data-theme="dark"] .booking-time.is-occupied {
+  background: #18283e !important;
+  color: #abbdd2 !important;
+  border-color: #42536b !important;
+  opacity: 1;
+}
+
+html[data-theme="dark"] .admin-empty,
+html[data-theme="dark"] .admin-stats,
+html[data-theme="dark"] .booking-tab-button,
+html[data-theme="dark"] .admin-filter,
+html[data-theme="dark"] .admin-bookings-empty,
+html[data-theme="dark"] .management-message,
+html[data-theme="dark"] .business-message,
+html[data-theme="dark"] .payment-panel,
+html[data-theme="dark"] .gng-calendar-popover,
+html[data-theme="dark"] .gng-calendar-day {
+  background-color: #1d304c !important;
+  color: #e9f1fa !important;
+  border-color: rgba(224, 234, 247, 0.18) !important;
+}
+
+html[data-theme="dark"] .admin-message.is-success,
+html[data-theme="dark"] .booking-feedback.is-success {
+  background: #153a30 !important;
+  color: #d4f8e8 !important;
+  border-color: #57a987 !important;
+}
+
+html[data-theme="dark"] .admin-message.is-error,
+html[data-theme="dark"] .booking-feedback.is-error {
+  background: #47262b !important;
+  color: #ffe5e7 !important;
+  border-color: #bd7278 !important;
+}
+
+html[data-theme="dark"] .gng-theme-toggle {
+  background: #223953 !important;
+  color: #f5f8fc !important;
+  border-color: #7790ac !important;
+}
+
+html[data-theme="dark"] .price-table th,
+html[data-theme="dark"] .price-table td,
+html[data-theme="dark"] .report-table td,
+html[data-theme="dark"] .admin-booking-card,
+html[data-theme="dark"] .business-item,
+html[data-theme="dark"] .payment-option strong {
+  color: #eef4fd !important;
 }
 
 html[data-theme="dark"] input::placeholder,
 html[data-theme="dark"] textarea::placeholder {
-  color: rgba(255, 255, 255, 0.68) !important;
-}
-
-/* Feedbacks precisam de fundo escuro para manter o texto branco legível. */
-html[data-theme="dark"] .booking-feedback.is-success {
-  background: #10251d !important;
-  border-color: #2f8a62 !important;
-}
-
-html[data-theme="dark"] .booking-feedback.is-error {
-  background: #2a1515 !important;
-  border-color: #c65a52 !important;
-}
-
-/* Botões que no tema escuro usam azul passam a usar preto. */
-html[data-theme="dark"] .gng-theme-toggle,
-html[data-theme="dark"] .menu-toggle,
-html[data-theme="dark"] .main-nav .nav-cta,
-html[data-theme="dark"] .btn-primary,
-html[data-theme="dark"] .btn-light,
-html[data-theme="dark"] .table-action a,
-html[data-theme="dark"] .map-open-link,
-html[data-theme="dark"] .booking-submit,
-html[data-theme="dark"] .booking-day.is-selected,
-html[data-theme="dark"] .booking-time.is-selected,
-html[data-theme="dark"] .mobile-app-nav a.is-primary,
-html[data-theme="dark"] #mobile-services-toggle,
-html[data-theme="dark"] .admin-section-nav-button,
-html[data-theme="dark"] .business-tab,
-html[data-theme="dark"] .business-small-button,
-html[data-theme="dark"] .booking-action-button,
-html[data-theme="dark"] .payment-mode-button,
-html[data-theme="dark"] .payment-option,
-html[data-theme="dark"] .admin-secondary-button {
-  background: #000000 !important;
-  background-image: none !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
-}
-
-/* Controles selecionados/ativos continuam claramente destacados, agora em preto. */
-html[data-theme="dark"] .admin-section-nav-button.is-active,
-html[data-theme="dark"] .business-tab.is-active,
-html[data-theme="dark"] .payment-mode-button.is-active,
-html[data-theme="dark"] .payment-option.is-selected,
-html[data-theme="dark"] .mobile-app-nav a.is-primary.is-active {
-  background: #000000 !important;
-  background-image: none !important;
-  color: #ffffff !important;
-}
-
-/* Mantém estados indisponíveis diferentes dos botões ativos. */
-html[data-theme="dark"] .booking-day:disabled,
-html[data-theme="dark"] .booking-time:disabled,
-html[data-theme="dark"] .booking-time.is-occupied {
-  color: #ffffff !important;
+  color: #bccbe0 !important;
 }
