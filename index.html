@@ -68,7 +68,7 @@
 
   <link
     rel="stylesheet"
-    href="theme.css?v=1.2"
+    href="theme.css?v=1.3"
   >
 </head>
 
@@ -931,7 +931,7 @@
                   </strong>
 
                   <small>
-                    Todos os dias da semana
+                    De segunda a sábado
                   </small>
 
                 </div>
@@ -1066,9 +1066,22 @@
 
               <p>
                 O envio da solicitação reserva temporariamente
-                o horário. A confirmação final é feita pelo WhatsApp.
+                o horário. A confirmação final depende da barbearia.
+                O WhatsApp é opcional.
               </p>
 
+            </div>
+
+            <div class="booking-privacy-controls">
+              <label class="booking-privacy-choice" for="booking-privacy-ack">
+                <input type="checkbox" id="booking-privacy-ack" required>
+                <span>Li a <a href="privacidade.html" target="_blank" rel="noopener noreferrer">Política de Privacidade</a> e estou ciente de que meus dados serão utilizados para registrar e administrar meu agendamento.</span>
+              </label>
+              <label class="booking-privacy-choice" for="booking-whatsapp-opt-in">
+                <input type="checkbox" id="booking-whatsapp-opt-in">
+                <span>Autorizo abrir o WhatsApp com meu nome, serviço, barbeiro, dia e horário preenchidos para solicitar confirmação. Posso desmarcar e registrar apenas pelo site.</span>
+              </label>
+              <p class="booking-privacy-hint">Se não autorizar o WhatsApp, a solicitação ainda ficará pendente de confirmação e poderá expirar. Seu telefone será usado para assuntos do atendimento, não para anúncios.</p>
             </div>
 
             <button
@@ -1077,7 +1090,7 @@
               type="button"
               disabled
             >
-              Confirmar pelo WhatsApp
+              Enviar solicitação
             </button>
 
           </aside>
@@ -1556,7 +1569,7 @@
         <div class="map-card">
 
           <iframe
-            src="https://www.google.com/maps?q=St.%20M%20QNM%2021%20conjunto%20D%20lote%2048%20Ceil%C3%A2ndia%20Bras%C3%ADlia%20DF%2072215-214&output=embed"
+            data-map-src="https://www.google.com/maps?q=St.%20M%20QNM%2021%20conjunto%20D%20lote%2048%20Ceil%C3%A2ndia%20Bras%C3%ADlia%20DF%2072215-214&output=embed"
             title="Mapa da localização da GNG Barbearia"
             loading="lazy"
             allowfullscreen
@@ -1677,6 +1690,14 @@
           Localização
         </a>
 
+        <a href="privacidade.html">
+          Privacidade e dados
+        </a>
+
+        <button type="button" class="footer-privacy-button" data-privacy-preferences>
+          Preferências de privacidade
+        </button>
+
       </div>
 
     </div>
@@ -1697,6 +1718,7 @@
 
   <script src="script.js?v=13.0"></script>
   <script src="site-data.js?v=1.0"></script>
+  <script src="privacy.js?v=1.0"></script>
 
 </body>
 
