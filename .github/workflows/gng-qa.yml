@@ -1,0 +1,44 @@
+name: GNG QA Regression
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.js'
+      - '**/*.cjs'
+      - 'tests/**'
+      - '.github/workflows/gng-qa.yml'
+  pull_request:
+    paths:
+      - '**/*.js'
+      - '**/*.cjs'
+      - 'tests/**'
+      - '.github/workflows/gng-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    name: JavaScript, booking and payment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse application JavaScript
+        run: |
+          for file in script.js site-data.js privacy.js config.js theme.js admin.js admin-barbers.js admin-business.js admin-manual-payment.js admin-calendar.js admin-notifications.js; do
+            node --check "$file"
+          done
+      - name: Booking regressions
+        run: node tests/booking-reliability.test.cjs
+      - name: Administrative mutation regressions
+        run: node tests/admin-mutations.test.cjs
+      - name: Manual in-person payment regressions
+        run: node tests/manual-payment.test.cjs
