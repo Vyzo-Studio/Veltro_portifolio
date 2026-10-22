@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - 'tests/browser.spec.cjs'
+      - '**/*.css'
+      - '**/*.html'
+      - 'site-data.js'
       - '.github/workflows/gng-browser-qa.yml'
   workflow_dispatch:
 permissions:
