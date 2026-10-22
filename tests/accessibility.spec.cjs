@@ -16,7 +16,11 @@ for (const target of ['index.html','admin.html']) {
       const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
       const issues=result.violations.map(issue=>({
         id:issue.id,impact:issue.impact,description:issue.description,
-        nodes:issue.nodes.slice(0,3).map(n=>n.target)
+        nodes:issue.nodes.slice(0,3).map(n=>({
+          target:n.target,
+          failureSummary:n.failureSummary,
+          contrast:n.any?.filter(v=>v.id==='color-contrast').map(v=>({data:v.data,message:v.message}))
+        }))
       }));
       if(issues.length) {
         const details = await page.evaluate((selectors)=>{
@@ -27,7 +31,12 @@ for (const target of ['index.html','admin.html']) {
                 return {selector,tag:el.tagName,text:el.textContent?.trim().slice(0,35),
                   color:st.color,background:st.backgroundColor,opacity:st.opacity,
                   backgroundImage:st.backgroundImage,parentBackground:parent.backgroundColor,
-                  parentColor:parent.color,parentOpacity:parent.opacity};
+                  parentColor:parent.color,parentOpacity:parent.opacity,
+                  ancestors:(()=>{const xs=[];let p=el.parentElement;for(let i=0;i<6&&p;i++,p=p.parentElement){
+                    const style=getComputedStyle(p);
+                    xs.push({tag:p.tagName,cls:typeof p.className==='string'?p.className.slice(0,70):'',
+                      bg:style.backgroundColor,fg:style.color,opacity:style.opacity});
+                  }return xs})()};
               });
             }catch(e){return [{selector,error:String(e)}];}
           });
