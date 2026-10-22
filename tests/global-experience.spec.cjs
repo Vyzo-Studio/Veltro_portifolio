@@ -106,6 +106,9 @@ test('legal contact follows official live settings without hardcoded customer ph
   });
   for(const path of ['privacidade.html','termos.html']) {
     await page.goto(base+path,{waitUntil:'domcontentloaded'});
+    // The previous legal page persists the chosen language in this same browser.
+    // Always return to pt-BR before asserting the local-format contact label.
+    await page.locator('[data-gng-locale]').selectOption('pt-BR');
     const link=page.locator('a[data-gng-contact-link]').first();
     await expect(link).toHaveAttribute('href','https://wa.me/'+mockNumber);
     await expect(link).toContainText('(61) 99998-8877');
