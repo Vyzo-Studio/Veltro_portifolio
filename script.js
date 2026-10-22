@@ -2728,12 +2728,11 @@ function syncMobileBookingFlow() {
         isUnlocked
       );
 
-      heading.setAttribute(
-        "aria-expanded",
-        isCurrent
-          ? "true"
-          : "false"
-      );
+      if (isUnlocked) {
+        heading.setAttribute("aria-expanded", isCurrent ? "true" : "false");
+      } else {
+        heading.removeAttribute("aria-expanded");
+      }
 
       if (
         isUnlocked
@@ -4650,6 +4649,22 @@ function initializeSite() {
   setupKeyboardAwareMobileNav();
 
   setupBooking();
+
+  // Scrollable content is keyboard reachable without trapping focus.
+  [
+    [".quick-info", "Informações rápidas da barbearia"],
+    [".trust-grid", "Destaques da barbearia"],
+    [".portfolio-grid", "Galeria de cortes"],
+    [".space-grid", "Galeria do espaço"],
+    [".benefits", "Benefícios da barbearia"],
+    [".plans-grid", "Planos de assinatura"]
+  ].forEach(function (entry) {
+    document.querySelectorAll(entry[0]).forEach(function (element) {
+      element.tabIndex = 0;
+      element.setAttribute("role", "region");
+      element.setAttribute("aria-label", entry[1]);
+    });
+  });
 
   window.setInterval(
     refreshCurrentDayState,
