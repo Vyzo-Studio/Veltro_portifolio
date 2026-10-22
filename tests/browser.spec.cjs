@@ -10,11 +10,11 @@ const business={settings:{
   slot_interval_minutes:30,site_texts:{}
 },services:[{id:'00000000-0000-4000-8000-000000000001',name:'Corte',description:'',
 duration_minutes:20,price_cents:3000,sort_order:0}],gallery:[]};
-async function mockPublicData(page){
+async function mockPublicData(page, publicConfig=business){
   await page.route('**/rest/v1/rpc/**',async route=>{
     const url=route.request().url();
     let data=[];
-    if(url.includes('get_public_site_config')) data=business;
+    if(url.includes('get_public_site_config')) data=publicConfig;
     else if(url.includes('get_public_barbers')) data=[
       {id:'00000000-0000-4000-8000-000000000002',name:'Barbeiro QA',active:true}
     ];
@@ -83,6 +83,21 @@ test('public site: theme switching works',async({page})=>{
   const after=await page.locator('html').getAttribute('data-theme');
   expect(after).not.toBe(before);
 });
+test('empty data from admin removes stale public services, portfolio and space photos',async({page})=>{
+  await mockPublicData(page,{...business,services:[],gallery:[]});
+  await page.goto(base,{waitUntil:'domcontentloaded'});
+  await expect(page.locator('#servicos tbody .gng-empty-message'))
+    .toHaveText('Nenhum serviço disponível no momento.');
+  await expect(page.locator('#portfolio .portfolio-empty'))
+    .toHaveText('Nenhuma foto de cortes disponível no momento.');
+  await expect(page.locator('#espaco .space-empty'))
+    .toHaveText('Nenhuma foto do espaço disponível no momento.');
+  await expect(page.locator('#servicos tbody tr')).toHaveCount(1);
+  await expect(page.locator('#portfolio .portfolio-photo')).toHaveCount(0);
+  await expect(page.locator('#espaco .space-card')).toHaveCount(0);
+  await expect(page.locator('#booking-service option')).toHaveCount(1);
+  await expect(page.locator('#booking-submit')).toBeDisabled();
+});
 test('dark theme changes only the header logo, keeping other logos untouched',async({page})=>{
   await mockPublicData(page);
   await page.goto(base,{waitUntil:'domcontentloaded'});
@@ -112,7 +127,10 @@ test('dark theme changes only the header logo, keeping other logos untouched',as
   await expect(dark).toBeHidden();
 });
 test('dark theme: white membership copy, gold bullets and legible photo captions only',async({page})=>{
-  await mockPublicData(page);
+  await mockPublicData(page,{...business,gallery:[
+    {kind:'exterior',image_url:'assets/logo-gng.jpg',caption:'Fachada GNG',alt_text:'Fachada'},
+    {kind:'interior',image_url:'assets/logo-gng.jpg',caption:'Interior GNG',alt_text:'Interior'}
+  ]});
   for(const width of [390,1366]) {
     await page.setViewportSize({width,height:860});
     await page.goto(base,{waitUntil:'domcontentloaded'});
@@ -133,8 +151,7 @@ test('dark theme: white membership copy, gold bullets and legible photo captions
         '.plan-featured .price small',
         '.plan-featured li',
         '#espaco .space-card figcaption span',
-        '#espaco .space-card figcaption strong',
-        '#espaco .space-card figcaption small'
+        '#espaco .space-card figcaption strong'
       ];
       return {
         colors: selectors.map(selector=>{
@@ -148,6 +165,7 @@ test('dark theme: white membership copy, gold bullets and legible photo captions
         }))
       };
     });
+    await expect(page.locator('#espaco .space-card')).toHaveCount(2);
     const light=await readStyles();
     const toggle=page.locator('.gng-theme-toggle');
     await toggle.click();
