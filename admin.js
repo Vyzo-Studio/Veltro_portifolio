@@ -5690,6 +5690,36 @@ async function loadCashSummary() {
       null;
 
     renderCashSummary();
+
+    // Read-only reconciliation: never updates or reopens a closed cash session.
+    let snapshot = document.getElementById("cash-original-snapshot");
+    const summaryGrid = document.querySelector("#admin-section-caixa .cash-summary-grid");
+    if (summaryGrid && !snapshot) {
+      snapshot = document.createElement("article");
+      snapshot.id = "cash-original-snapshot";
+      snapshot.className = "cash-summary-card";
+      summaryGrid.appendChild(snapshot);
+    }
+    if (snapshot) {
+      try {
+        const reconciliation = await rpc("admin_cash_reconciliation", {
+          p_start_date: getTodayKey(),
+          p_end_date: getTodayKey()
+        });
+        const row = (reconciliation && reconciliation.rows || [])[0];
+        const original = row && row.original_close_cents != null
+          ? formatMoney(row.original_close_cents) : "Em aberto";
+        const late = formatMoney(row && row.post_close_adjustment_cents || 0);
+        const updated = formatMoney(row && row.reconciled_cents || 0);
+        snapshot.innerHTML =
+          '<span>CONCILIAÇÃO DO CAIXA</span><strong>' + original +
+          '</strong><small>Fechamento original · Ajustes posteriores: ' + late +
+          ' · Total atualizado: ' + updated + '</small>';
+      } catch (reconciliationError) {
+        console.error("Falha ao conferir fechamento histórico", reconciliationError);
+        snapshot.textContent = "Conciliação indisponível. Consulte o histórico financeiro.";
+      }
+    }
   } catch (error) {
     console.error(
       error
