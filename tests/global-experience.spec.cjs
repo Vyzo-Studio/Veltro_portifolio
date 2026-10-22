@@ -32,6 +32,18 @@ test('first visit, reject optional content, reopen settings, withdrawal and pers
   expect((await page.locator('.map-card iframe').getAttribute('src'))||'').not.toContain('google.com/maps');
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('gng_barbearia_consent_v2')).external)).toBe(false);
 });
+test('first-visit accept all enables optional map and persists',async({page})=>{
+  await page.goto(base,{waitUntil:'domcontentloaded'});
+  await expect(page.locator('#gng-consent-banner')).toBeVisible();
+  await page.locator('#gng-consent-banner [data-consent-action="accept"]').click();
+  await expect(page.locator('#gng-consent-banner')).toBeHidden();
+  await expect(page.locator('.map-card iframe')).toHaveAttribute('src',/google\.com\/maps/);
+  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('gng_barbearia_consent_v2')));
+  expect(stored).toMatchObject({version:2,external:true});
+  await page.reload({waitUntil:'domcontentloaded'});
+  await expect(page.locator('#gng-consent-banner')).toBeHidden();
+  await expect(page.locator('.map-card iframe')).toHaveAttribute('src',/google\.com\/maps/);
+});
 test('customer autofill opt-in, same-browser return and forgetting without server writes',async({page})=>{
   await page.goto(base,{waitUntil:'domcontentloaded'});
   const name=page.locator('#booking-customer-name'),phone=page.locator('#booking-customer-phone');
