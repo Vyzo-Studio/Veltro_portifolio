@@ -24,7 +24,9 @@ function render(){
  record.sections.forEach((item,index)=>{
    const h2=document.createElement("h2");h2.textContent=(index+1)+". "+item[0];
    if(type==="privacy"&&index===5)h2.id="mapas";
-   const p=document.createElement("p");p.textContent=item[1];article.append(h2,p);
+   const p=document.createElement("p");p.textContent=item[1];
+   if(type==="privacy"&&index===5)p.id="dados-locais";
+   article.append(h2,p);
  });
  const contact=document.createElement("p");
  const link=document.createElement("a");link.href="https://wa.me/5561994075539";
