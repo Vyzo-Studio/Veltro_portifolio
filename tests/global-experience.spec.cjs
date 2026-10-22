@@ -15,13 +15,13 @@ test('first visit, reject optional content, reopen settings, withdrawal and pers
   await expect(page.locator('#gng-consent-banner')).toBeVisible();
   const frame=page.locator('.map-card iframe[data-map-src]');
   await expect(frame).toHaveCount(1);
-  expect(await frame.getAttribute('src')).not.toContain('google.com/maps');
+  expect((await frame.getAttribute('src'))||'').not.toContain('google.com/maps');
   expect(externalRequests).toHaveLength(0);
   await page.locator('#gng-consent-banner [data-consent-action="reject"]').click();
   await expect(page.locator('#gng-consent-banner')).toBeHidden();
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(page.locator('#gng-consent-banner')).toBeHidden();
-  expect(await page.locator('.map-card iframe').getAttribute('src')).not.toContain('google.com/maps');
+  expect((await page.locator('.map-card iframe').getAttribute('src'))||'').not.toContain('google.com/maps');
   await page.locator('[data-privacy-preferences]').first().click();
   await expect(page.locator('.gng-consent-dialog')).toBeVisible();
   await page.locator('#gng-consent-maps').check();
@@ -29,7 +29,7 @@ test('first visit, reject optional content, reopen settings, withdrawal and pers
   await expect(page.locator('.map-card iframe')).toHaveAttribute('src',/google.com\/maps/);
   await page.locator('[data-privacy-preferences]').first().click();
   await page.locator('.gng-consent-dialog [data-consent-action="reject"]').click();
-  expect(await page.locator('.map-card iframe').getAttribute('src')).not.toContain('google.com/maps');
+  expect((await page.locator('.map-card iframe').getAttribute('src'))||'').not.toContain('google.com/maps');
   expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('gng_barbearia_consent_v2')).external)).toBe(false);
 });
 test('customer autofill opt-in, same-browser return and forgetting without server writes',async({page})=>{
