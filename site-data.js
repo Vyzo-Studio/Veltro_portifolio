@@ -122,10 +122,23 @@
 
   function weekdayLabel(days) {
     const list = Array.isArray(days) ? days.map(Number).sort() : [1,2,3,4,5,6,7];
-    if (list.length === 7) return "Todos os dias";
-    if (list.length === 6 && list.join(",") === "1,2,3,4,5,6") return "Segunda a sábado";
-    const names = {1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb",7:"Dom"};
-    return list.map(function (day) { return names[day] || ""; }).filter(Boolean).join(", ");
+    const locale = window.GNG_I18N?.getLocale?.() || "pt-BR";
+    const range = {
+      "pt-BR":"Segunda a sábado", en:"Monday to Saturday",
+      es:"De lunes a sábado", ja:"月曜〜土曜", de:"Montag bis Samstag"
+    };
+    const all = {
+      "pt-BR":"Todos os dias", en:"Every day",
+      es:"Todos los días", ja:"毎日", de:"Jeden Tag"
+    };
+    if(list.length===7)return all[locale]||all["pt-BR"];
+    if(list.length===6&&list.join(",")==="1,2,3,4,5,6")return range[locale]||range["pt-BR"];
+    const names={1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb",7:"Dom"};
+    return list.map(day=>{
+      const value = new Date(Date.UTC(2026,9,19+day-1));
+      return new Intl.DateTimeFormat(locale,{weekday:"short",timeZone:"UTC"}).format(value)
+        || names[day] || "";
+    }).join(", ");
   }
 
   function applyContactAndSchedule(settings) {
@@ -150,13 +163,13 @@
       }
     });
 
+    const locale = window.GNG_I18N?.getLocale?.() || "pt-BR";
+    const connectors = {"pt-BR":"às",en:"to",es:"a",ja:"〜",de:"bis"};
+    const timeWord = connectors[locale] || "às";
     const scheduleLabel = weekdayLabel(settings.open_weekdays) + " • " +
-      (settings.open_time || "09:00") + " às " + (settings.close_time || "19:30");
+      (settings.open_time || "09:00") + " " + timeWord + " " + (settings.close_time || "19:30");
 
-    const quickInfo = Array.from(document.querySelectorAll(".quick-info > div")).find(function (item) {
-      const label = item.querySelector("span");
-      return label && label.textContent.trim().toUpperCase() === "HORÁRIOS";
-    });
+    const quickInfo = document.querySelector(".quick-info > div:last-child");
 
     if (quickInfo) {
       const strong = quickInfo.querySelector("strong");
@@ -165,9 +178,16 @@
 
     const bookingHeading = document.querySelector("#agendamento .section-head > p");
     if (bookingHeading) {
-      bookingHeading.textContent =
-        "Escolha o serviço, o barbeiro, o dia e um horário disponível entre " +
-        (settings.open_time || "09:00") + " e " + (settings.close_time || "19:30") + ".";
+      const prefix={
+        "pt-BR":"Escolha o serviço, o barbeiro, o dia e um horário disponível entre ",
+        en:"Choose a service, barber, date and an available time between ",
+        es:"Elige servicio, barbero, día y un horario disponible entre ",
+        ja:"サービス・担当者・日付・空き時間を選択：",
+        de:"Wähle Leistung, Barber, Tag und eine freie Uhrzeit zwischen "
+      };
+      bookingHeading.textContent=(prefix[locale]||prefix["pt-BR"]) +
+        (settings.open_time||"09:00") + (locale==="ja"?"〜":" "+(locale==="en"?"and":locale==="de"?"und":locale==="es"?"y":"e")+" ") +
+        (settings.close_time||"19:30") + ".";
     }
 
     if (settings.address) setText(".address", settings.address);
@@ -375,6 +395,10 @@
       console.error("GNG: não foi possível carregar a configuração dinâmica.", error);
     }
   }
+
+  window.addEventListener("gng:locale-changed", function () {
+    if(window.GNG_RUNTIME_CONFIG)applyContactAndSchedule(window.GNG_RUNTIME_CONFIG);
+  });
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initialize, { once: true });
