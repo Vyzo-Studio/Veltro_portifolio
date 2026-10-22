@@ -92,6 +92,35 @@ test('five languages, privacy/terms and eight viewport widths without horizontal
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(page.locator('html')).toHaveAttribute('lang','ja');
 });
+test('legal contact follows official live settings without hardcoded customer phone',async({page})=>{
+  const mockNumber='5561999988877';
+  await page.route('**/rest/v1/rpc/get_public_site_config',async route=>{
+    await route.fulfill({
+      status:200,contentType:'application/json',
+      body:JSON.stringify({settings:{
+        business_name:'GNG Barbearia',
+        whatsapp_digits:mockNumber,
+        phone_display:'(61) 99998-8877'
+      }})
+    });
+  });
+  for(const path of ['privacidade.html','termos.html']) {
+    await page.goto(base+path,{waitUntil:'domcontentloaded'});
+    const link=page.locator('a[data-gng-contact-link]').first();
+    await expect(link).toHaveAttribute('href','https://wa.me/'+mockNumber);
+    await expect(link).toContainText('(61) 99998-8877');
+    await page.locator('[data-gng-locale]').selectOption('en');
+    await expect(link).toHaveAttribute('href','https://wa.me/'+mockNumber);
+    await expect(link).toContainText('Contact GNG via WhatsApp');
+  }
+});
+test('legal contact fails closed to official location link if public config is unavailable',async({page})=>{
+  await page.route('**/rest/v1/rpc/get_public_site_config',async route=>
+    route.fulfill({status:503,contentType:'application/json',body:'{"message":"test unavailable"}'}));
+  await page.goto(base+'termos.html',{waitUntil:'domcontentloaded'});
+  await expect(page.locator('a[data-gng-contact-link]').first())
+    .toHaveAttribute('href','index.html#localizacao');
+});
 test('language changes preserve entered customer contact without auto-booking',async({page})=>{
   await page.goto(base,{waitUntil:'domcontentloaded'});
   await page.locator('#gng-consent-banner [data-consent-action="reject"]').click();
