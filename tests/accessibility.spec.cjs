@@ -12,6 +12,9 @@ for (const target of ['index.html','admin.html']) {
       if(theme==='dark'){
         await page.locator('#gng-theme-toggle').click();
         await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+        // Theme.js explicitly animates color/background for 420 ms.
+        // Audit the final stable colors rather than a transient blend.
+        await expect(page.locator('html')).not.toHaveClass(/gng-theme-switching/);
       }
       const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze();
       const issues=result.violations.map(issue=>({
