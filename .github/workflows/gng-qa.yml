@@ -55,6 +55,8 @@ jobs:
         run: node tests/manual-payment.test.cjs
       - name: Administrative email and authorization regressions
         run: node tests/admin-login.test.cjs
+      - name: Image upload security regressions
+        run: node tests/upload-validation.test.cjs
       - name: Dynamic business SEO regressions
         run: node tests/seo-sync.test.cjs
       - name: HTML CSS SQL syntax and references
