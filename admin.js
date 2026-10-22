@@ -1450,20 +1450,9 @@ function showDashboard() {
 async function validateAdminUser(
   user
 ) {
-  if (
-    !user ||
-    !user.email
-  ) {
-    return false;
-  }
-
-  if (
-    typeof window.GNG_isConfiguredAdminEmail ===
-      "function" &&
-    !window.GNG_isConfiguredAdminEmail(
-      user.email
-    )
-  ) {
+  // Administrative authorization is based on the verified Supabase user ID.
+  // Email is only used for sign-in and display, never to grant access.
+  if (!user || !user.id) {
     return false;
   }
 
@@ -1504,9 +1493,27 @@ async function establishSession(
     return false;
   }
 
+  // getSession() reads cached credentials; getUser() verifies the identity
+  // with Supabase Auth before displaying any administrative information.
+  let verifiedUser = null;
+  try {
+    const result = await supabaseClient.auth.getUser();
+    if (result.error || !result.data?.user || result.data.user.id !== session.user.id) {
+      throw new Error("Sessão administrativa não verificada.");
+    }
+    verifiedUser = result.data.user;
+  } catch (verifyError) {
+    console.error("Admin identity check failed", verifyError);
+    state.session = null;
+    state.user = null;
+    showLogin();
+    setMessage(loginMessage, "Sua sessão não pôde ser verificada. Entre novamente.", "error");
+    return false;
+  }
+
   const allowed =
     await validateAdminUser(
-      session.user
+      verifiedUser
     );
 
   if (!allowed) {
@@ -1539,7 +1546,7 @@ async function establishSession(
     session;
 
   state.user =
-    session.user;
+    verifiedUser;
 
   showDashboard();
 
