@@ -92,7 +92,7 @@ function isConfiguredAdminEmail(email) {
   // Never embed the authorized account identity in the public JavaScript bundle.
   const normalized = normalizeAdminEmail(email);
   return normalized.length <= 254 &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized);
+    /^[^\s@]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i.test(normalized);
 }
 
 function loadScriptOnce({ src, dataAttribute, errorMessage }) {
