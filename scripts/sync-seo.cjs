@@ -2,7 +2,15 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
+// Schema.org requires English weekday values; visible descriptions must remain pt-BR.
 const DAYS = {1:"Monday",2:"Tuesday",3:"Wednesday",4:"Thursday",5:"Friday",6:"Saturday",7:"Sunday"};
+const DAYS_PT = {1:"segunda-feira",2:"terça-feira",3:"quarta-feira",4:"quinta-feira",5:"sexta-feira",6:"sábado",7:"domingo"};
+function businessDaysLabel(days) {
+  if (!days.length) return "";
+  if (days.join(",")==="1,2,3,4,5,6") return "De segunda a sábado";
+  if (days.join(",")==="1,2,3,4,5,6,7") return "Todos os dias";
+  return "Atendimento: " + days.map(day=>DAYS_PT[day]).join(", ");
+}
 const BASE = "https://vyzo-studio.github.io/gng_barbearia/";
 function escapeAttr(value) {
   return String(value).replace(/&/g,"&amp;").replace(/"/g,"&quot;")
@@ -41,7 +49,7 @@ function updateSeoMarkup(html, settings) {
   const image=/^https:\/\//i.test(settings.logo_url||"")
     ? settings.logo_url : BASE+"assets/logo-gng.jpg";
   const title=name+" | Agendamento";
-  const opening=days.length&&opens&&closes ? days.map(day=>DAYS[day]).join(", ")+" · "+opens+"–"+closes : "";
+  const opening=days.length&&opens&&closes ? businessDaysLabel(days)+" · "+opens+"–"+closes : "";
   const description=[name+": cortes, barba e agendamento presencial.",opening,address].filter(Boolean).join(" ").slice(0,300);
   html=html.replace(/<title>[^<]*<\/title>/i,"<title>"+escapeAttr(title)+"</title>");
   html=updateMeta(html,"name","description",description);
