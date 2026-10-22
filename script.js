@@ -1447,7 +1447,7 @@ function formatWeekday(
   date
 ) {
   return new Intl.DateTimeFormat(
-    "pt-BR",
+    (window.GNG_I18N?.getLocale?.() || "pt-BR"),
     {
       weekday:
         "short",
@@ -1469,7 +1469,7 @@ function formatMonth(
   date
 ) {
   return new Intl.DateTimeFormat(
-    "pt-BR",
+    (window.GNG_I18N?.getLocale?.() || "pt-BR"),
     {
       month:
         "short",
@@ -1491,7 +1491,7 @@ function formatFullDate(
   date
 ) {
   return new Intl.DateTimeFormat(
-    "pt-BR",
+    (window.GNG_I18N?.getLocale?.() || "pt-BR"),
     {
       weekday:
         "long",
@@ -1517,7 +1517,7 @@ function formatShortDate(
   date
 ) {
   return new Intl.DateTimeFormat(
-    "pt-BR",
+    (window.GNG_I18N?.getLocale?.() || "pt-BR"),
     {
       day:
         "2-digit",
@@ -4478,6 +4478,15 @@ async function setupBooking() {
   }
 
   setupServiceLinks();
+  window.addEventListener("gng:locale-changed", function () {
+    if (availabilityState === "ready") renderDays();
+    updateServiceSummary();
+    updateBarberSummary();
+    updateCustomerSummary();
+    updateDateSummary(selectedDate);
+    updateTimeSummary();
+    updateBookingValidationHint();
+  });
 
   updateServiceSummary();
 
