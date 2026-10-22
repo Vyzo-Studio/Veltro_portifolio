@@ -4365,6 +4365,9 @@ async function submitBooking() {
       p_whatsapp_share_opt_in: wantsWhatsapp
     });
     bookingCreated = true;
+    window.dispatchEvent(new CustomEvent("gng:booking-created", {
+      detail: { name: customerName, phone: customerPhone }
+    }));
 
     showBookingFeedback(
       wantsWhatsapp
