@@ -90,7 +90,9 @@ function normalizeAdminEmail(email) {
 function isConfiguredAdminEmail(email) {
   // Authorization is verified server-side by the is_gng_admin() RPC.
   // Never embed the authorized account identity in the public JavaScript bundle.
-  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalizeAdminEmail(email));
+  const normalized = normalizeAdminEmail(email);
+  return normalized.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized);
 }
 
 function loadScriptOnce({ src, dataAttribute, errorMessage }) {
