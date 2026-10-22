@@ -30,13 +30,16 @@ const serverContext={
 };
 vm.createContext(serverContext);vm.runInContext(check,serverContext);
 (async()=>{
-  assert.equal(await serverContext.validateAdminUser({email:"admin@example.com"}),true);
+  const adminId="00000000-0000-4000-8000-000000000001";
+  const outsiderId="00000000-0000-4000-8000-000000000002";
+  assert.equal(await serverContext.validateAdminUser({id:adminId,email:"admin@example.com"}),true);
   access=false;
-  assert.equal(await serverContext.validateAdminUser({email:"outsider@example.com"}),false,
-    "Syntactically valid external user must not receive server authorization");
-  assert.equal(await serverContext.validateAdminUser({email:"invalid"}),false);
+  assert.equal(await serverContext.validateAdminUser({id:outsiderId,email:"admin@example.com"}),false,
+    "Matching email must not authorize an unrelated account ID");
+  assert.equal(await serverContext.validateAdminUser({email:"admin@example.com"}),false,
+    "Missing UID must not pass the admin guard");
   assert.equal(await serverContext.validateAdminUser(null),false);
-  assert.equal(rpcCalls,2,"Malformed emails cannot query the administrative RPC");
+  assert.equal(rpcCalls,2,"Only users with a valid UID reach the administrative RPC");
 
   const loginCode=extract(admin,"async function handleLogin(","async function handleLogout()");
   let authorized=true;
@@ -47,7 +50,7 @@ vm.createContext(serverContext);vm.runInContext(check,serverContext);
     supabaseClient:{auth:{signInWithPassword:async({email,password})=>{
       authCalls++;
       if(password==="wrong") return {error:new Error("Invalid login credentials"),data:null};
-      return {data:{session:{user:{email},access_token:"mock"}},error:null};
+      return {data:{session:{user:{id:"00000000-0000-4000-8000-000000000001",email},access_token:"mock"}},error:null};
     }}},
     adminEmailInput:{value:"admin@example.com"},
     adminPasswordInput:{value:"good"},
