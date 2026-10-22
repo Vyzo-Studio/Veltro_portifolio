@@ -187,8 +187,11 @@ if (!SUPABASE_URL || SUPABASE_URL === "COLE_AQUI_A_PROJECT_URL") {
   window.supabaseClient = null;
   showStartupError("A chave pública do Supabase não está configurada.");
 } else if (typeof window.supabase === "undefined") {
+  // Legal pages use only the publishable public settings, not Supabase Auth.
   window.supabaseClient = null;
-  showStartupError("Não foi possível carregar o sistema administrativo. Recarregue a página.");
+  if (document.getElementById("admin-login") || document.getElementById("admin-dashboard")) {
+    showStartupError("Não foi possível carregar o sistema administrativo. Recarregue a página.");
+  }
 } else {
   const authStorage = resolveAuthStorage();
   window.GNG_AUTH_STORAGE_MODE = authStorage.mode;
