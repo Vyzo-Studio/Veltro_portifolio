@@ -36,12 +36,15 @@
     html[data-theme="dark"] .gng-policy-content .policy-updated { color: #b9cbdf; }
   </style>
 </head>
-<body class="gng-policy-page">
+<body class="gng-policy-page" data-gng-legal="privacy">
   <a href="#politica" class="skip-link">Pular para a política</a>
   <header class="gng-policy-header">
     <img src="assets/logo-gng.jpg" alt="GNG Barbearia">
     <a href="index.html">GNG Barbearia</a>
     <a href="index.html#agendamento">Voltar ao site e agendar</a>
+    <a href="termos.html">Termos de Serviço</a>
+    <label class="gng-locale-label"><span class="sr-only">Idioma do site</span><select data-gng-locale aria-label="Idioma do site"><option value="pt-BR">Português (Brasil)</option><option value="en">English</option><option value="es">Español</option><option value="ja">日本語</option><option value="de">Deutsch</option></select></label>
+    <button type="button" class="footer-privacy-button" data-privacy-preferences>Configurações dos Cookies</button>
   </header>
   <main class="gng-policy-content" id="politica">
     <article>
@@ -71,10 +74,10 @@
       <p><strong>Tratamento e transferência internacional:</strong> a base de dados Supabase deste projeto está configurada na região <strong>us-west-2, nos Estados Unidos</strong>. Assim, os dados de agendamento podem ser armazenados e processados fora do Brasil. O uso de fornecedores estrangeiros deve respeitar os mecanismos aplicáveis de transferência internacional previstos na LGPD e na <a href="https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024" target="_blank" rel="noopener noreferrer">Resolução CD/ANPD nº 19/2024</a>. A GNG deve verificar contratualmente quais salvaguardas desses fornecedores se aplicam ao seu tratamento.</p>
 
       <h2 id="mapas">5. Cookies, preferências e mapa</h2>
-      <p>Não utilizamos cookies de publicidade ou ferramentas próprias de rastreamento para marketing no código público atualmente publicado. A preferência de tema claro/escuro pode ser salva no armazenamento local do navegador. A autenticação do painel restrito utiliza armazenamento necessário para manter a sessão administrativa.</p>
-      <p>O mapa incorporado do Google fica <strong>desativado por padrão</strong>. Ele só é carregado após sua escolha em “Carregar mapa” ou nas preferências de privacidade. Quando ativado, o Google pode receber dados técnicos e utilizar cookies segundo suas próprias regras. Você pode revogar essa preferência no rodapé do site. Os links que abrem serviços externos estão sujeitos às respectivas políticas de privacidade.</p>
+      <p>Não utilizamos cookies de publicidade ou ferramentas próprias de rastreamento para marketing no código público atualmente publicado. A preferência de tema claro/escuro e o idioma escolhido podem ser salvos no armazenamento local do navegador. Com sua escolha específica, podemos salvar neste mesmo navegador somente seu nome e telefone para preenchimento futuro, por até 90 dias, sem criar uma conta; você pode apagar esses dados imediatamente pelo formulário. Em dispositivos compartilhados, outras pessoas que usem o mesmo perfil do navegador poderão ver esses dados. A autenticação do painel restrito utiliza armazenamento necessário para manter a sessão administrativa.</p>
+      <p>Um registro local da decisão sobre conteúdo externo é mantido por até 180 dias ou até mudança de versão da política. O mapa incorporado do Google fica <strong>desativado por padrão</strong>. Ele só é carregado após sua escolha em “Carregar mapa” ou nas preferências de privacidade. Quando ativado, o Google pode receber dados técnicos e utilizar cookies segundo suas próprias regras. Você pode revogar essa preferência no rodapé do site. Os links que abrem serviços externos estão sujeitos às respectivas políticas de privacidade.</p>
 
-      <h2>6. Por quanto tempo mantemos os dados?</h2>
+      <h2 id="dados-locais">6. Por quanto tempo mantemos os dados?</h2>
       <p>Os registros podem ser mantidos enquanto necessários para tratar a solicitação, prestar serviços, administrar histórico operacional, cumprir obrigações legais e proteger direitos em eventuais controvérsias. Quando não forem mais necessários e não existir fundamento legal para retenção, devem ser eliminados ou anonimizados. A GNG deve estabelecer e revisar periodicamente seus prazos internos de retenção; não há uma rotina de exclusão automática geral garantida por esta página.</p>
 
       <h2>7. Segurança</h2>
@@ -92,5 +95,8 @@
       <p><a href="index.html#agendamento">Voltar ao agendamento</a></p>
     </article>
   </main>
+  <script src="i18n.js?v=1.0"></script>
+  <script src="privacy.js?v=2.0"></script>
+  <script src="legal-i18n.js?v=1.0"></script>
 </body>
 </html>
