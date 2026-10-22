@@ -112,6 +112,7 @@
     rel="stylesheet"
     href="theme.css?v=2.6"
   >
+  <link rel="stylesheet" href="experience.css?v=1.0">
 </head>
 
 <body>
@@ -1790,17 +1791,26 @@
           Localização
         </a>
 
-        <a href="privacidade.html">
-          Privacidade e dados
-        </a>
 
-        <button type="button" class="footer-privacy-button" data-privacy-preferences>
-          Preferências de privacidade
-        </button>
 
       </div>
 
     </div>
+
+    <nav class="container gng-global-controls" aria-label="Privacidade, termos e idioma">
+      <a href="privacidade.html">Política de Privacidade</a>
+      <a href="termos.html">Termos de Serviço</a>
+      <button type="button" class="footer-privacy-button" data-privacy-preferences>Configurações dos Cookies</button>
+      <label class="gng-locale-label"><span class="sr-only">Idioma do site</span>
+        <select data-gng-locale aria-label="Idioma do site">
+          <option value="pt-BR">Português (Brasil)</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="ja">日本語</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </label>
+    </nav>
 
     <div class="container footer-bottom">
 
@@ -1816,9 +1826,11 @@
 
   </footer>
 
-  <script src="script.js?v=13.5"></script>
+  <script src="script.js?v=13.6"></script>
   <script src="site-data.js?v=1.2"></script>
-  <script src="privacy.js?v=1.2"></script>
+  <script src="i18n.js?v=1.0"></script>
+  <script src="privacy.js?v=2.0"></script>
+  <script src="customer-memory.js?v=1.0"></script>
 
 </body>
 
