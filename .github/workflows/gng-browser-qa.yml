@@ -17,7 +17,7 @@ permissions:
   contents: read
 jobs:
   browser:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -37,7 +37,7 @@ jobs:
             if curl --retry 2 --silent --show-error --fail --max-time 12 \
               -H 'Cache-Control: no-cache' \
               "https://vyzo-studio.github.io/gng_barbearia/?qa=${GITHUB_SHA}-${attempt}" \
-              | grep -Fq "$expected"; then
+              -o /tmp/gng-live-index.html && grep -Fq "$expected" /tmp/gng-live-index.html; then
               echo "Published page uses the intended CSS version."
               exit 0
             fi
