@@ -40,10 +40,18 @@ test('public site: seven widths, links, no horizontal overflow',async({page})=>{
         return {tag:el.tagName,className:typeof el.className==='string'?el.className.slice(0,70):'',
           id:el.id||'',left:Math.round(r.left),right:Math.round(r.right),w:Math.round(r.width)};
       }).filter(x=>x.w>0 && x.right>width+3 && x.left<width).sort((a,b)=>b.right-a.right).slice(0,10);
-      return {overflow,out};
+      const containers=[...document.querySelectorAll('body,main,section,div,article,figure')].map(el=>{
+        const css=getComputedStyle(el);
+        const r=el.getBoundingClientRect();
+        return {tag:el.tagName,className:typeof el.className==='string'?el.className.slice(0,70):'',
+          id:el.id||'',scroll:el.scrollWidth,client:el.clientWidth,
+          left:Math.round(r.left),right:Math.round(r.right),overflowX:css.overflowX};
+      }).filter(x=>x.scroll>x.client+10 && x.overflowX==='visible')
+        .sort((a,b)=>(b.scroll-b.client)-(a.scroll-a.client)).slice(0,14);
+      return {overflow,out,containers};
     });
     await page.screenshot({path:path.join('artifacts','public-'+width+'.png'),fullPage:false});
-    if(report.overflow>3)console.log('OVERFLOW_DETAIL '+width+'px '+JSON.stringify(report.out));
+    if(report.overflow>3)console.log('OVERFLOW_DETAIL '+width+'px '+JSON.stringify({out:report.out,containers:report.containers}));
     expect(report.overflow,'Public horizontal overflow at '+width+'px').toBeLessThanOrEqual(3);
   }
 });
