@@ -986,8 +986,12 @@
   async function uploadImage(file, folder) {
     if (!file) throw new Error("Selecione uma imagem.");
 
-    const allowed = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowed.includes(file.type)) {
+    const mimeExtensions = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp"
+    };
+    if (!Object.prototype.hasOwnProperty.call(mimeExtensions, file.type)) {
       throw new Error("Use uma imagem JPG, PNG ou WEBP.");
     }
 
@@ -995,7 +999,22 @@
       throw new Error("A imagem deve ter no máximo 5 MB.");
     }
 
-    const extension = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+    // Do not trust file.type or the user-controlled filename by themselves.
+    // Ensure the file's magic bytes match the selected supported image format.
+    const bytes = new Uint8Array(await file.slice(0, 12).arrayBuffer());
+    const jpg = bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+    const png = bytes.length >= 8 && [137,80,78,71,13,10,26,10].every((byte, index) => bytes[index] === byte);
+    const webp = bytes.length >= 12 &&
+      String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
+      String.fromCharCode(...bytes.slice(8, 12)) === "WEBP";
+    if (!(file.type === "image/jpeg" && jpg ||
+          file.type === "image/png" && png ||
+          file.type === "image/webp" && webp)) {
+      throw new Error("O conteúdo do arquivo não corresponde a uma imagem válida JPG, PNG ou WEBP.");
+    }
+
+    // Extension is derived from validated MIME type, not arbitrary upload filenames.
+    const extension = mimeExtensions[file.type];
     const path =
       folder + "/" +
       Date.now() + "-" +
