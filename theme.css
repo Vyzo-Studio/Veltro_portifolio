@@ -1269,3 +1269,18 @@ html:not([data-theme="dark"]) .login-card-head > span {
     outline-offset: 2px;
   }
 }
+
+/* Accessibility QA: injected mobile styles follow the static stylesheets.
+   Explicit important overrides prevent disabled-state opacity from reducing text contrast. */
+@media (max-width: 860px) {
+  html .booking-step.is-mobile-locked {
+    opacity: 1 !important;
+  }
+  html .booking-step.is-mobile-locked .booking-step-number {
+    background: #22334f !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+  }
+}
+html:not([data-theme="dark"]) .service-description { color: #344359 !important; }
+html[data-theme="dark"] .service-description { color: #dbe7f6 !important; }
