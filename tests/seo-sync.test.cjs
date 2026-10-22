@@ -24,6 +24,8 @@ assert.equal(json.telephone,"+5561987654321");
 assert.deepEqual(json.openingHoursSpecification[0].dayOfWeek,
   ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]);
 assert.equal(json.openingHoursSpecification[0].opens,"08:30");
+assert.match(result,/De segunda a sábado · 08:30–18:00/);
+assert.doesNotMatch(result,/Monday, Tuesday, Wednesday/);
 assert.ok(!json.openingHoursSpecification[0].dayOfWeek.includes("Sunday"));
 assert.equal(updateSeoMarkup(result,settings),result,"Idempotent synchronization");
 assert.throws(()=>updateSeoMarkup(source,null),/Missing verified/);
