@@ -83,6 +83,34 @@ test('public site: theme switching works',async({page})=>{
   const after=await page.locator('html').getAttribute('data-theme');
   expect(after).not.toBe(before);
 });
+test('dark theme changes only the header logo, keeping other logos untouched',async({page})=>{
+  await mockPublicData(page);
+  await page.goto(base,{waitUntil:'domcontentloaded'});
+  const banner=page.locator('#gng-consent-banner');
+  if(await banner.isVisible())await banner.locator('[data-consent-action="reject"]').click();
+  const light=page.locator('header .brand .gng-header-logo-light');
+  const dark=page.locator('header .brand .gng-header-logo-dark');
+  await expect(light).toBeVisible();
+  await expect(dark).toBeHidden();
+  const otherBefore=await page.locator('.hero-brand-card img,.footer-logo').evaluateAll(
+    elements=>elements.map(img=>img.getAttribute('src'))
+  );
+  expect(otherBefore.length).toBeGreaterThan(0);
+  const toggle=page.locator('.gng-theme-toggle');
+  await toggle.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+  await expect(light).toBeHidden();
+  await expect(dark).toBeVisible();
+  await expect.poll(async()=>dark.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  await expect(dark).toHaveAttribute('src','assets/gng-logo-header-dark.svg');
+  expect(await page.locator('.hero-brand-card img,.footer-logo').evaluateAll(
+    elements=>elements.map(img=>img.getAttribute('src'))
+  )).toEqual(otherBefore);
+  await page.screenshot({path:'artifacts/dark-header-logo.png',fullPage:false});
+  await toggle.click();
+  await expect(light).toBeVisible();
+  await expect(dark).toBeHidden();
+});
 test('admin page: login gate at mobile and desktop widths',async({page})=>{
   await mockPublicData(page);
   for(const width of [390,1366]) {
