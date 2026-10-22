@@ -1318,3 +1318,35 @@ html[data-theme="dark"] .brand .gng-header-logo-dark:hover {
   box-shadow: none;
   transform: none;
 }
+
+
+/* GNG DARK CONTRAST — plans and space gallery
+   Applies only when the visitor chooses dark mode. The buttons retain
+   their existing accessible foreground/background combinations. */
+html[data-theme="dark"] .memberships-section .plan-card :is(
+  .plan-kicker, h3, .price span, .price strong, .price small, ul li
+) {
+  color: #ffffff !important;
+}
+
+/* The CSS-created list dots were navy on the first membership card. */
+html[data-theme="dark"] .memberships-section .plan-card ul li::before {
+  background-color: #dfa64a !important;
+}
+
+/* These captions can be populated either by index.html or site-data.js. */
+html[data-theme="dark"] #espaco .space-card figcaption,
+html[data-theme="dark"] #espaco .space-card figcaption :is(span, strong, small) {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+/* Uniform readable photo overlay in dark mode without changing the photos. */
+html[data-theme="dark"] #espaco .space-card::after {
+  background: linear-gradient(
+    180deg,
+    transparent 42%,
+    rgba(8, 17, 30, 0.48) 66%,
+    rgba(8, 17, 30, 0.94) 100%
+  );
+}
