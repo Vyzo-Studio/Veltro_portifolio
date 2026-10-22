@@ -1,5 +1,13 @@
 name: GNG Browser QA
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'tests/**'
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - '.github/workflows/gng-browser-qa.yml'
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
@@ -19,6 +27,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Ensure published HTML has caught up with GitHub Pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected=$(grep -o 'theme.css?v=[0-9.]*' index.html | head -n1)
+          echo "Awaiting published asset reference: $expected"
+          for attempt in $(seq 1 45); do
+            if curl --retry 2 --silent --show-error --fail --max-time 12 \
+              -H 'Cache-Control: no-cache' \
+              "https://vyzo-studio.github.io/gng_barbearia/?qa=${GITHUB_SHA}-${attempt}" \
+              | grep -Fq "$expected"; then
+              echo "Published page uses the intended CSS version."
+              exit 0
+            fi
+            sleep 4
+          done
+          echo "GitHub Pages has not published the expected HTML; refuse a stale browser test." >&2
+          exit 1
       - name: Install pinned Playwright test runner
         run: npm install --no-save --ignore-scripts @playwright/test@1.56.1 @axe-core/playwright@4.10.2
       - name: Install Chromium
