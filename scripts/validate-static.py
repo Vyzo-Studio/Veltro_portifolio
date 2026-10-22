@@ -78,7 +78,7 @@ def validate_sql(file):
     except Exception as ex:errors.append(f"{file.name}: PostgreSQL syntax error: {ex}")
     print(f"{file.name}: PostgreSQL AST checked")
 
-for file in (ROOT/"index.html",ROOT/"admin.html",ROOT/"privacidade.html"):
+for file in (ROOT/"index.html",ROOT/"admin.html",ROOT/"privacidade.html",ROOT/"termos.html"):
     validate_html(file)
 for file in sorted(ROOT.glob("*.css")):
     validate_css(file)
