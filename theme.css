@@ -1243,3 +1243,29 @@ html[data-theme="dark"] .booking-summary-list strong {
     overscroll-behavior-x: contain;
   }
 }
+
+/* Confirmed axe WCAG failures: visible focus, target dimensions, and legible colors. */
+html:not([data-theme="dark"]) .table-action a {
+  background: #22334f;
+  color: #ffffff !important;
+}
+html:not([data-theme="dark"]) .login-card-head > span {
+  color: #435572;
+}
+@media (max-width: 860px) {
+  .booking-step.is-mobile-locked { opacity: 1; border-color: rgba(34,51,79,.28); }
+  .booking-step.is-mobile-locked .booking-step-number {
+    background: #34455f;
+    color: #ffffff;
+  }
+  .footer-links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 6px;
+  }
+  :is(.quick-info, .trust-grid, .portfolio-grid, .space-grid, .benefits, .plans-grid):focus-visible {
+    outline: 3px solid #d97717;
+    outline-offset: 2px;
+  }
+}
