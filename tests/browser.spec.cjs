@@ -111,6 +111,64 @@ test('dark theme changes only the header logo, keeping other logos untouched',as
   await expect(light).toBeVisible();
   await expect(dark).toBeHidden();
 });
+test('dark theme: white membership copy, gold bullets and legible photo captions only',async({page})=>{
+  await mockPublicData(page);
+  for(const width of [390,1366]) {
+    await page.setViewportSize({width,height:860});
+    await page.goto(base,{waitUntil:'domcontentloaded'});
+    const banner=page.locator('#gng-consent-banner');
+    if(await banner.isVisible())await banner.locator('[data-consent-action="reject"]').click();
+    const readStyles=async()=>page.evaluate(()=>{
+      const selectors=[
+        '.plan-card:not(.plan-featured) .plan-kicker',
+        '.plan-card:not(.plan-featured) h3',
+        '.plan-card:not(.plan-featured) .price span',
+        '.plan-card:not(.plan-featured) .price strong',
+        '.plan-card:not(.plan-featured) .price small',
+        '.plan-card:not(.plan-featured) li',
+        '.plan-featured .plan-kicker',
+        '.plan-featured h3',
+        '.plan-featured .price span',
+        '.plan-featured .price strong',
+        '.plan-featured .price small',
+        '.plan-featured li',
+        '#espaco .space-card figcaption span',
+        '#espaco .space-card figcaption strong',
+        '#espaco .space-card figcaption small'
+      ];
+      return {
+        colors: selectors.map(selector=>{
+          const el=document.querySelector(selector);
+          return {selector,present:!!el,color:el?getComputedStyle(el).color:null};
+        }),
+        bullets:[...document.querySelectorAll('.plan-card li')].map(el=>
+          getComputedStyle(el,'::before').backgroundColor),
+        buttonColors:[...document.querySelectorAll('.plan-card .btn')].map(el=>({
+          foreground:getComputedStyle(el).color,background:getComputedStyle(el).backgroundColor
+        }))
+      };
+    });
+    const light=await readStyles();
+    const toggle=page.locator('.gng-theme-toggle');
+    await toggle.click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
+    await expect(page.locator('html')).not.toHaveClass(/gng-theme-switching/);
+    const dark=await readStyles();
+    for(const entry of dark.colors) {
+      expect(entry.present,'Missing '+entry.selector).toBe(true);
+      expect(entry.color,'Dark text '+entry.selector).toBe('rgb(255, 255, 255)');
+    }
+    for(const bullet of dark.bullets)
+      expect(bullet,'Gold bullet in dark mode').toBe('rgb(223, 166, 74)');
+    expect(dark.buttonColors).toHaveLength(2);
+    expect(dark.buttonColors[1].foreground).not.toBe(dark.buttonColors[1].background);
+    await toggle.click();
+    await expect(page.locator('html')).not.toHaveClass(/gng-theme-switching/);
+    const restored=await readStyles();
+    expect(restored.colors).toEqual(light.colors);
+    expect(restored.bullets).toEqual(light.bullets);
+  }
+});
 test('admin page: login gate at mobile and desktop widths',async({page})=>{
   await mockPublicData(page);
   for(const width of [390,1366]) {
