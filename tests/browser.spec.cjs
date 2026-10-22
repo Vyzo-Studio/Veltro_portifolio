@@ -32,9 +32,19 @@ test('public site: seven widths, links, no horizontal overflow',async({page})=>{
     await page.goto(base,{waitUntil:'domcontentloaded'});
     await expect(page.locator('h1').first()).toBeVisible();
     await expect(page.locator('a[href="https://www.instagram.com/gngbarbearia/"]').first()).toBeAttached();
-    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
-    expect(overflow,'Public horizontal overflow at '+width+'px').toBeLessThanOrEqual(3);
+    const report=await page.evaluate(()=>{
+      const width=window.innerWidth;
+      const overflow=document.documentElement.scrollWidth-width;
+      const out=[...document.body.querySelectorAll('*')].map(el=>{
+        const r=el.getBoundingClientRect();
+        return {tag:el.tagName,className:typeof el.className==='string'?el.className.slice(0,70):'',
+          id:el.id||'',left:Math.round(r.left),right:Math.round(r.right),w:Math.round(r.width)};
+      }).filter(x=>x.w>0 && x.right>width+3 && x.left<width).sort((a,b)=>b.right-a.right).slice(0,10);
+      return {overflow,out};
+    });
     await page.screenshot({path:path.join('artifacts','public-'+width+'.png'),fullPage:false});
+    if(report.overflow>3)console.log('OVERFLOW_DETAIL '+width+'px '+JSON.stringify(report.out));
+    expect(report.overflow,'Public horizontal overflow at '+width+'px').toBeLessThanOrEqual(3);
   }
 });
 test('public site: maps consent and booking form',async({page})=>{
