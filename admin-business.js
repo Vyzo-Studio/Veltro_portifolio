@@ -4,6 +4,7 @@
 
   let businessData = null;
   let reportData = null;
+  let reconciliationData = null;
   let originalRefreshAvailability = null;
 
   const WEEKDAYS = [
@@ -257,6 +258,14 @@
         </section>
 
         <section class="report-summary" id="report-summary"></section>
+        <section class="business-card" aria-labelledby="report-reconciliation-title">
+          <div class="business-card-head"><div><span>CONCILIAÇÃO</span><h3 id="report-reconciliation-title">FECHAMENTOS E AJUSTES RETROATIVOS</h3></div></div>
+          <p>O valor original de um caixa encerrado permanece registrado; lançamentos posteriores aparecem separados, sem reabrir o caixa.</p>
+          <div class="report-table-shell"><table class="report-table">
+          <thead><tr><th>Data efetiva</th><th>Situação</th><th>Fechamento original</th><th>Ajustes posteriores</th><th>Valor atualizado</th><th>Divergência</th></tr></thead>
+          <tbody id="report-reconciliation-body"><tr><td colspan="6">Carregue o relatório para consultar a conciliação.</td></tr></tbody>
+          </table></div>
+        </section>
 
         <section class="business-card">
           <div class="business-card-head">
@@ -1339,6 +1348,30 @@
     return labels[method] || method || "—";
   }
 
+  function renderCashReconciliation() {
+    const body = document.getElementById("report-reconciliation-body");
+    if (!body) return;
+    if (!reconciliationData || !Array.isArray(reconciliationData.rows)) {
+      body.innerHTML = '<tr><td colspan="6">Conciliação indisponível. Consulte o relatório financeiro e tente novamente.</td></tr>';
+      return;
+    }
+    if (!reconciliationData.rows.length) {
+      body.innerHTML = '<tr><td colspan="6">Sem movimentações ou sessões de caixa neste período.</td></tr>';
+      return;
+    }
+    body.innerHTML = reconciliationData.rows.map(function(row) {
+      const date = String(row.date || "").slice(0, 10);
+      const original = row.original_close_cents == null ? "—" : formatMoney(row.original_close_cents);
+      const difference = row.difference_cents == null ? "—" : formatMoney(row.difference_cents);
+      const status = row.status === "closed" ? "Fechado" : row.status === "open" ? "Aberto" : "Sem sessão";
+      return '<tr><td>' + escapeHtml(date) + '</td><td>' + status +
+        '</td><td>' + escapeHtml(original) +
+        '</td><td>' + escapeHtml(formatMoney(row.post_close_adjustment_cents || 0)) +
+        '</td><td>' + escapeHtml(formatMoney(row.reconciled_cents || 0)) +
+        '</td><td>' + escapeHtml(difference) + '</td></tr>';
+    }).join("");
+  }
+
   function renderFinancialReport() {
     const summary = document.getElementById("report-summary");
     const body = document.getElementById("report-transactions-body");
@@ -1404,8 +1437,19 @@
         p_end_date: end.value
       });
 
+      try {
+        reconciliationData = await rpc("admin_cash_reconciliation", {
+          p_start_date: start.value,
+          p_end_date: end.value
+        });
+      } catch (reconciliationError) {
+        console.error("Não foi possível carregar a conciliação", reconciliationError);
+        reconciliationData = null;
+      }
       renderFinancialReport();
-      setBusinessMessage(message, "");
+      renderCashReconciliation();
+      setBusinessMessage(message, reconciliationData ? "" :
+        "Relatório carregado, mas a conciliação não pôde ser verificada.", reconciliationData ? "" : "error");
     } catch (error) {
       setBusinessMessage(message, error.message, "error");
     }
