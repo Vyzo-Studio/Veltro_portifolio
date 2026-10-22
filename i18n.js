@@ -42,10 +42,10 @@ function walkText(root){
 }
 function walkAttrs(root){
  if(!root?.querySelectorAll)return;
- const list=[root,...root.querySelectorAll("input,button,a,select,option,img,iframe,section,div")].filter(x=>x?.getAttribute);
+ const list=[root,...root.querySelectorAll("input,button,a,select,option,img,iframe,section,div,td,th")].filter(x=>x?.getAttribute);
  for(const el of list){
    if(el.closest(excluded))continue;
-   for(const attr of ["placeholder","title","aria-label"]){
+   for(const attr of ["placeholder","title","aria-label","data-label","alt"]){
      const actual=el.getAttribute(attr);if(!actual)continue;
      const key=attr+":"+actual;const store=attributes.get(el)||{};
      const old=store[attr];
@@ -68,11 +68,17 @@ function updateSelector(){
    select.setAttribute("aria-label",({"pt-BR":"Idioma do site",en:"Website language",es:"Idioma del sitio",ja:"表示言語",de:"Sprache der Website"})[locale]);
  });
 }
+function updatePageTitle(){
+ if(document.body?.dataset.gngLegal)return;
+ const titles={"pt-BR":"GNG Barbearia | Agendamento",en:"GNG Barbearia | Booking",es:"GNG Barbearia | Reservas",ja:"GNG Barbearia | 予約",de:"GNG Barbearia | Terminbuchung"};
+ document.title=titles[locale]||titles["pt-BR"];
+}
 function setLocale(next){
  if(!locales[next]||locale===next)return;
  locale=next;
  try{localStorage.setItem(STORAGE,locale)}catch(e){}
  document.documentElement.lang=locale;
+ updatePageTitle();
  updateSelector();
  walkText(document.body);walkAttrs(document.body);
  window.dispatchEvent(new CustomEvent("gng:locale-changed",{detail:{locale}}));
@@ -80,6 +86,7 @@ function setLocale(next){
 }
 function setup(){
  document.documentElement.lang=locale;
+ updatePageTitle();
  document.querySelectorAll("[data-gng-locale]").forEach(s=>s.addEventListener("change",()=>setLocale(s.value)));
  updateSelector();
  walkText(document.body);walkAttrs(document.body);
