@@ -20,8 +20,9 @@ const legacy=localStorage.getItem(OLD);
 if(legacy==="accepted"||legacy==="declined"){value={external:legacy==="accepted",createdAt:Date.now()};decided=true;store();localStorage.removeItem(OLD)}
 }catch(e){}}
 function syncMap(allowed){
-value.external=!!allowed;
-window.GNG_MAP_ALLOWED = !!allowed;
+allowed=Boolean(allowed);
+value.external=allowed;
+window.GNG_MAP_ALLOWED = allowed;
 if(frame){
 placeholder.hidden=!!allowed;frame.hidden=!allowed;
 if(allowed&&frame.dataset.mapSrc&&frame.getAttribute("src")!==frame.dataset.mapSrc)frame.setAttribute("src",frame.dataset.mapSrc);
