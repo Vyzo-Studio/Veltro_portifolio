@@ -97,6 +97,17 @@ test('empty data from admin removes stale public services, portfolio and space p
   await expect(page.locator('#espaco .space-card')).toHaveCount(0);
   await expect(page.locator('#booking-service option')).toHaveCount(1);
   await expect(page.locator('#booking-submit')).toBeDisabled();
+  for (const [language,messages] of [
+    ['en',['No services available at the moment.','No haircut photos available at the moment.','No photos of the barbershop space available at the moment.']],
+    ['es',['No hay servicios disponibles por el momento.','No hay fotos de cortes disponibles por el momento.','No hay fotos del local disponibles por el momento.']],
+    ['ja',['現在ご利用可能なサービスはありません。','現在カット写真はありません。','現在店舗の写真はありません。']],
+    ['de',['Zurzeit sind keine Leistungen verfügbar.','Zurzeit sind keine Haarschnittfotos verfügbar.','Zurzeit sind keine Fotos des Salons verfügbar.']]
+  ]) {
+    await page.locator('[data-gng-locale]').selectOption(language);
+    await expect(page.locator('#servicos .gng-empty-message')).toHaveText(messages[0]);
+    await expect(page.locator('#portfolio .portfolio-empty')).toHaveText(messages[1]);
+    await expect(page.locator('#espaco .space-empty')).toHaveText(messages[2]);
+  }
 });
 test('dark theme changes only the header logo, keeping other logos untouched',async({page})=>{
   await mockPublicData(page);
