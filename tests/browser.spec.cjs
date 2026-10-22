@@ -169,6 +169,51 @@ test('dark theme: white membership copy, gold bullets and legible photo captions
     expect(restored.bullets).toEqual(light.bullets);
   }
 });
+test('admin logos: same transparent brand mark in login and header, no square frames',async({page})=>{
+  await mockPublicData(page);
+  for(const width of [390,1366]) {
+    await page.setViewportSize({width,height:860});
+    await page.goto(base+'admin.html',{waitUntil:'domcontentloaded'});
+    const login=page.locator('.login-logo-box img');
+    const header=page.locator('.admin-header-brand img');
+    await expect(login).toBeVisible();
+    await expect(login).toHaveAttribute('src','assets/gng-logo-header-dark.svg');
+    await expect(header).toHaveAttribute('src','assets/gng-logo-header-dark.svg');
+    for(const image of [login,header]){
+      expect(await image.evaluate(img=>img.complete && img.naturalWidth>0),
+        'Transparent GNG image must load').toBe(true);
+    }
+    const loginBox=await page.locator('.login-logo-box').evaluate(el=>{
+      const s=getComputedStyle(el);
+      return {background:s.backgroundColor,shadow:s.boxShadow,border:s.borderTopWidth};
+    });
+    expect(loginBox.shadow).toBe('none');
+    expect(loginBox.border).toBe('0px');
+    const imgStyles=await login.evaluate(el=>{
+      const s=getComputedStyle(el);
+      return {background:s.backgroundColor,shadow:s.boxShadow,radius:s.borderTopLeftRadius};
+    });
+    expect(imgStyles.background).toBe('rgba(0, 0, 0, 0)');
+    expect(imgStyles.shadow).toBe('none');
+    expect(imgStyles.radius).toBe('0px');
+    const loggedOut=page.locator('#admin-login');
+    await expect(loggedOut).toBeVisible();
+    // Inspect only header presentation. This does not authenticate or call admin RPCs.
+    await page.evaluate(()=>{
+      document.querySelector('#admin-login').hidden=true;
+      document.querySelector('#admin-dashboard').hidden=false;
+    });
+    await expect(header).toBeVisible();
+    const headStyles=await header.evaluate(el=>{
+      const s=getComputedStyle(el);
+      return {background:s.backgroundColor,shadow:s.boxShadow,radius:s.borderTopLeftRadius};
+    });
+    expect(headStyles.background).toBe('rgba(0, 0, 0, 0)');
+    expect(headStyles.shadow).toBe('none');
+    expect(headStyles.radius).toBe('0px');
+    await page.screenshot({path:'artifacts/admin-transparent-logos-'+width+'.png',fullPage:false});
+  }
+});
 test('admin page: login gate at mobile and desktop widths',async({page})=>{
   await mockPublicData(page);
   for(const width of [390,1366]) {
