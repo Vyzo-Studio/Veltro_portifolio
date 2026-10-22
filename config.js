@@ -135,7 +135,7 @@ async function loadAdminModules() {
     });
 
     await loadScriptOnce({
-      src: "admin-business.js?v=1.4",
+      src: "admin-business.js?v=1.5",
       dataAttribute: "data-gng-admin-business",
       errorMessage: "Não foi possível carregar os módulos de relatórios e personalização."
     });
