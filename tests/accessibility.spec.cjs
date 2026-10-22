@@ -18,6 +18,22 @@ for (const target of ['index.html','admin.html']) {
         id:issue.id,impact:issue.impact,description:issue.description,
         nodes:issue.nodes.slice(0,3).map(n=>n.target)
       }));
+      if(issues.length) {
+        const details = await page.evaluate((selectors)=>{
+          return selectors.flatMap(selector=>{
+            try{
+              return [...document.querySelectorAll(selector)].slice(0,3).map(el=>{
+                const st=getComputedStyle(el), parent=getComputedStyle(el.parentElement||el);
+                return {selector,tag:el.tagName,text:el.textContent?.trim().slice(0,35),
+                  color:st.color,background:st.backgroundColor,opacity:st.opacity,
+                  backgroundImage:st.backgroundImage,parentBackground:parent.backgroundColor,
+                  parentColor:parent.color,parentOpacity:parent.opacity};
+              });
+            }catch(e){return [{selector,error:String(e)}];}
+          });
+        },issues.flatMap(i=>i.nodes).flat());
+        console.log('A11Y_COMPUTED '+target+' '+width+' '+theme+' '+JSON.stringify(details));
+      }
       console.log('A11Y '+target+' '+width+' '+theme+' '+JSON.stringify(issues));
       expect(issues,'WCAG serious problems: '+target+' '+width).toEqual([]);
     });
