@@ -1284,3 +1284,15 @@ html:not([data-theme="dark"]) .login-card-head > span {
 }
 html:not([data-theme="dark"]) .service-description { color: #344359 !important; }
 html[data-theme="dark"] .service-description { color: #dbe7f6 !important; }
+
+/* Confirmed WCAG contrast: light featured labels and dark admin welcome text. */
+html:not([data-theme="dark"]) .featured-label {
+  background: #984208 !important;
+  color: #ffffff !important;
+}
+html[data-theme="dark"] .login-card {
+  background: #111f33 !important;
+}
+html[data-theme="dark"] :is(.login-card-head > span,.login-card-head > h2,.login-card-head > p) {
+  color: #f6f9ff !important;
+}
