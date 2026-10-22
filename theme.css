@@ -1223,3 +1223,23 @@ html[data-theme="dark"] .booking-summary-list strong {
   line-height: 1.45;
 }
 .booking-validation-hint[hidden] { display:none !important; }
+
+
+/* GNG responsive QA: let the hero's grid track shrink to the viewport.
+   The quick-info cards remain horizontally scrollable inside their own row. */
+@media (max-width: 1000px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-grid > *,
+  .hero-copy,
+  .hero-media,
+  .quick-info {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .quick-info {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+}
