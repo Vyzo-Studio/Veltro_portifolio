@@ -1296,3 +1296,25 @@ html[data-theme="dark"] .login-card {
 html[data-theme="dark"] :is(.login-card-head > span,.login-card-head > h2,.login-card-head > p) {
   color: #f6f9ff !important;
 }
+
+
+/* GNG header-only logo switching. Other brand instances intentionally untouched. */
+.brand .gng-header-logo-dark {
+  display: none;
+}
+html[data-theme="dark"] .brand .gng-header-logo-light {
+  display: none;
+}
+html[data-theme="dark"] .brand .gng-header-logo-dark {
+  display: block;
+  padding: 3px 0;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+  object-fit: contain;
+}
+html[data-theme="dark"] .brand .gng-header-logo-dark:hover {
+  box-shadow: none;
+  transform: none;
+}
