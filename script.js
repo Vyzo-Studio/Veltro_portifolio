@@ -4365,9 +4365,14 @@ async function submitBooking() {
       p_whatsapp_share_opt_in: wantsWhatsapp
     });
     bookingCreated = true;
-    window.dispatchEvent(new CustomEvent("gng:booking-created", {
-      detail: { name: customerName, phone: customerPhone }
-    }));
+    // Optional browser-only contact storage must never interrupt a confirmed booking.
+    try {
+      if (typeof window !== "undefined" && window.GNG_CUSTOMER_MEMORY) {
+        window.GNG_CUSTOMER_MEMORY.saveAfterSuccess(customerName, customerPhone);
+      }
+    } catch (memoryError) {
+      console.warn("Dados locais não puderam ser lembrados:", memoryError);
+    }
 
     showBookingFeedback(
       wantsWhatsapp
