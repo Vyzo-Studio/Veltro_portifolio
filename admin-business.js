@@ -1348,7 +1348,8 @@
 
     summary.innerHTML = `
       <article class="report-card"><span>RESULTADO LÍQUIDO</span><strong>${escapeHtml(formatMoney(reportData.net_total_cents || 0))}</strong></article>
-      <article class="report-card"><span>PAGAMENTOS</span><strong>${Number(reportData.payment_count || 0)}</strong></article>
+      <article class="report-card"><span>ATENDIMENTOS RECEBIDOS</span><strong>${Number(reportData.paid_booking_count || 0)}</strong><small>Agendamentos distintos com saldo recebido positivo no período.</small></article>
+      <article class="report-card"><span>TRANSAÇÕES FINANCEIRAS</span><strong>${Number(reportData.financial_transaction_count || 0)}</strong><small>Pagamentos individuais e estornos; uma divisão gera duas transações.</small></article>
       <article class="report-card"><span>ESTORNOS</span><strong>${escapeHtml(formatMoney(reportData.refund_total_cents || 0))}</strong></article>
       <article class="report-card"><span>PIX</span><strong>${escapeHtml(formatMoney(methods.pix || 0))}</strong></article>
       <article class="report-card"><span>DINHEIRO</span><strong>${escapeHtml(formatMoney(methods.cash || 0))}</strong></article>
@@ -1418,6 +1419,13 @@
     }
 
     const lines = [
+      ["RESUMO FINANCEIRO", "Valor"],
+      ["Atendimentos recebidos", Number(reportData.paid_booking_count || 0)],
+      ["Transações financeiras", Number(reportData.financial_transaction_count || 0)],
+      ["Pagamentos individuais", Number(reportData.payment_count || 0)],
+      ["Estornos individuais", Number(reportData.refund_count || 0)],
+      ["Resultado líquido (R$)", formatMoney(reportData.net_total_cents || 0)],
+      [],
       ["Data do pagamento","Registrado em","Tipo","Cliente","Serviço","Profissional","Data do atendimento","Horário","Forma de pagamento","Valor"]
     ];
 
