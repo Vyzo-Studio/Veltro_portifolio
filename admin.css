@@ -2439,3 +2439,51 @@ textarea:focus-visible {
     text-align: left;
   }
 }
+
+
+/* GNG ADMIN TRANSPARENT WORDMARK — login and header only.
+   Reuse the public site's existing transparent SVG. No decorative tile
+   behind either logo and no changes to portfolio or business logos. */
+.admin-page .login-logo-box {
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.admin-page .login-logo-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 640 / 415;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.admin-page .admin-header-brand img {
+  display: block;
+  width: 76px;
+  height: auto;
+  aspect-ratio: 640 / 415;
+  object-fit: contain;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* The transparent white mark remains visible over the light-mode header. */
+html:not([data-theme="dark"]) .admin-page .admin-header-brand img {
+  filter: brightness(0) saturate(100%) invert(17%) sepia(17%) saturate(1397%)
+    hue-rotate(173deg) brightness(96%) contrast(94%);
+}
+html[data-theme="dark"] .admin-page .admin-header-brand img {
+  filter: none;
+}
+@media (max-width: 680px) {
+  .admin-page .admin-header-brand img {
+    width: 62px;
+  }
+}
