@@ -269,12 +269,14 @@
   }
 
   function applyServices(services) {
-    if (!Array.isArray(services) || !services.length) return;
+    if (!Array.isArray(services)) return;
 
     const tbody = document.querySelector("#servicos .price-table tbody");
     if (tbody) {
-      tbody.innerHTML = services.map(buildServiceRow).join("");
-      const rows = Array.from(tbody.querySelectorAll("tr"));
+      tbody.innerHTML = services.length
+        ? services.map(buildServiceRow).join("")
+        : '<tr><td colspan="4" class="gng-empty-message" role="status">Nenhum serviço disponível no momento.</td></tr>';
+      const rows = services.length ? Array.from(tbody.querySelectorAll("tr")) : [];
       setupDynamicServiceToggle(rows);
 
       tbody.addEventListener("click", function (event) {
@@ -312,21 +314,22 @@
 
       if (current && services.some(function (service) { return service.name === current; })) {
         select.value = current;
+      } else if (current && !services.some(function (service) { return service.name === current; })) {
+        select.value = "";
+        select.dispatchEvent(new Event("change", { bubbles: true }));
       }
     }
   }
 
   function applyPortfolio(gallery) {
     const items = gallery.filter(function (item) { return item.kind === "portfolio"; });
-    if (!items.length) return;
-
     const grid = document.querySelector("#portfolio .portfolio-grid");
     if (!grid) return;
 
     const note = grid.querySelector(".portfolio-note");
     const noteHtml = note ? note.outerHTML : "";
 
-    grid.innerHTML = items.map(function (item, index) {
+    grid.innerHTML = (items.length ? items.map(function (item, index) {
       return `
         <figure class="portfolio-photo ${index === 0 ? "portfolio-large" : ""}">
           <img src="${escapeHtml(item.image_url)}"
@@ -338,7 +341,7 @@
           </figcaption>
         </figure>
       `;
-    }).join("") + noteHtml;
+    }).join("") : '<p class="gng-empty-message portfolio-empty" role="status">Nenhuma foto de cortes disponível no momento.</p>') + noteHtml;
   }
 
   function applySpaceGallery(gallery) {
@@ -349,9 +352,7 @@
       return item.kind === "interior" || item.kind === "exterior";
     });
 
-    if (!items.length) return;
-
-    grid.innerHTML = items.map(function (item) {
+    grid.innerHTML = items.length ? items.map(function (item) {
       const label = item.kind === "interior" ? "INTERIOR" : "FACHADA";
       return `
         <figure class="space-card">
@@ -364,7 +365,7 @@
           </figcaption>
         </figure>
       `;
-    }).join("");
+    }).join("") : '<p class="gng-empty-message space-empty" role="status">Nenhuma foto do espaço disponível no momento.</p>';
   }
 
   async function initialize() {
@@ -386,9 +387,13 @@
       applyLogo(settings);
       applyTexts(settings);
       applyContactAndSchedule(settings);
-      applyServices(data.services || []);
-      applyPortfolio(data.gallery || []);
-      applySpaceGallery(data.gallery || []);
+      // Absence of a payload is a temporary API error, but an empty array
+      // is an intentional admin configuration and must clear legacy cards.
+      if (Array.isArray(data.services)) applyServices(data.services);
+      if (Array.isArray(data.gallery)) {
+        applyPortfolio(data.gallery);
+        applySpaceGallery(data.gallery);
+      }
 
       window.dispatchEvent(new CustomEvent("gng:site-data-ready", { detail: data }));
     } catch (error) {
