@@ -24,7 +24,7 @@ const mockSupabase={
 const actualUpload=new Function("supabaseClient","file","folder",
   functionSource+"\nreturn uploadImage(file,folder);");
 function file(bytes,type,name="photo.jpg"){
-  const blob=new Blob([bytes],{type});Object.defineProperty(blob,"name",{value:name});return blob;
+  const blob=new Blob([bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)],{type});Object.defineProperty(blob,"name",{value:name});return blob;
 }
 (async()=>{
   const jpg=file([0xff,0xd8,0xff,0xe0,0,0,0,0],"image/jpeg","filename.svg");
@@ -50,7 +50,7 @@ function file(bytes,type,name="photo.jpg"){
   await assert.rejects(actualUpload(mockSupabase,
     file([137,80,78,71,13,10,26,10,0,0,0,0],"image/jpeg","wrong.jpg"),
     "logo"),/não corresponde/);
-  const huge=file([new Uint8Array(5*1024*1024+1)],"image/png","huge.png");
+  const huge=file(new Uint8Array(5*1024*1024+1),"image/png","huge.png");
   await assert.rejects(actualUpload(mockSupabase,huge,"gallery"),/no máximo 5 MB/);
   assert.equal(uploaded.length,before,"Rejected uploads must not reach storage");
   console.log("PASS media upload: MIME/signature consistency, safe extensions, size limit and rejected malicious formats");
