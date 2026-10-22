@@ -5,6 +5,7 @@ on:
     paths:
       - 'tests/browser.spec.cjs'
       - 'tests/accessibility.spec.cjs'
+      - 'tests/performance.spec.cjs'
       - '**/*.css'
       - '**/*.html'
       - 'site-data.js'
@@ -28,7 +29,7 @@ jobs:
       - name: Create capture folder
         run: mkdir -p artifacts
       - name: Run safe read-only browser checks
-        run: npx playwright test tests/browser.spec.cjs tests/accessibility.spec.cjs --workers=1 --reporter=line
+        run: npx playwright test tests/browser.spec.cjs tests/accessibility.spec.cjs tests/performance.spec.cjs --workers=1 --reporter=line
       - uses: actions/upload-artifact@v4
         if: always()
         with:
