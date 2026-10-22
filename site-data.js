@@ -40,6 +40,12 @@
       .service-name-wrap{display:grid;gap:2px}
       .service-name-wrap strong{color:var(--navy-deep);font-size:1rem}
       .service-description{color:var(--muted);font-size:.76rem;font-weight:500;line-height:1.35}
+      .gng-empty-message{grid-column:1/-1;max-width:100%;margin:10px 0;
+        padding:20px 22px;border:1px dashed var(--line);border-radius:12px;
+        color:var(--text);background:var(--white);line-height:1.5;text-align:center}
+      html[data-theme="dark"] .gng-empty-message{background:#203651;color:#f4f8ff;border-color:#6983a1}
+      .price-table .gng-empty-message{display:table-cell;text-align:left}
+
       @media(max-width:680px){
         .service-name-wrap strong{font-size:.84rem}
         .service-description{font-size:.62rem}
