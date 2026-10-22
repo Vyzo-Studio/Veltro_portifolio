@@ -9,6 +9,10 @@ for (const target of ['index.html','admin.html']) {
       await page.setViewportSize({width,height:850});
       await page.goto(base+target,{waitUntil:'domcontentloaded'});
       await page.locator('body').waitFor();
+      // First-visit cookie banner is an independent UI. Reject optional cookies
+      // before interacting with the theme button underneath it.
+      const banner=page.locator('#gng-consent-banner');
+      if(await banner.isVisible())await banner.locator('[data-consent-action="reject"]').click();
       if(theme==='dark'){
         await page.locator('#gng-theme-toggle').click();
         await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
