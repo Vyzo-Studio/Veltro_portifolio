@@ -166,6 +166,9 @@ test('dark theme: white membership copy, gold bullets and legible photo captions
       };
     });
     await expect(page.locator('#espaco .space-card')).toHaveCount(2);
+    // Initial computed CSS can still be blending during page theme initialization.
+    await expect(page.locator('html')).not.toHaveClass(/gng-theme-switching/);
+    await page.waitForTimeout(520);
     const light=await readStyles();
     const toggle=page.locator('.gng-theme-toggle');
     await toggle.click();
@@ -182,6 +185,7 @@ test('dark theme: white membership copy, gold bullets and legible photo captions
     expect(dark.buttonColors[1].foreground).not.toBe(dark.buttonColors[1].background);
     await toggle.click();
     await expect(page.locator('html')).not.toHaveClass(/gng-theme-switching/);
+    await page.waitForTimeout(520);
     const restored=await readStyles();
     expect(restored.colors).toEqual(light.colors);
     expect(restored.bullets).toEqual(light.bullets);
