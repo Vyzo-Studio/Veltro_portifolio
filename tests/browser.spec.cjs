@@ -71,6 +71,11 @@ test('public site: maps consent and booking form',async({page})=>{
 test('public site: theme switching works',async({page})=>{
   await mockPublicData(page);
   await page.goto(base,{waitUntil:'domcontentloaded'});
+  // Dismiss the first-visit consent banner before testing the separate theme control.
+  const privacyBanner=page.locator('#gng-consent-banner');
+  if(await privacyBanner.isVisible()) {
+    await privacyBanner.locator('[data-consent-action="reject"]').click();
+  }
   const toggle=page.locator('.gng-theme-toggle');
   await expect(toggle).toBeVisible();
   const before=await page.locator('html').getAttribute('data-theme');
