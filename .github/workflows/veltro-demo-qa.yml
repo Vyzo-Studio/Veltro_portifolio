@@ -2,7 +2,7 @@ name: VELTRO Independent Demo QA
 
 on:
   push:
-    branches: [work/vyzo-independent-demo-v2]
+    branches: [work/vyzo-independent-demo-v2, main]
   workflow_dispatch:
 
 permissions:
