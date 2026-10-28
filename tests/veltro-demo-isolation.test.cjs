@@ -20,6 +20,20 @@ assert.doesNotMatch(scripted,/<span>GNG<\/span>/,"mobile navigation still contai
 assert.doesNotMatch(adminRuntime,/painel da GNG/i,"admin login leaks original business name");
 assert.doesNotMatch(notifications,/\|\s*GNG\b/,"notifications leak original business name");
 assert.doesNotMatch(manualPayments,/gng_manual_payment_operation_v1/,"old draft storage namespace reused");
+// Legal and crawler safety: no invalid backend endpoints or original company URL.
+for(const name of ["privacidade.html","termos.html"]){
+ const html=fs.readFileSync(path.join(root,name),"utf8");
+ assert.equal((html.match(/<meta name="robots"/g)||[]).length,1,name+": duplicate robots directives");
+ assert.match(html,/<meta name="robots" content="noindex,nofollow">/);
+ assert.doesNotMatch(html,/demo-backend-not-configured\.invalid/);
+ assert.match(html,/type="image\/svg\+xml" href="assets\/veltro-favicon\.svg"/);
+}
+for(const name of ["robots.txt","sitemap.xml"]){
+ const content=fs.readFileSync(path.join(root,name),"utf8");
+ assert.doesNotMatch(content,/gng_barbearia|gngbarbearia/i,name+": former business URL");
+}
+const configText=fs.readFileSync(path.join(root,"config.js"),"utf8");
+assert.match(configText,/VELTRO_BACKEND\?\.ready === true/,"connection gate requires explicit demo readiness");
 const page=fs.readFileSync(path.join(root,"index.html"),"utf8");
 assert.match(page,/PROJETO DEMONSTRATIVO/);
 assert.match(page,/VELTRO Barber Atelier/);
