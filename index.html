@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://ueqfokfnjsjgocotvdae.supabase.co wss://ueqfokfnjsjgocotvdae.supabase.co; img-src 'self' data: blob: https:; frame-src https://www.google.com; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://demo-backend-not-configured.invalid.supabase.co wss://demo-backend-not-configured.invalid.supabase.co; img-src 'self' data: blob: https:; frame-src https://www.google.com; upgrade-insecure-requests">
 
   <meta
     name="viewport"
@@ -21,70 +21,29 @@
     content="light dark"
   >
 
-  <meta
-    name="description"
-    content="GNG Barbearia: cortes, barba e agendamento presencial. De segunda a sábado · 09:00–19:30 St. M QNM 21 conjunto D lote 48 - Ceilândia, Brasília - DF, 72215-214"
-  >
-
-  <title>GNG Barbearia | Agendamento</title>
-
-  <link rel="canonical" href="https://vyzo-studio.github.io/gng_barbearia/">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="VELTRO Barber Atelier: conceito fictício de barbearia e sistema de gestão desenvolvido pela VYZO Studio.">
+  <title>VELTRO — Demonstração VYZO Studio</title>
   <meta property="og:type" content="website">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="GNG Barbearia">
-  <meta property="og:title" content="GNG Barbearia | Agendamento">
-  <meta property="og:description" content="GNG Barbearia: cortes, barba e agendamento presencial. De segunda a sábado · 09:00–19:30 St. M QNM 21 conjunto D lote 48 - Ceilândia, Brasília - DF, 72215-214">
-  <meta property="og:url" content="https://vyzo-studio.github.io/gng_barbearia/">
-  <meta property="og:image" content="https://vyzo-studio.github.io/gng_barbearia/assets/logo-gng.jpg">
-  <meta property="og:image:alt" content="Logotipo de GNG Barbearia">
+  <meta property="og:site_name" content="VELTRO — Demonstração VYZO">
+  <meta property="og:title" content="VELTRO Barber Atelier — Projeto demonstrativo">
+  <meta property="og:description" content="Marca, profissionais e registros fictícios. Software de agendamento demonstrativo.">
+  <meta property="og:image" content="assets/veltro-logo-dark.svg">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="GNG Barbearia | Agendamento">
-  <meta name="twitter:description" content="GNG Barbearia: cortes, barba e agendamento presencial. De segunda a sábado · 09:00–19:30 St. M QNM 21 conjunto D lote 48 - Ceilândia, Brasília - DF, 72215-214">
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Barbershop",
-  "name": "GNG Barbearia",
-  "url": "https://vyzo-studio.github.io/gng_barbearia/",
-  "image": "https://vyzo-studio.github.io/gng_barbearia/assets/logo-gng.jpg",
-  "sameAs": [
-    "https://www.instagram.com/gngbarbearia/"
-  ],
-  "telephone": "+5561994075539",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "St. M QNM 21 conjunto D lote 48 - Ceilândia, Brasília - DF, 72215-214",
-    "addressCountry": "BR"
-  },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-      ],
-      "opens": "09:00",
-      "closes": "19:30"
-    }
-  ]
-}
+  {"@context":"https://schema.org","@type":"CreativeWork","name":"VELTRO Barber Atelier (demonstração)","creator":{"@type":"Organization","name":"VYZO Studio"},"description":"Projeto fictício de barbearia, não representa estabelecimento real."}
   </script>
-
   <script src="theme.js?v=1.0"></script>
 
   <link
     rel="icon"
-    type="image/jpeg"
-    href="assets/logo-gng.jpg"
+    type="image/svg+xml"
+    href="assets/veltro-favicon.svg"
   >
 
   <link
     rel="apple-touch-icon"
-    href="assets/logo-gng.jpg"
+    href="assets/veltro-favicon.svg"
   >
 
   <link
@@ -113,6 +72,7 @@
     href="theme.css?v=2.8"
   >
   <link rel="stylesheet" href="experience.css?v=1.0">
+  <link rel="stylesheet" href="demo-brand.css?v=1.0">
 </head>
 
 <body>
@@ -134,18 +94,18 @@
       <a
         class="brand"
         href="#topo"
-        aria-label="GNG Barbearia - início"
+        aria-label="VELTRO Barber Atelier - início"
       >
 
         <img
           class="gng-header-logo-light"
-          src="assets/logo-gng.jpg"
-          alt="GNG Barbearia"
+          src="assets/veltro-logo-dark.svg"
+          alt="VELTRO Barber Atelier"
           decoding="async"
         >
         <img
           class="gng-header-logo-dark"
-          src="assets/gng-logo-header-dark.svg"
+          src="assets/veltro-logo-light.svg"
           alt=""
           aria-hidden="true"
           width="640"
@@ -195,23 +155,10 @@
         </a>
 
         <a href="#localizacao">
-          Localização
+          Conceito
         </a>
 
-        <a
-          class="nav-social-link"
-          href="https://www.instagram.com/gngbarbearia/"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram da GNG Barbearia (abre em nova aba)"
-        >
-          <svg class="instagram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <rect x="2.5" y="2.5" width="19" height="19" rx="5"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
-          </svg>
-          <span>Instagram</span>
-        </a>
+        <a class="nav-social-link" href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21" target="_blank" rel="noopener noreferrer">VYZO Studio</a>
 
         <a
           class="nav-cta"
@@ -228,6 +175,7 @@
 
   <main id="conteudo">
 
+    <aside class="veltro-demo-ribbon"><div class="container"><strong>PROJETO DEMONSTRATIVO</strong><span>Marca e registros fictícios • Desenvolvido pela VYZO Studio</span><a href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21%20Quero%20um%20site%20como%20este." target="_blank" rel="noopener noreferrer">QUERO UM SITE COMO ESTE</a></div></aside>
     <section class="hero">
 
       <div class="container hero-grid">
@@ -235,7 +183,7 @@
         <div class="hero-content">
 
           <p class="eyebrow">
-            GNG BARBEARIA • CEILÂNDIA
+            VELTRO BARBER ATELIER • CEILÂNDIA
           </p>
 
           <h1>
@@ -257,7 +205,7 @@
               class="btn btn-primary"
               href="#agendamento"
             >
-              Agendar horário
+              Explorar agendamento
             </a>
 
             <a
@@ -281,7 +229,7 @@
               </span>
 
               <strong class="important-number">
-                (61) 99407-5539
+                +55 61 8515-4156
               </strong>
 
             </div>
@@ -293,7 +241,7 @@
               </span>
 
               <strong>
-                QNM 21 • Ceilândia
+                Local fictício
               </strong>
 
             </div>
@@ -319,8 +267,7 @@
           <figure class="photo-card photo-main">
 
             <img
-              src="assets/gng-corte-01.webp"
-              srcset="assets/gng-corte-01-mobile.webp 519w, assets/gng-corte-01.webp 519w"
+              src="https://images.unsplash.com/photo-1747832910187-f27508ac4c60?auto=format&fit=crop&w=1000&q=75"
               sizes="(max-width: 680px) 94vw, (max-width: 1180px) 48vw, 760px"
               width="519" height="816"
               alt="Barbeiro atendendo cliente"
@@ -333,8 +280,7 @@
           <figure class="photo-card photo-secondary">
 
             <img
-              src="assets/gng-corte-02.webp"
-              srcset="assets/gng-corte-02-mobile.webp 691w, assets/gng-corte-02.webp 691w"
+              src="https://images.unsplash.com/photo-1721697956161-f1584fad9d37?auto=format&fit=crop&w=1000&q=75"
               sizes="(max-width: 680px) 94vw, (max-width: 1180px) 48vw, 760px"
               width="691" height="829"
               alt="Exemplo de barba alinhada"
@@ -346,7 +292,7 @@
           <div class="hero-brand-card">
 
             <img
-              src="assets/logo-gng.jpg"
+              src="assets/veltro-logo-dark.svg"
               alt=""
               decoding="async"
             >
@@ -1205,8 +1151,7 @@
           </div>
 
           <p>
-            Exemplos reais de corte, acabamento
-            e cuidado masculino.
+            Fotos ilustrativas licenciadas, sem relação com uma barbearia real.
           </p>
 
         </div>
@@ -1216,8 +1161,7 @@
           <figure class="portfolio-photo portfolio-large">
 
             <img
-              src="assets/gng-corte-01.webp"
-              srcset="assets/gng-corte-01-mobile.webp 519w, assets/gng-corte-01.webp 519w"
+              src="https://images.unsplash.com/photo-1747832910187-f27508ac4c60?auto=format&fit=crop&w=1000&q=75"
               sizes="(max-width: 680px) 94vw, (max-width: 1180px) 48vw, 760px"
               width="519" height="816"
               alt="Exemplo de corte masculino"
@@ -1242,8 +1186,7 @@
           <figure class="portfolio-photo">
 
             <img
-              src="assets/gng-corte-02.webp"
-              srcset="assets/gng-corte-02-mobile.webp 691w, assets/gng-corte-02.webp 691w"
+              src="https://images.unsplash.com/photo-1721697956161-f1584fad9d37?auto=format&fit=crop&w=1000&q=75"
               sizes="(max-width: 680px) 94vw, (max-width: 1180px) 48vw, 760px"
               width="691" height="829"
               alt="Exemplo de barba masculina"
@@ -1268,7 +1211,7 @@
           <article class="portfolio-note">
 
             <span class="mini-tag">
-              GNG
+              VELTRO
             </span>
 
             <h3>
@@ -1310,9 +1253,7 @@
           </div>
 
           <p>
-            Imagens ilustrativas temporárias até a GNG
-            fornecer as fotos oficiais da parte interna
-            e externa.
+            Imagens licenciadas e ilustrativas: a VELTRO não possui unidade física.
           </p>
 
         </div>
@@ -1322,7 +1263,7 @@
           <figure class="space-card">
 
             <img
-              src="https://images.unsplash.com/photo-1702865272115-5afdbae975af?auto=format&fit=crop&w=1600&q=82"
+              src="https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&w=1200&q=75"
               alt="Imagem ilustrativa de interior de barbearia"
               loading="lazy"
               decoding="async"
@@ -1349,7 +1290,7 @@
           <figure class="space-card">
 
             <img
-              src="https://images.unsplash.com/photo-1779703056737-7f327f484fda?auto=format&fit=crop&w=1600&q=82"
+              src="https://images.unsplash.com/photo-1702865272115-5afdbae975af?auto=format&fit=crop&w=1200&q=75"
               alt="Imagem ilustrativa de fachada de barbearia"
               loading="lazy"
               decoding="async"
@@ -1391,7 +1332,7 @@
           <div>
 
             <p class="eyebrow">
-              ASSINATURAS GNG
+              ASSINATURAS VELTRO
             </p>
 
             <h2>
@@ -1480,7 +1421,7 @@
           <article class="plan-card">
 
             <p class="plan-kicker">
-              GNG SELECT
+              VELTRO ESSENCIAL
             </p>
 
             <h3>
@@ -1517,11 +1458,11 @@
 
             <a
               class="btn btn-primary full"
-              href="https://wa.me/5561994075539?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20assinatura%20GNG%20Select."
+              href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20assinatura%20VELTRO%20Select."
               target="_blank"
               rel="noopener noreferrer"
             >
-              Quero o GNG Select
+              Quero o VELTRO Essencial
             </a>
 
           </article>
@@ -1533,7 +1474,7 @@
             </span>
 
             <p class="plan-kicker">
-              GNG ELITE
+              VELTRO SIGNATURE
             </p>
 
             <h3>
@@ -1575,11 +1516,11 @@
 
             <a
               class="btn btn-light full"
-              href="https://wa.me/5561994075539?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20assinatura%20GNG%20Elite."
+              href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20a%20assinatura%20VELTRO%20Elite."
               target="_blank"
               rel="noopener noreferrer"
             >
-              Quero o GNG Elite
+              Quero o VELTRO Signature
             </a>
 
           </article>
@@ -1600,34 +1541,33 @@
         <div class="location-copy">
 
           <p class="eyebrow">
-            LOCALIZAÇÃO
+            CONCEITO FICTÍCIO
           </p>
 
           <h2>
-            Chegue sem complicação
+            O ambiente é uma inspiração, não um endereço
           </h2>
 
           <p class="address">
-            St. M QNM 21 conjunto D lote 48 -
-            Ceilândia, Brasília - DF, 72215-214
+            Endereço fictício — não existe atendimento presencial.
           </p>
 
           <div class="location-actions">
 
             <a
               class="btn btn-primary"
-              href="https://maps.app.goo.gl/TWPYmZSicCJ618xw6"
+              href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Abrir localização
+              Solicitar proposta
             </a>
 
             <a
               class="btn btn-secondary"
-              href="tel:+5561994075539"
+              href="tel:+556185154156"
             >
-              Ligar agora
+              Contato VYZO
             </a>
 
           </div>
@@ -1639,11 +1579,11 @@
             </span>
 
             <strong class="important-number">
-              (61) 99407-5539
+              +55 61 8515-4156
             </strong>
 
             <a
-              href="https://wa.me/5561994075539?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20GNG%20Barbearia."
+              href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20VELTRO%20Barbearia."
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -1652,17 +1592,17 @@
 
             <a
               class="instagram-contact-link"
-              href="https://www.instagram.com/gngbarbearia/"
+              href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Ver Instagram da GNG Barbearia (abre em nova aba)"
+              aria-label="Ver VYZO Studio da VELTRO Barber Atelier (abre em nova aba)"
             >
               <svg class="instagram-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <rect x="2.5" y="2.5" width="19" height="19" rx="5"></rect>
                 <circle cx="12" cy="12" r="4"></circle>
                 <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
               </svg>
-              Acompanhar no Instagram ↗
+              Fale com a VYZO ↗
             </a>
 
           </div>
@@ -1671,18 +1611,12 @@
 
         <div class="map-card">
 
-          <iframe
-            data-map-src="https://www.google.com/maps?q=St.%20M%20QNM%2021%20conjunto%20D%20lote%2048%20Ceil%C3%A2ndia%20Bras%C3%ADlia%20DF%2072215-214&output=embed"
-            title="Mapa da localização da GNG Barbearia"
-            loading="lazy"
-            allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+          <div class="veltro-concept-illustration"><img src="https://images.unsplash.com/photo-1781455793310-8427c96454c7?auto=format&fit=crop&w=1200&q=75" alt="Referência de interior de barbearia, ambiente meramente ilustrativo" loading="lazy"></div>
 
           <div class="map-business-label">
 
             <img
-              src="assets/logo-gng.jpg"
+              src="assets/veltro-logo-dark.svg"
               alt=""
               loading="lazy"
               decoding="async"
@@ -1691,25 +1625,18 @@
             <div>
 
               <span>
-                GNG BARBEARIA
+                VELTRO BARBER ATELIER
               </span>
 
               <strong>
-                QNM 21 • Ceilândia
+                Local fictício
               </strong>
 
             </div>
 
           </div>
 
-          <a
-            class="map-open-link"
-            href="https://maps.app.goo.gl/TWPYmZSicCJ618xw6"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Abrir no Google Maps ↗
-          </a>
+          <a class="map-open-link" href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21" target="_blank" rel="noopener noreferrer">Quero um site como este</a>
 
         </div>
 
@@ -1724,7 +1651,7 @@
         <div>
 
           <p class="eyebrow eyebrow-light">
-            GNG BARBEARIA
+            VELTRO BARBER ATELIER
           </p>
 
           <h2>
@@ -1742,7 +1669,7 @@
           class="btn btn-light"
           href="#agendamento"
         >
-          Agendar agora
+          Simular atendimento
         </a>
 
       </div>
@@ -1757,8 +1684,8 @@
 
       <img
         class="footer-logo"
-        src="assets/logo-gng.jpg"
-        alt="GNG Barbearia"
+        src="assets/veltro-logo-dark.svg"
+        alt="VELTRO Barber Atelier"
         loading="lazy"
         decoding="async"
       >
@@ -1786,19 +1713,19 @@
         </a>
 
         <a
-          href="https://www.instagram.com/gngbarbearia/"
+          href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Instagram
+          VYZO Studio
         </a>
 
         <a
-          href="https://maps.app.goo.gl/TWPYmZSicCJ618xw6"
+          href="https://wa.me/556185154156?text=Ol%C3%A1%2C%20VYZO%20Studio%21"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Localização
+          Conceito
         </a>
 
 
@@ -1825,17 +1752,18 @@
     <div class="container footer-bottom">
 
       <span>
-        © <span id="year"></span> GNG Barbearia
+        © <span id="year"></span> VELTRO Barber Atelier
       </span>
 
       <strong class="footer-phone">
-        (61) 99407-5539
+        +55 61 8515-4156
       </strong>
 
     </div>
 
   </footer>
 
+  <script src="demo-fixtures.js?v=1.0"></script>
   <script src="script.js?v=13.7"></script>
   <script src="site-data.js?v=1.4"></script>
   <script src="i18n.js?v=1.4"></script>
