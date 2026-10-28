@@ -25,7 +25,7 @@ test("VELTRO public site: independent fictional identity and safe demo flow",asy
  expect(preview).toMatch(/^demo-/);
  const stored=await page.evaluate(()=>sessionStorage.getItem("veltro_demo_bookings_v1"));
  expect(stored).not.toContain("Nome de exemplo");
- await expect(page.locator(".veltro-demo-ribbon a")).toHaveAttribute("href",/wa\.me\/556185154156/);
+ await expect(page.locator(".veltro-demo-ribbon a")).toHaveAttribute("href",/(?:wa\.me\/556185154156|web\.whatsapp\.com\/send\?phone=556185154156)/);
 });
 test("VELTRO admin login remains protected and disconnected until independent Auth",async({page})=>{
  const endpoints=[];
@@ -50,9 +50,15 @@ for(const width of [320,390,768,1366]){
         right:Math.round(box.right),left:Math.round(box.left),width:Math.round(box.width)};
     }).filter(el=>el.right>window.innerWidth+4 && el.left<window.innerWidth && el.width>0)
       .sort((a,b)=>b.right-a.right).slice(0,18);
-    return {diff,elements};
+    const overflowAncestors=[...document.querySelectorAll("body,header,main,section,article,div,figure,footer,nav")].map(el=>{
+      const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
+      return {tag:el.tagName,id:el.id,cls:(typeof el.className==="string"?el.className:"").slice(0,60), 
+        right:Math.round(r.right),left:Math.round(r.left),w:Math.round(r.width),scroll:el.scrollWidth,client:el.clientWidth,
+        overflow:cs.overflowX};
+    }).filter(x=>x.scroll>x.client+7&&x.overflow==="visible").sort((a,b)=>(b.scroll-b.client)-(a.scroll-a.client)).slice(0,22);
+    return {diff,elements,overflowAncestors};
   });
-  if(report.diff>4)console.log("DEMO_OVERFLOW "+width+"px "+JSON.stringify(report.elements));
+  if(report.diff>4)console.log("DEMO_OVERFLOW "+width+"px "+JSON.stringify({elements:report.elements,ancestors:report.overflowAncestors}));
   expect(report.diff,"No horizontal scrolling at "+width+"px").toBeLessThanOrEqual(4);
   await expect(page.locator(".veltro-demo-ribbon")).toBeVisible();
  });
