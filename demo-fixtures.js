@@ -63,16 +63,24 @@ async function rpc(name,payload={}){
  case "get_public_site_config":return {settings:{...settings},services:services.map(x=>({...x})),gallery:images.map(x=>({...x}))};
  case "get_public_barbers":return barbers.map(x=>({...x}));
  case "get_public_unavailable_slots_by_barber":
-   return read().filter(x=>x.barber_id===payload.p_barber_id && x.booking_date>=payload.p_start_date&&x.booking_date<=payload.p_end_date)
+   return read().filter(x=>x.barber_id===payload.p_barber_id && x.status!=="cancelled" && x.booking_date>=payload.p_start_date&&x.booking_date<=payload.p_end_date)
       .map(x=>({booking_date:x.booking_date,booking_time:x.booking_time,slot_status:"demo_reserved"}));
  case "create_booking_request_by_barber_privacy_v1": {
    if(payload.p_privacy_acknowledged!==true)throw Error("É necessário ler a política de privacidade.");
    const service=services.find(x=>x.name===payload.p_service);
-   if(!service||!barbers.some(x=>x.id===payload.p_barber_id))throw Error("Serviço ou profissional demonstrativo inválido.");
+   if(!service||service.active===false||!barbers.some(x=>x.id===payload.p_barber_id&&x.active!==false))throw Error("Serviço ou profissional demonstrativo inválido.");
    const date=String(payload.p_booking_date||""),time=onlyTime(payload.p_booking_time);
    if(!/^\d{4}-\d\d-\d\d$/.test(date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw Error("Selecione uma data e hora válidas.");
    const day=new Date(date+"T12:00:00Z").getUTCDay();
    if(day===0)throw Error("A demonstração não oferece horários aos domingos.");
+   const parsed=new Date(date+"T12:00:00Z");
+   if(!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date)
+     throw Error("Data demonstrativa inválida.");
+   if(date<todayISO())throw Error("Não é possível simular agendamentos em datas passadas.");
+   const minutes=t=>Number(t.slice(0,2))*60+Number(t.slice(3,5));
+   const open=minutes(settings.open_time),close=minutes(settings.close_time),start=minutes(time);
+   if(start<open||start+service.duration_minutes>close||(start-open)%settings.slot_interval_minutes!==0)
+     throw Error("O horário não respeita o funcionamento, intervalo e duração do serviço.");
    const records=read();if(locked(payload.p_barber_id,date,time,service.duration_minutes,records))throw Error("Horário já utilizado nesta sessão demonstrativa.");
    const rec={id:"demo-"+Date.now(),booking_date:date,booking_time:time,barber_id:payload.p_barber_id,service:service.name,
      duration_minutes:service.duration_minutes,status:"demo_only",created_at:new Date().toISOString()};
