@@ -932,10 +932,10 @@
               time,
 
             icon:
-              "assets/logo-gng.jpg",
+              "assets/veltro-logo-dark.svg",
 
             badge:
-              "assets/logo-gng.jpg",
+              "assets/veltro-logo-dark.svg",
 
             tag:
               "gng-booking-" +
