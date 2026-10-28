@@ -5,7 +5,7 @@ test("VELTRO public site: independent fictional identity and safe demo flow",asy
  page.on("request",req=>seen.push(req.url()));
  await page.goto(base,{waitUntil:"domcontentloaded"});
  await expect(page.getByText("PROJETO DEMONSTRATIVO").first()).toBeVisible();
- await expect(page.locator("title")).toContainText("VELTRO");
+ expect(await page.title()).toContain("VELTRO");
  await expect(page.locator(".brand img").first()).toHaveAttribute("src","assets/veltro-logo-dark.svg");
  await expect(page.locator(".hero")).toBeVisible();
  await expect.poll(async()=>page.locator("#booking-service option").count()).toBeGreaterThan(6);
@@ -42,8 +42,18 @@ for(const width of [320,390,768,1366]){
  test("VELTRO responsive at "+width+"px",async({page})=>{
   await page.setViewportSize({width,height:850});
   await page.goto(base,{waitUntil:"domcontentloaded"});
-  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
-  expect(overflow,"No horizontal scrolling at "+width+"px").toBeLessThanOrEqual(4);
+  const report=await page.evaluate(()=>{
+    const diff=document.documentElement.scrollWidth-window.innerWidth;
+    const elements=[...document.body.querySelectorAll("*")].map(el=>{
+      const box=el.getBoundingClientRect();
+      return {tag:el.tagName,cls:typeof el.className==="string"?el.className.slice(0,65):"",
+        right:Math.round(box.right),left:Math.round(box.left),width:Math.round(box.width)};
+    }).filter(el=>el.right>window.innerWidth+4 && el.left<window.innerWidth && el.width>0)
+      .sort((a,b)=>b.right-a.right).slice(0,18);
+    return {diff,elements};
+  });
+  if(report.diff>4)console.log("DEMO_OVERFLOW "+width+"px "+JSON.stringify(report.elements));
+  expect(report.diff,"No horizontal scrolling at "+width+"px").toBeLessThanOrEqual(4);
   await expect(page.locator(".veltro-demo-ribbon")).toBeVisible();
  });
 }
