@@ -1,0 +1,50 @@
+name: VELTRO Live Pages Verification
+on:
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-demo:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+      - name: Confirm standalone demonstration is deployed and unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'PROJETO DEMONSTRATIVO' index.html
+          grep -q 'VELTRO' admin.html
+          grep -q 'ready: false' demo-backend-config.js
+          if grep -Eiq 'ueqfokfnjsjgocotvdae|5561994075539|GNG BARBEARIA|St\\. M QNM' index.html admin.html config.js demo-fixtures.js; then
+            echo "Original establishment data found in demo." >&2
+            exit 1
+          fi
+          base=https://vyzo-studio.github.io/gng_barbearia
+          for attempt in $(seq 1 48); do
+            synced=true
+            for file in index.html admin.html privacidade.html termos.html config.js demo-fixtures.js assets/veltro-logo-dark.svg assets/veltro-logo-light.svg; do
+              target="/tmp/veltro-${file//\//_}"
+              if ! curl --silent --show-error --fail --max-time 12 \
+                    -H 'Cache-Control: no-cache' \
+                    "$base/$file?verify=${GITHUB_SHA}-${attempt}" \
+                    -o "$target" || ! cmp -s "$file" "$target"; then
+                synced=false
+                break
+              fi
+            done
+            if [ "$synced" = true ]; then
+              echo "VELTRO published assets match exact source files; old GNG content is not in audited pages."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "GitHub Pages still differs from published demonstration source." >&2
+          exit 1
