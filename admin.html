@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://demo-backend-not-configured.invalid.supabase.co wss://demo-backend-not-configured.invalid.supabase.co; img-src 'self' data: blob: https:; frame-src https://www.google.com; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data: blob: https:; frame-src https://www.google.com; upgrade-insecure-requests">
 
   <meta
     name="viewport"
@@ -49,6 +49,7 @@
     Painel demonstrativo | VELTRO • VYZO Studio
   </title>
 
+  <script src="demo-backend-config.js?v=1.0"></script>
   <script src="theme.js?v=1.0"></script>
 
   <link
@@ -79,11 +80,7 @@
     crossorigin
   >
 
-  <link
-    rel="preconnect"
-    href="https://demo-backend-not-configured.invalid.supabase.co"
-    crossorigin
-  >
+  
 
   <link
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap"
