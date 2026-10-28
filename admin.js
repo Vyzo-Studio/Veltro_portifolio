@@ -1280,7 +1280,7 @@ function buildCustomerWhatsappUrl(
   }
 
   const message =
-    "Olá! Aqui é da GNG Barbearia. Estou entrando em contato sobre o seu agendamento.";
+    "Olá! Aqui é da VELTRO Barber Atelier. Estou entrando em contato sobre o seu agendamento.";
 
   return (
     "https://wa.me/" +
