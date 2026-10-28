@@ -112,17 +112,35 @@ test('legal contact follows official live settings without hardcoded customer ph
     const link=page.locator('a[data-gng-contact-link]').first();
     await expect(link).toHaveAttribute('href','https://wa.me/'+mockNumber);
     await expect(link).toContainText('(61) 99998-8877');
-    await page.locator('[data-gng-locale]').selectOption('en');
-    await expect(link).toHaveAttribute('href','https://wa.me/'+mockNumber);
-    await expect(link).toContainText('Contact GNG via WhatsApp');
+    for (const [locale,label] of [
+      ['en','Official WhatsApp'],['es','WhatsApp oficial'],
+      ['ja','公式WhatsApp'],['de','Offizielles WhatsApp']
+    ]) {
+      await page.locator('[data-gng-locale]').selectOption(locale);
+      await expect(link).toHaveAttribute('href','https://wa.me/'+mockNumber);
+      await expect(link).toContainText(label);
+      await expect(link).toContainText('(61) 99998-8877');
+    }
   }
 });
 test('legal contact fails closed to official location link if public config is unavailable',async({page})=>{
   await page.route('**/rest/v1/rpc/get_public_site_config',async route=>
     route.fulfill({status:503,contentType:'application/json',body:'{"message":"test unavailable"}'}));
-  await page.goto(base+'termos.html',{waitUntil:'domcontentloaded'});
-  await expect(page.locator('a[data-gng-contact-link]').first())
-    .toHaveAttribute('href','index.html#localizacao');
+  for (const path of ['termos.html','privacidade.html']) {
+    await page.goto(base+path,{waitUntil:'domcontentloaded'});
+    for (const [locale,label] of [
+      ['pt-BR','Contatos oficiais da GNG'],
+      ['en','GNG official contact channels'],
+      ['es','Canales oficiales de contacto de GNG'],
+      ['ja','GNGの公式連絡先'],
+      ['de','Offizielle Kontaktwege von GNG']
+    ]) {
+      await page.locator('[data-gng-locale]').selectOption(locale);
+      const link=page.locator('a[data-gng-contact-link]').first();
+      await expect(link).toHaveAttribute('href','index.html#localizacao');
+      await expect(link).toHaveText(label);
+    }
+  }
 });
 test('language changes preserve entered customer contact without auto-booking',async({page})=>{
   await page.goto(base,{waitUntil:'domcontentloaded'});
