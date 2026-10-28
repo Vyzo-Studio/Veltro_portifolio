@@ -25,4 +25,4 @@ jobs:
           node scripts/sync-seo.cjs
           cmp /tmp/veltro-index-seo.html index.html
           grep -q '"@type":"CreativeWork"' index.html
-          ! grep -q 'ueqfokfnjsjgocotvdae' index.html
+          ! grep -qE 'https://[^" ]+\.supabase\.co' index.html
