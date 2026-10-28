@@ -43,7 +43,10 @@ assert(demo.services.every(x=>x.price_cents>0&&x.duration_minutes>0));
 const list=await demo.rpc("get_public_site_config");
 assert.equal(list.settings.business_name,"VELTRO — Barber Atelier");
 const barber=demo.barbers[0].id;
-const testDate="2026-10-29"; // Thursday, calendar-independent regression.
+const next=new Date();
+next.setUTCDate(next.getUTCDate()+3);
+while(next.getUTCDay()===0)next.setUTCDate(next.getUTCDate()+1);
+const testDate=next.toISOString().slice(0,10);
 const params={p_privacy_acknowledged:true,p_barber_id:barber,p_service:"Corte Essencial",
  p_booking_date:testDate,p_booking_time:"10:00",p_customer_name:"Pessoa Fictícia",p_customer_phone:"61999999999"};
 await demo.rpc("create_booking_request_by_barber_privacy_v1",params);
@@ -51,6 +54,9 @@ assert.equal(demo.read().length,1);
 assert(!store.get("veltro_demo_bookings_v1").includes("Pessoa Fictícia"),"no personally identifying content in simulated booking record");
 await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",params),/Horário/);
 await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_booking_date:"2026-11-01"}),/domingos/);
+await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_booking_date:"2000-01-01"}),/datas passadas/);
+await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_booking_time:"20:00"}),/horário não respeita/);
+await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_service:"Combo Premium",p_booking_time:"19:00"}),/horário não respeita/);
 await assert.rejects(()=>demo.rpc("admin_cash_summary"),/Supabase exclusivo/);
 console.log("PASS — VELTRO identity, no production Supabase, local demo bookings, fictional records, Sunday rejection and safe admin boundary");
 })().catch(e=>{console.error(e);process.exitCode=1});
