@@ -6,12 +6,19 @@
     const value = digits.startsWith("55") ? digits : "55" + digits;
     return /^55[1-9][0-9]{9,10}$/.test(value) ? value : null;
   }
+  const contactLabels = {
+    "pt-BR": { ready: "WhatsApp oficial", fallback: "Contatos oficiais da GNG" },
+    en: { ready: "Official WhatsApp", fallback: "GNG official contact channels" },
+    es: { ready: "WhatsApp oficial", fallback: "Canales oficiales de contacto de GNG" },
+    ja: { ready: "公式WhatsApp", fallback: "GNGの公式連絡先" },
+    de: { ready: "Offizielles WhatsApp", fallback: "Offizielle Kontaktwege von GNG" }
+  };
   function render() {
+    const locale = window.GNG_I18N?.getLocale?.() || "pt-BR";
+    const labels = contactLabels[locale] || contactLabels["pt-BR"];
     document.querySelectorAll("[data-gng-contact-link]").forEach(function (link) {
       link.href = current ? "https://wa.me/" + current.number : "index.html#localizacao";
-      if ((window.GNG_I18N?.getLocale?.() || "pt-BR") === "pt-BR") {
-        link.textContent = current ? "WhatsApp oficial (" + current.label + ")" : "Contatos oficiais da GNG";
-      }
+      link.textContent = current ? labels.ready + " (" + current.label + ")" : labels.fallback;
     });
   }
   async function initialize() {
@@ -28,7 +35,8 @@
       const settings = (await response.json()).settings || {};
       const phone = normalize(settings.whatsapp_digits || settings.phone_display);
       if (!phone) throw new Error("Missing official contact");
-      current = { number: phone, label: String(settings.phone_display || phone).slice(0,32) };
+      const displayed = String(settings.phone_display || "").slice(0,32);
+      current = { number: phone, label: normalize(displayed) === phone ? displayed : phone };
       render();
     } catch (error) {
       current = null;
