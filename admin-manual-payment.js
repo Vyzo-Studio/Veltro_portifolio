@@ -5,7 +5,7 @@
 
   const methods = ["cash", "pix", "debit", "credit"];
   const labels = {cash:"Dinheiro",pix:"Pix",debit:"Débito",credit:"Crédito"};
-  const draftKey = "gng_manual_payment_operation_v1";
+  const draftKey = "veltro_demo_manual_payment_operation_v1";
   let root = null;
   let secondEdited = false;
 
