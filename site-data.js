@@ -92,7 +92,7 @@
 
   function applyLogo(settings) {
     if (!settings.logo_url) return;
-    document.querySelectorAll('img[src*="logo-gng"]').forEach(function (image) {
+    document.querySelectorAll('img[data-demo-brand-dynamic]').forEach(function (image) {
       image.src = settings.logo_url;
     });
   }
@@ -148,8 +148,8 @@
   }
 
   function applyContactAndSchedule(settings) {
-    const phoneDisplay = settings.phone_display || "(61) 99407-5539";
-    const whatsapp = normalizeDigits(settings.whatsapp_digits || "5561994075539");
+    const phoneDisplay = settings.phone_display || "+55 61 8515-4156";
+    const whatsapp = normalizeDigits(settings.whatsapp_digits || "556185154156");
 
     document.querySelectorAll(".important-number").forEach(function (element) {
       element.textContent = phoneDisplay;
@@ -198,9 +198,9 @@
 
     if (settings.address) setText(".address", settings.address);
 
-    const mapsUrl = settings.maps_url || "https://maps.app.goo.gl/TWPYmZSicCJ618xw6";
+    const mapsUrl = settings.maps_url || "";
     document.querySelectorAll(".location-actions a[target='_blank'], .map-open-link, .footer-links a[target='_blank']").forEach(function (link) {
-      if (/maps|google/i.test(link.href) || link.classList.contains("map-open-link")) {
+      if (mapsUrl && (/maps|google/i.test(link.href) || link.classList.contains("map-open-link"))) {
         link.href = mapsUrl;
       }
     });
@@ -339,11 +339,11 @@
       return `
         <figure class="portfolio-photo ${index === 0 ? "portfolio-large" : ""}">
           <img src="${escapeHtml(item.image_url)}"
-               alt="${escapeHtml(item.alt_text || item.caption || "Trabalho GNG Barbearia")}"
+               alt="${escapeHtml(item.alt_text || item.caption || "Trabalho VELTRO Barber Atelier")}"
                loading="lazy" decoding="async">
           <figcaption>
             <span>${String(index + 1).padStart(2, "0")}</span>
-            <strong>${escapeHtml(item.caption || "Trabalho GNG")}</strong>
+            <strong>${escapeHtml(item.caption || "Projeto VELTRO")}</strong>
           </figcaption>
         </figure>
       `;
@@ -363,11 +363,11 @@
       return `
         <figure class="space-card">
           <img src="${escapeHtml(item.image_url)}"
-               alt="${escapeHtml(item.alt_text || item.caption || label + " da GNG Barbearia")}"
+               alt="${escapeHtml(item.alt_text || item.caption || label + " da VELTRO Barber Atelier")}"
                loading="lazy" decoding="async">
           <figcaption>
             <span>${label}</span>
-            <strong>${escapeHtml(item.caption || (item.kind === "interior" ? "Espaço interno da GNG" : "Fachada da GNG"))}</strong>
+            <strong>${escapeHtml(item.caption || (item.kind === "interior" ? "Ambiente conceitual VELTRO" : "Ambiente fictício VELTRO"))}</strong>
           </figcaption>
         </figure>
       `;
@@ -378,7 +378,7 @@
     injectStyles();
 
     if (typeof supabaseRpc !== "function") {
-      console.error("GNG: RPC pública indisponível para carregar configuração.");
+      console.error("VELTRO: RPC pública indisponível para carregar configuração.");
       return;
     }
 
@@ -403,7 +403,7 @@
 
       window.dispatchEvent(new CustomEvent("gng:site-data-ready", { detail: data }));
     } catch (error) {
-      console.error("GNG: não foi possível carregar a configuração dinâmica.", error);
+      console.error("VELTRO: não foi possível carregar a configuração dinâmica.", error);
     }
   }
 
