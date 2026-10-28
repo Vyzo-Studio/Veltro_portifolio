@@ -1,7 +1,7 @@
 (function(){
 "use strict";
 if(window.GNG_CUSTOMER_MEMORY)return;
-const KEY="gng_barbearia_customer_contact_v1",TTL=90*86400000;
+const KEY="veltro_demo_customer_contact_v1",TTL=90*86400000;
 let checkbox=null,forget=null,nameInput=null,phoneInput=null;
 const t={
 "pt-BR":["Lembrar meus dados neste dispositivo","Na próxima visita, seu nome e telefone poderão ser preenchidos neste navegador. Outras pessoas usando este perfil poderão vê-los.","Esquecer meus dados deste dispositivo","Dados apagados deste navegador.","Política de Privacidade"],
