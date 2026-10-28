@@ -1,6 +1,7 @@
 // Fail closed: credentials must belong to a new independent VELTRO project.
-const SUPABASE_URL = window.VELTRO_BACKEND?.url || "";
-const SUPABASE_PUBLIC_KEY = window.VELTRO_BACKEND?.publishableKey || "";
+const approvedDemoBackend = window.VELTRO_BACKEND?.ready === true ? window.VELTRO_BACKEND : null;
+const SUPABASE_URL = approvedDemoBackend?.url || "";
+const SUPABASE_PUBLIC_KEY = approvedDemoBackend?.publishableKey || "";
 
 function showStartupError(message) {
   console.error(message);
