@@ -354,7 +354,7 @@
             </div>
 
             <div class="business-logo-row">
-              <img class="business-logo-preview" id="business-logo-preview" src="assets/logo-gng.jpg" alt="Prévia do logotipo">
+              <img class="business-logo-preview" id="business-logo-preview" src="assets/veltro-logo-dark.svg" alt="Prévia do logotipo">
               <div class="admin-field" style="flex:1">
                 <label for="business-logo-file">Novo logotipo</label>
                 <input id="business-logo-file" type="file" accept="image/png,image/jpeg,image/webp">
@@ -783,7 +783,7 @@
     setValue("business-slot-interval", settings.slot_interval_minutes || 30);
 
     const preview = document.getElementById("business-logo-preview");
-    if (preview) preview.src = settings.logo_url || "assets/logo-gng.jpg";
+    if (preview) preview.src = settings.logo_url || "assets/veltro-logo-dark.svg";
 
     const openDays = Array.isArray(settings.open_weekdays)
       ? settings.open_weekdays.map(Number)
@@ -1022,7 +1022,7 @@
       "." + extension;
 
     const result = await supabaseClient.storage
-      .from("gng-media")
+      .from("veltro-demo-media")
       .upload(path, file, {
         cacheControl: "3600",
         upsert: false,
@@ -1032,7 +1032,7 @@
     if (result.error) throw result.error;
 
     const publicUrl = supabaseClient.storage
-      .from("gng-media")
+      .from("veltro-demo-media")
       .getPublicUrl(path);
 
     return {
@@ -1236,7 +1236,7 @@
 
       if (item.storage_path) {
         const removeResult = await supabaseClient.storage
-          .from("gng-media")
+          .from("veltro-demo-media")
           .remove([item.storage_path]);
 
         if (removeResult.error) {
@@ -1525,7 +1525,7 @@
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "gng-relatorio-" + (reportData.start_date || "inicio") + "-a-" + (reportData.end_date || "fim") + ".csv";
+    link.download = "veltro-demo-relatorio-" + (reportData.start_date || "inicio") + "-a-" + (reportData.end_date || "fim") + ".csv";
     document.body.appendChild(link);
     link.click();
     link.remove();
