@@ -11,6 +11,15 @@ for(const name of files){
  [/St\. M QNM|Ceilândia/i,"original physical location"]
  ])assert(!regex.test(text),name+": "+label+" still present");
 }
+// Detect original client identity leaking into runtime UI strings, not only HTML.
+const scripted=fs.readFileSync(path.join(root,"script.js"),"utf8");
+const adminRuntime=fs.readFileSync(path.join(root,"admin.js"),"utf8");
+const notifications=fs.readFileSync(path.join(root,"admin-notifications.js"),"utf8");
+const manualPayments=fs.readFileSync(path.join(root,"admin-manual-payment.js"),"utf8");
+assert.doesNotMatch(scripted,/<span>GNG<\/span>/,"mobile navigation still contains original logo text");
+assert.doesNotMatch(adminRuntime,/painel da GNG/i,"admin login leaks original business name");
+assert.doesNotMatch(notifications,/\|\s*GNG\b/,"notifications leak original business name");
+assert.doesNotMatch(manualPayments,/gng_manual_payment_operation_v1/,"old draft storage namespace reused");
 const page=fs.readFileSync(path.join(root,"index.html"),"utf8");
 assert.match(page,/PROJETO DEMONSTRATIVO/);
 assert.match(page,/VELTRO Barber Atelier/);
