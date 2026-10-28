@@ -18,7 +18,11 @@ test("VELTRO public site: independent fictional identity and safe demo flow",asy
    const b=window.VELTRO_DEMO;
    return await b.rpc("create_booking_request_by_barber_privacy_v1",{
     p_privacy_acknowledged:true,p_barber_id:b.barbers[0].id,p_service:b.services[0].name,
-    p_booking_date:"2026-10-29",p_booking_time:"12:30",p_customer_name:"Nome de exemplo",
+    p_booking_date:(()=>{
+     const d=new Date();d.setUTCDate(d.getUTCDate()+3);
+     while(d.getUTCDay()===0)d.setUTCDate(d.getUTCDate()+1);
+     return d.toISOString().slice(0,10);
+    })(),p_booking_time:"12:30",p_customer_name:"Nome de exemplo",
     p_customer_phone:"61999999999"
    });
  });
