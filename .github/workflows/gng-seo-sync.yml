@@ -1,43 +1,24 @@
-name: GNG SEO Sync
-
+name: VELTRO Demo SEO Validation
 on:
-  schedule:
-    - cron: '17 * * * *'
   push:
-    branches: [main]
+    branches: [work/vyzo-independent-demo-v2]
     paths:
       - 'scripts/sync-seo.cjs'
+      - 'index.html'
       - '.github/workflows/gng-seo-sync.yml'
   workflow_dispatch:
-
 permissions:
-  contents: write
-
-concurrency:
-  group: gng-seo-sync
-  cancel-in-progress: false
-
+  contents: read
 jobs:
-  refresh:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Update static metadata from public Supabase RPC
-        run: node scripts/sync-seo.cjs
-      - name: Commit only if changed
+      - name: Verify static creative-work metadata (no external database)
         run: |
-          if git diff --quiet -- index.html; then
-            echo "Already synchronized."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "chore(seo): sync metadata from business settings"
-          git push
+          node --check scripts/sync-seo.cjs
+          node scripts/sync-seo.cjs
+          git diff --exit-code -- index.html
