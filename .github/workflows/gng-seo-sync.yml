@@ -21,4 +21,8 @@ jobs:
         run: |
           node --check scripts/sync-seo.cjs
           node scripts/sync-seo.cjs
-          git diff --exit-code -- index.html
+          cp index.html /tmp/veltro-index-seo.html
+          node scripts/sync-seo.cjs
+          cmp /tmp/veltro-index-seo.html index.html
+          grep -q '"@type":"CreativeWork"' index.html
+          ! grep -q 'ueqfokfnjsjgocotvdae' index.html
