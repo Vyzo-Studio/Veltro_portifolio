@@ -1535,7 +1535,7 @@ async function establishSession(
 
     setMessage(
       loginMessage,
-      "Esta conta não possui autorização para acessar o painel da GNG.",
+      "Esta conta não possui autorização para acessar o painel demonstrativo VELTRO.",
       "error"
     );
 
