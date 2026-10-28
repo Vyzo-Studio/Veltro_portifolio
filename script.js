@@ -1089,7 +1089,7 @@ function createMobileBottomNav() {
       href="#assinaturas"
       data-mobile-nav="assinaturas"
     >
-      <span>GNG</span>
+      <span>VELTRO</span>
       <span>Planos</span>
     </a>
 
