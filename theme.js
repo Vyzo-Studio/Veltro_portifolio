@@ -2,7 +2,7 @@
   if (window.GNG_THEME_INSTALLED) return;
   window.GNG_THEME_INSTALLED = true;
 
-  const STORAGE_KEY = "gng-theme";
+  const STORAGE_KEY = "veltro-demo-theme";
   const root = document.documentElement;
 
   function readStoredTheme() {
