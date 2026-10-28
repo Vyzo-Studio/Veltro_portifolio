@@ -1,0 +1,54 @@
+name: VELTRO Independent Demo QA
+
+on:
+  push:
+    branches: [work/vyzo-independent-demo-v2, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: veltro-demo-qa
+  cancel-in-progress: true
+
+jobs:
+  isolated-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify all browser JavaScript syntax
+        run: |
+          for f in config.js demo-backend-config.js demo-fixtures.js site-data.js script.js i18n.js legal-i18n.js legal-contact.js privacy.js customer-memory.js theme.js admin.js admin-barbers.js admin-business.js admin-calendar.js admin-manual-payment.js admin-notifications.js; do
+            node --check "$f"
+          done
+      - name: Isolated fake-booking and no-original-business regression
+        run: node tests/veltro-demo-isolation.test.cjs
+      - name: Install pinned Chromium test runner
+        run: npm install --no-save --ignore-scripts @playwright/test@1.56.1
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Serve only the checked-out branch locally
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/veltro-server.log 2>&1 &
+          for i in $(seq 1 20); do
+            curl --silent --fail http://127.0.0.1:8765/ -o /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/veltro-server.log
+          exit 1
+      - name: Verify public site, disconnected admin, legal pages and viewports
+        run: |
+          mkdir -p artifacts
+          npx playwright test tests/veltro-demo-browser.spec.cjs --reporter=line --workers=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: veltro-branch-QA-evidence
+          path: artifacts/
+          if-no-files-found: ignore
+          retention-days: 7

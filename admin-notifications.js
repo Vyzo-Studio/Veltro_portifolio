@@ -920,7 +920,7 @@
     try {
       const notification =
         new Notification(
-          "Novo agendamento | GNG",
+          "Novo agendamento | VELTRO",
           {
             body:
               customer +
@@ -932,10 +932,10 @@
               time,
 
             icon:
-              "assets/logo-gng.jpg",
+              "assets/veltro-logo-dark.svg",
 
             badge:
-              "assets/logo-gng.jpg",
+              "assets/veltro-logo-dark.svg",
 
             tag:
               "gng-booking-" +
@@ -983,8 +983,8 @@
       count > 1
         ? "🔔 " +
           count +
-          " novos agendamentos | GNG"
-        : "🔔 Novo agendamento | GNG";
+          " novos agendamentos | VELTRO"
+        : "🔔 Novo agendamento | VELTRO";
 
     state.titleTimeout =
       window.setTimeout(

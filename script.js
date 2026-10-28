@@ -18,11 +18,10 @@ const serviceLinks = Array.from(
   document.querySelectorAll("[data-service-link]")
 );
 
-const WHATSAPP_NUMBER = "5561994075539";
-const SUPABASE_URL =
-  "https://ueqfokfnjsjgocotvdae.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_YqWCSylIzOdQcxuJFpE9dQ_3mVV4oji";
+const WHATSAPP_NUMBER = "556185154156";
+// A separate VELTRO backend is required before enabling shared bookings.
+const SUPABASE_URL = window.VELTRO_BACKEND?.url || "";
+const SUPABASE_PUBLISHABLE_KEY = window.VELTRO_BACKEND?.publishableKey || "";
 
 const BUSINESS_TIMEZONE =
   "America/Sao_Paulo";
@@ -1090,7 +1089,7 @@ function createMobileBottomNav() {
       href="#assinaturas"
       data-mobile-nav="assinaturas"
     >
-      <span>GNG</span>
+      <span>VELTRO</span>
       <span>Planos</span>
     </a>
 
@@ -1909,6 +1908,14 @@ async function supabaseRpc(
   functionName,
   payload = {}
 ) {
+  // Until an independent database exists, use an isolated per-tab sample only.
+  // Never send a demo request to the previous barbershop's production database.
+  if (window.VELTRO_DEMO?.active && !window.VELTRO_BACKEND?.ready) {
+    return window.VELTRO_DEMO.rpc(functionName, payload);
+  }
+  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+    throw new Error("Banco de demonstração independente não configurado.");
+  }
   const response =
     await fetch(
       SUPABASE_URL +
@@ -4117,50 +4124,9 @@ function setupServiceLinks() {
 }
 
 function buildWhatsappMessage() {
-  if (
-    !bookingService ||
-    !bookingService.value ||
-    !selectedBarberName ||
-    !selectedDate ||
-    !selectedTime ||
-    !bookingCustomerName
-  ) {
-    return "";
-  }
-
-  const customerName =
-    bookingCustomerName
-      .value
-      .trim();
-
-  const dateText =
-    capitalizeFirst(
-      formatFullDate(
-        selectedDate
-      )
-    );
-
-  return (
-    "Olá, GNG Barbearia!\n\n" +
-
-    "Sou *" +
-    customerName +
-    "*. Acabei de solicitar pelo site um agendamento para *" +
-
-    bookingService.value +
-    "* com *" +
-
-    selectedBarberName +
-    "*, no dia *" +
-
-    dateText +
-    "*, às *" +
-
-    selectedTime +
-    "*.\n\n" +
-
-    "Poderiam, por gentileza, confirmar meu agendamento? Fico no aguardo. Obrigado!"
-  );
+  return "Olá, VYZO Studio! Vi a demonstração fictícia VELTRO Barber Atelier " +
+    "e gostaria de conversar sobre um site e painel administrativo para meu negócio. " +
+    "As reservas exibidas na demonstração são simulações, sem atendimento real.";
 }
 
 function buildWhatsappUrlFromMessage(
@@ -4376,8 +4342,8 @@ async function submitBooking() {
 
     showBookingFeedback(
       wantsWhatsapp
-        ? "Solicitação registrada e pendente por até 5 minutos. A barbearia precisa confirmar. Se o WhatsApp não abrir, use o link abaixo."
-        : "Solicitação registrada, pendente por até 5 minutos. A confirmação depende da barbearia. Sem WhatsApp, ligue ou entre em contato pelos canais do site para acompanhar.",
+        ? "Agendamento de demonstração registrado somente nesta aba. Não existe reserva real. O WhatsApp abre um contato comercial com a VYZO Studio."
+        : "Agendamento fictício registrado apenas nesta sessão do navegador. Nenhum horário real foi reservado.",
       "success",
       whatsappUrl
     );
@@ -4403,8 +4369,8 @@ async function submitBooking() {
       console.error("Falha após o registro da solicitação:", error);
       showBookingFeedback(
         wantsWhatsapp
-          ? "Sua solicitação foi registrada. Caso o WhatsApp não tenha aberto, use o link abaixo."
-          : "Sua solicitação foi registrada sem WhatsApp e aguarda confirmação da barbearia.",
+          ? "Seu registro de demonstração foi criado somente nesta aba. Para falar com a VYZO Studio, use o contato abaixo."
+          : "Registro fictício salvo nesta sessão. Não há confirmação ou atendimento real.",
         "success",
         whatsappUrl
       );

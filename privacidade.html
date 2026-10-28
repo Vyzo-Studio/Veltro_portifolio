@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://ueqfokfnjsjgocotvdae.supabase.co wss://ueqfokfnjsjgocotvdae.supabase.co; img-src 'self' data: blob: https:; frame-src https://www.google.com; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data: blob: https:; frame-src https://www.google.com; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="index,follow">
-  <meta name="description" content="Saiba como a GNG Barbearia utiliza e protege seus dados pessoais durante os agendamentos e como exercer seus direitos.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Documento informativo de projeto demonstrativo VELTRO — VYZO Studio.">
   <meta name="color-scheme" content="light dark">
-  <title>Política de Privacidade | GNG Barbearia</title>
-  <link rel="canonical" href="https://vyzo-studio.github.io/gng_barbearia/privacidade.html">
-  <link rel="icon" type="image/jpeg" href="assets/logo-gng.jpg">
+  <title>Privacidade — VELTRO | VYZO Studio</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/veltro-favicon.svg">
   <script src="theme.js?v=1.0"></script>
   <link rel="stylesheet" href="style.css?v=8.3">
   <link rel="stylesheet" href="theme.css?v=2.6">
@@ -27,74 +27,38 @@
     .gng-policy-content h2 { margin: 32px 0 12px; font-size: 1.14rem; color: var(--ink); }
     .gng-policy-content p, .gng-policy-content li { color: var(--text); line-height: 1.75; font-size: 0.96rem; }
     .gng-policy-content ul { padding-left: 21px; }
-    .gng-policy-content a { color: #35639c; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+    .gng-policy-content a { color: #85522d; text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
     .gng-policy-content .policy-updated { font-size: 0.85rem; color: var(--muted); }
-    html[data-theme="dark"] .gng-policy-page { background: #142238; }
-    html[data-theme="dark"] .gng-policy-content article { background: #1d304c; border-color: #506884; }
-    html[data-theme="dark"] .gng-policy-content h1, html[data-theme="dark"] .gng-policy-content h2 { color: #f5f8fc; }
-    html[data-theme="dark"] .gng-policy-content p, html[data-theme="dark"] .gng-policy-content li { color: #d9e5f4; }
-    html[data-theme="dark"] .gng-policy-content a { color: #b1d2ff; }
-    html[data-theme="dark"] .gng-policy-content .policy-updated { color: #b9cbdf; }
+    html[data-theme="dark"] .gng-policy-page { background: #161f1a; }
+    html[data-theme="dark"] .gng-policy-content article { background: #26372d; border-color: #6f8a77; }
+    html[data-theme="dark"] .gng-policy-content h1, html[data-theme="dark"] .gng-policy-content h2 { color: #fff9ed; }
+    html[data-theme="dark"] .gng-policy-content p, html[data-theme="dark"] .gng-policy-content li { color: #efe9db; }
+    html[data-theme="dark"] .gng-policy-content a { color: #f5c79c; }
+    html[data-theme="dark"] .gng-policy-content .policy-updated { color: #d0d1c5; }
   </style>
+  <link rel="stylesheet" href="demo-brand.css?v=1.0">
 </head>
 <body class="gng-policy-page" data-gng-legal="privacy">
   <a href="#politica" class="skip-link">Pular para a política</a>
   <header class="gng-policy-header">
-    <img src="assets/logo-gng.jpg" alt="GNG Barbearia">
-    <a href="index.html">GNG Barbearia</a>
+    <img src="assets/veltro-logo-dark.svg" alt="VELTRO — demonstração">
+    <a href="index.html">VELTRO Barber Atelier</a>
     <a href="index.html#agendamento">Voltar ao site e agendar</a>
     <a href="termos.html">Termos de Serviço</a>
     <label class="gng-locale-label"><span class="sr-only">Idioma do site</span><select data-gng-locale aria-label="Idioma do site"><option value="pt-BR">Português (Brasil)</option><option value="en">English</option><option value="es">Español</option><option value="ja">日本語</option><option value="de">Deutsch</option></select></label>
     <button type="button" class="footer-privacy-button" data-privacy-preferences>Configurações dos Cookies</button>
   </header>
   <main class="gng-policy-content" id="politica">
-    <article>
-      <p class="policy-updated">Atualização: 22 de outubro de 2026</p>
-      <h1>Política de Privacidade</h1>
-      <p>Esta página explica, em linguagem simples, como a <strong>GNG Barbearia</strong> trata os dados pessoais informados por clientes ao utilizar o site e solicitar um atendimento. O tratamento deve observar a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).</p>
-
-      <h2>1. Quem é responsável?</h2>
-      <p>A GNG Barbearia decide como os dados dos seus clientes são utilizados para a prestação de seus serviços. Atendimento e solicitações sobre dados pessoais: <a href="index.html#localizacao" data-gng-contact-link target="_blank" rel="noopener noreferrer">Contatos oficiais da GNG</a>. Endereço: St. M QNM 21 conjunto D lote 48, Ceilândia, Brasília — DF, 72215-214.</p>
-
-      <h2>2. Quais informações coletamos?</h2>
-      <p>Ao solicitar um horário pelo site, você informa seu <strong>nome e número de telefone</strong> e seleciona <strong>serviço, profissional, data e horário</strong>. O sistema também registra informações operacionais da solicitação, como status, data de criação, confirmação de leitura do aviso de privacidade e eventual autorização de abertura do WhatsApp. No painel, profissionais autorizados podem registrar atendimentos e pagamentos. Não pedimos CPF, RG, endereço residencial nem dados de cartão bancário no agendamento.</p>
-
-      <h2>3. Para que usamos esses dados?</h2>
-      <ul>
-        <li>Registrar e administrar pedidos de agendamento, evitar conflitos de horários e realizar o atendimento solicitado.</li>
-        <li>Identificar o cliente, entrar em contato sobre a solicitação e registrar alterações, cancelamentos e histórico necessário à operação.</li>
-        <li>Organizar registros administrativos e financeiros pertinentes, quando houver um atendimento.</li>
-        <li>Atender pedidos relacionados aos direitos de proteção de dados e obrigações legais aplicáveis.</li>
-      </ul>
-      <p>Esses dados são necessários para a solicitação de serviço e atividades relacionadas, conforme as hipóteses legais aplicáveis da LGPD, incluindo procedimentos preliminares à contratação e cumprimento de obrigações legais quando pertinente. <strong>O agendamento não implica autorização para mensagens promocionais.</strong></p>
-
-      <h2>4. Com quem os dados podem ser compartilhados?</h2>
-      <p>Os dados do agendamento são armazenados na infraestrutura do <strong>Supabase</strong>, que presta o serviço de banco de dados e autenticação. O site é publicado no <strong>GitHub Pages</strong>, que pode receber dados técnicos usuais de acesso. Recursos externos, como imagens e fontes carregadas de provedores terceiros, também podem receber informações técnicas do navegador.</p>
-      <p>O <strong>WhatsApp, da Meta</strong>, só será aberto automaticamente com uma mensagem contendo nome e detalhes do agendamento se você marcar a autorização específica no formulário. O envio efetivo dependerá da sua ação no aplicativo ou no WhatsApp Web. Caso não autorize, a solicitação pode ser registrada sem abrir o WhatsApp; a barbearia ainda pode precisar entrar em contato pelo telefone informado para tratar do serviço.</p>
-
-      <p><strong>Tratamento e transferência internacional:</strong> a base de dados Supabase deste projeto está configurada na região <strong>us-west-2, nos Estados Unidos</strong>. Assim, os dados de agendamento podem ser armazenados e processados fora do Brasil. O uso de fornecedores estrangeiros deve respeitar os mecanismos aplicáveis de transferência internacional previstos na LGPD e na <a href="https://www.gov.br/anpd/pt-br/acesso-a-informacao/institucional/atos-normativos/regulamentacoes_anpd/resolucao-cd-anpd-no-19-de-23-de-agosto-de-2024" target="_blank" rel="noopener noreferrer">Resolução CD/ANPD nº 19/2024</a>. A GNG deve verificar contratualmente quais salvaguardas desses fornecedores se aplicam ao seu tratamento.</p>
-
-      <h2 id="mapas">5. Cookies, preferências e mapa</h2>
-      <p>Não utilizamos cookies de publicidade ou ferramentas próprias de rastreamento para marketing no código público atualmente publicado. A preferência de tema claro/escuro e o idioma escolhido podem ser salvos no armazenamento local do navegador. Com sua escolha específica, podemos salvar neste mesmo navegador somente seu nome e telefone para preenchimento futuro, por até 90 dias, sem criar uma conta; você pode apagar esses dados imediatamente pelo formulário. Em dispositivos compartilhados, outras pessoas que usem o mesmo perfil do navegador poderão ver esses dados. A autenticação do painel restrito utiliza armazenamento necessário para manter a sessão administrativa.</p>
-      <p>Um registro local da decisão sobre conteúdo externo é mantido por até 180 dias ou até mudança de versão da política. O mapa incorporado do Google fica <strong>desativado por padrão</strong>. Ele só é carregado após sua escolha em “Carregar mapa” ou nas preferências de privacidade. Quando ativado, o Google pode receber dados técnicos e utilizar cookies segundo suas próprias regras. Você pode revogar essa preferência no rodapé do site. Os links que abrem serviços externos estão sujeitos às respectivas políticas de privacidade.</p>
-
-      <h2 id="dados-locais">6. Por quanto tempo mantemos os dados?</h2>
-      <p>Os registros podem ser mantidos enquanto necessários para tratar a solicitação, prestar serviços, administrar histórico operacional, cumprir obrigações legais e proteger direitos em eventuais controvérsias. Quando não forem mais necessários e não existir fundamento legal para retenção, devem ser eliminados ou anonimizados. A GNG deve estabelecer e revisar periodicamente seus prazos internos de retenção; não há uma rotina de exclusão automática geral garantida por esta página.</p>
-
-      <h2>7. Segurança</h2>
-      <p>Adotamos controles de autenticação e regras de acesso no banco de dados para limitar o uso das informações ao funcionamento do agendamento e do painel restrito. Nenhum sistema conectado à internet elimina completamente os riscos. Se você identificar problema relacionado aos seus dados, entre em contato pelos canais acima.</p>
-
-      <h2>8. Seus direitos pela LGPD</h2>
-      <p>Você pode solicitar confirmação de tratamento, acesso, correção de dados, informações sobre compartilhamento, oposição ou eliminação nos casos previstos em lei, e outros direitos da LGPD. Pedidos poderão requerer comprovação de identidade para evitar divulgação indevida de dados. A GNG analisará a solicitação conforme a legislação e responderá pelo canal apropriado, sem cobrança pelo exercício dos direitos.</p>
-
-      <h2>9. Crianças e adolescentes</h2>
-      <p>Se um responsável realizar agendamento em nome de uma criança ou adolescente, deverá fornecer apenas as informações necessárias e agir de acordo com os interesses da pessoa atendida.</p>
-
-      <h2>10. Mudanças nesta política</h2>
-      <p>Esta política poderá ser atualizada quando o funcionamento do site ou os serviços de tratamento de dados forem alterados. A data de revisão constará no início da página.</p>
-
-      <p><a href="index.html#agendamento">Voltar ao agendamento</a></p>
-    </article>
+    <article><p class="policy-updated">Revisão: 28 de outubro de 2026 • Projeto demonstrativo</p>
+<h1>Política de Privacidade — Demonstração VELTRO</h1>
+<p>A VELTRO Barber Atelier é uma <strong>marca fictícia</strong> criada para demonstrar o trabalho da VYZO Studio. Não existe estabelecimento físico nem atendimento real associado a esta página.</p>
+<h2>1. Quais informações são usadas?</h2><p>Na versão de demonstração, o formulário pode solicitar nome, telefone, serviço, profissional e horário para simular o uso. O agendamento é registrado apenas na sessão deste navegador e não é encaminhado à antiga barbearia ou ao banco de dados dela.</p>
+<h2 id="dados-locais">2. Dados salvos no dispositivo</h2><p>Se você escolher “Lembrar meus dados”, nome e telefone ficam no armazenamento local deste navegador por até 90 dias, podendo ser apagados pelo próprio formulário. Outros usuários do mesmo perfil de navegador podem visualizá-los. O idioma e o tema também podem ser lembrados localmente.</p>
+<h2>3. Fornecedores e mídia</h2><p>O site utiliza GitHub Pages para distribuição. Fotografias ilustrativas da Unsplash podem transmitir dados técnicos de acesso aos servidores do provedor. Ao abrir voluntariamente o WhatsApp, você interage com um serviço de terceiros, sujeito à sua própria política. A VYZO não envia mensagens automaticamente.</p>
+<h2>4. Cookies e conteúdo externo</h2><p>As preferências locais são mantidas para funcionamento da interface. Esta demonstração não contém um mapa geográfico do antigo estabelecimento. Conteúdo externo adicional poderá exigir escolha específica quando implementado.</p>
+<h2>5. Ambiente administrativo</h2><p>O acesso administrativo real depende da criação de um projeto Supabase separado, autenticação e autorização próprias. Até essa configuração, o painel não se conecta a dados de clientes da antiga barbearia. Não devem ser inseridos dados pessoais reais para testar funcionalidades.</p>
+<h2>6. Direitos e contato</h2><p>Solicitações relativas a eventuais contatos comerciais com a VYZO Studio podem ser feitas pelo canal disponibilizado nesta demonstração. A política deverá ser revisada antes de habilitar um banco de dados compartilhado de produção, inclusive quanto a prazos de retenção e transferências internacionais.</p>
+<p><a href="termos.html">Ler os Termos de Serviço</a> • <a href="index.html">Voltar para a demonstração</a></p></article>
   </main>
   <script src="config.js?v=3.4"></script>
   <script src="i18n.js?v=1.4"></script>

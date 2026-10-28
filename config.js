@@ -1,8 +1,7 @@
-const SUPABASE_URL =
-  "https://ueqfokfnjsjgocotvdae.supabase.co";
-
-const SUPABASE_PUBLIC_KEY =
-  "sb_publishable_YqWCSylIzOdQcxuJFpE9dQ_3mVV4oji";
+// Fail closed: credentials must belong to a new independent VELTRO project.
+const approvedDemoBackend = window.VELTRO_BACKEND?.ready === true ? window.VELTRO_BACKEND : null;
+const SUPABASE_URL = approvedDemoBackend?.url || "";
+const SUPABASE_PUBLIC_KEY = approvedDemoBackend?.publishableKey || "";
 
 function showStartupError(message) {
   console.error(message);
@@ -25,7 +24,7 @@ function showStartupError(message) {
 function storageWorks(storage) {
   if (!storage) return false;
 
-  const testKey = "__gng_barbearia_storage_test__";
+  const testKey = "__veltro_demo_storage_test__";
 
   try {
     storage.setItem(testKey, "1");
@@ -60,7 +59,7 @@ function createMemoryStorage() {
 function resolveAuthStorage() {
   // Eliminar a sessão persistente da versão anterior deste painel.
   try {
-    window.localStorage.removeItem("sb-ueqfokfnjsjgocotvdae-auth-token");
+    window.localStorage.removeItem("sb-veltro-unconfigured-auth-token");
   } catch (error) {
   }
 
@@ -174,8 +173,9 @@ window.GNG_CONFIG = {
   supabaseUrl: SUPABASE_URL,
   publicKey: SUPABASE_PUBLIC_KEY,
   businessTimezone: "America/Sao_Paulo",
-  businessName: "GNG Barbearia",
-  whatsapp: "5561994075539"
+  businessName: "VELTRO Barber Atelier",
+  demonstration: true,
+  whatsapp: "556185154156"
 };
 
 window.GNG_isConfiguredAdminEmail = isConfiguredAdminEmail;

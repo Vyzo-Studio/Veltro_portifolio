@@ -1280,7 +1280,7 @@ function buildCustomerWhatsappUrl(
   }
 
   const message =
-    "Olá! Aqui é da GNG Barbearia. Estou entrando em contato sobre o seu agendamento.";
+    "Olá! Aqui é da VELTRO Barber Atelier. Estou entrando em contato sobre o seu agendamento.";
 
   return (
     "https://wa.me/" +
@@ -1535,7 +1535,7 @@ async function establishSession(
 
     setMessage(
       loginMessage,
-      "Esta conta não possui autorização para acessar o painel da GNG.",
+      "Esta conta não possui autorização para acessar o painel demonstrativo VELTRO.",
       "error"
     );
 
