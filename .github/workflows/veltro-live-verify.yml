@@ -1,5 +1,7 @@
 name: VELTRO Live Pages Verification
 on:
+  push:
+    branches: [main]
   workflow_run:
     workflows: ["pages build and deployment"]
     types: [completed]
