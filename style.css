@@ -600,7 +600,7 @@ input:focus-visible {
 }
 
 .booking-section::before {
-  content: "GNG";
+  content: "VELTRO";
   position: absolute;
   right: -35px;
   top: 20px;
