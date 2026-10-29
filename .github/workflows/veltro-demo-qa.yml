@@ -2,7 +2,7 @@ name: VELTRO Independent Demo QA
 
 on:
   push:
-    branches: [work/vyzo-independent-demo-v2, work/veltro-premium-grain-v1, main]
+    branches: [work/vyzo-independent-demo-v2, work/veltro-premium-grain-v1, work/veltro-v4-experience, main]
   workflow_dispatch:
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
           node-version: '22'
       - name: Verify all browser JavaScript syntax
         run: |
-          for f in config.js demo-backend-config.js demo-fixtures.js site-data.js script.js i18n.js legal-i18n.js legal-contact.js privacy.js customer-memory.js theme.js admin.js admin-barbers.js admin-business.js admin-calendar.js admin-manual-payment.js admin-notifications.js; do
+          for f in config.js demo-backend-config.js demo-fixtures.js site-data.js script.js i18n.js legal-i18n.js legal-contact.js privacy.js customer-memory.js theme.js veltro-experience.js admin.js admin-barbers.js admin-business.js admin-calendar.js admin-manual-payment.js admin-notifications.js; do
             node --check "$f"
           done
       - name: Isolated fake-booking and no-original-business regression
@@ -44,7 +44,7 @@ jobs:
       - name: Verify public site, disconnected admin, legal pages and viewports
         run: |
           mkdir -p artifacts
-          npx playwright test tests/veltro-demo-browser.spec.cjs tests/veltro-grain-visual.spec.cjs --reporter=line --workers=1
+          npx playwright test tests/veltro-demo-browser.spec.cjs tests/veltro-grain-visual.spec.cjs tests/veltro-v4-experience.spec.cjs --reporter=line --workers=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
