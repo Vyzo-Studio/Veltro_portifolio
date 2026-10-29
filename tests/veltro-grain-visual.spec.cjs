@@ -47,8 +47,9 @@ for(const mode of ["light","dark"]){
 
 test("Theme toggle persists and avoids forced animation for reduced motion",async({page})=>{
  await page.emulateMedia({reducedMotion:"reduce"});
- await useTheme(page,"light");
  await page.goto(base,{waitUntil:"domcontentloaded"});
+ await page.evaluate(()=>window.localStorage.setItem("veltro-demo-theme","light"));
+ await page.reload({waitUntil:"domcontentloaded"});
  await page.locator("#gng-theme-toggle").click();
  await expect(page.locator("html")).toHaveAttribute("data-theme","dark");
  expect(await page.locator("html").evaluate(el=>el.classList.contains("gng-theme-switching"))).toBe(false);
