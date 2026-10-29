@@ -32,7 +32,7 @@
   const close=document.createElement("button");close.type="button";close.className="veltro-photo-close";close.dataset.photoClose="";close.textContent="×";
   const picture=document.createElement("img");picture.alt="";picture.decoding="async";
   const title=document.createElement("strong");const caption=document.createElement("p");
-  const footer=document.createElement("div");footer.className="veltro-photo-meta";footer.append(title,caption);
+  const footer=document.createElement("div");footer.className="veltro-photo-meta";const source=document.createElement("a");source.className="veltro-photo-source";source.target="_blank";source.rel="noopener noreferrer";source.textContent="Unsplash";footer.append(title,caption,source);
   dialog.append(close,picture,footer);
   close.addEventListener("click",()=>dialog.close());
   dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
@@ -46,6 +46,9 @@
   img.src=item.src;img.alt=item.img.alt;
   dialog.querySelector(".veltro-photo-meta strong").textContent=item.item.caption||item.img.alt;
   dialog.querySelector(".veltro-photo-meta p").textContent=[tr("credit"),item.item.credit].filter(Boolean).join(" • ");
+  const sourceLink=dialog.querySelector(".veltro-photo-source");const original=String(item.item.credit_url||"");
+  const valid=/^https:\/\/unsplash\.com\/photos\/[a-zA-Z0-9_-]+(?:-[a-zA-Z0-9_-]+)*$/i.test(original);
+  sourceLink.hidden=!valid;if(valid)sourceLink.href=original;else sourceLink.removeAttribute("href");
   const close=dialog.querySelector(".veltro-photo-close");close.setAttribute("aria-label",tr("close"));
   if(typeof dialog.showModal==="function")dialog.showModal();
  }
