@@ -211,7 +211,7 @@ html:not([data-theme="dark"]) .main-nav a:not(.nav-cta) {color:#263D58;}
   background:linear-gradient(135deg,#354F6B,#172A43);
 }
 html[data-theme="dark"] .site-header .main-nav .nav-cta {background:#F5F6FA;color:#0C1523;border-color:#F5F6FA;}
-html[data-theme="dark"] .btn-primary:not(:disabled) {background:linear-gradient(135deg,#314D6B,#203954);color:#F5F6FA;}
+html[data-theme="dark"] .hero .btn-primary:not(:disabled) {background:linear-gradient(135deg,#314D6B,#203954) !important;background-image:linear-gradient(135deg,#314D6B,#203954) !important;color:#F5F6FA !important;border-color:#7897B4 !important;}
 html[data-theme="dark"] .btn-primary:disabled {background:#354358;color:#C7D4E3;}
 .hero .eyebrow,.section-head .eyebrow,.plan-kicker,.mini-tag {color:#78512C;}
 html[data-theme="dark"] .hero .eyebrow,
