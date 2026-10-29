@@ -24,7 +24,7 @@
   function updateThemeColor(theme) {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) return;
-    meta.setAttribute("content", theme === "dark" ? "#17243a" : "#f4f1eb");
+    meta.setAttribute("content", theme === "dark" ? "#0C1523" : "#FAF8F4");
   }
 
   function getTheme() {
@@ -52,7 +52,7 @@
   function applyTheme(theme, animate) {
     const next = theme === "dark" ? "dark" : "light";
 
-    if (animate) {
+    if (animate && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       root.classList.add("gng-theme-switching");
       window.setTimeout(function () {
         root.classList.remove("gng-theme-switching");
