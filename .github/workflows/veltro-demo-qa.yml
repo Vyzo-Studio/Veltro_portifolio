@@ -23,7 +23,7 @@ jobs:
           node-version: '22'
       - name: Verify all browser JavaScript syntax
         run: |
-          for f in config.js demo-backend-config.js demo-fixtures.js site-data.js script.js i18n.js legal-i18n.js legal-contact.js privacy.js customer-memory.js theme.js veltro-experience.js admin.js admin-barbers.js admin-business.js admin-calendar.js admin-manual-payment.js admin-notifications.js; do
+          for f in config.js demo-backend-config.js demo-fixtures.js site-data.js script.js i18n.js legal-i18n.js legal-contact.js privacy.js customer-memory.js theme.js veltro-experience.js veltro-v4-i18n.js admin.js admin-barbers.js admin-business.js admin-calendar.js admin-manual-payment.js admin-notifications.js; do
             node --check "$f"
           done
       - name: Isolated fake-booking and no-original-business regression
