@@ -34,7 +34,7 @@ const settings={
 business_name:"VELTRO — Barber Atelier",phone_display:"+55 61 8515-4156",whatsapp_digits:"556185154156",
 address:"Endereço fictício — sem atendimento presencial",maps_url:"",
 open_time:"09:00",close_time:"19:30",open_weekdays:[1,2,3,4,5,6],slot_interval_minutes:30,
-primary_color:"#26342e",secondary_color:"#202925",accent_color:"#be8759",
+primary_color:"#172A43",secondary_color:"#0C1523",accent_color:"#C38B4E",
 logo_url:"assets/veltro-logo-dark.svg",instagram_url:"",
 site_texts:{
 hero_title:"PRECISÃO",hero_subtitle:"EM CADA DETALHE.",
