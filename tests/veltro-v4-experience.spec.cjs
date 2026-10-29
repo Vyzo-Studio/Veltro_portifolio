@@ -76,3 +76,21 @@ test("VELTRO motion reveal is one-way and reduced-motion disables marquee",async
  const animation=await page.locator(".veltro-marquee-track").evaluate(el=>getComputedStyle(el).animationName);
  expect(animation).toBe("none");
 });
+
+test("VELTRO V4 editorial text and filters follow five supported languages",async({page})=>{
+ await page.goto(base,{waitUntil:"domcontentloaded"});
+ await expect.poll(()=>page.locator("[data-veltro-filter]").count()).toBeGreaterThan(0);
+ const language=page.locator("select[data-gng-locale]").first();
+ for(const [locale,heading,filter] of [
+  ["en","PRECISION IN THE CUT.","All"],
+  ["es","PRECISIÓN EN EL CORTE.","Todos"],
+  ["ja","カットに宿る技術。","すべて"],
+  ["de","PRÄZISION BEIM SCHNITT.","Alle"],
+  ["pt-BR","TÉCNICA NO CORTE.","Todos"]
+ ]){
+  await language.selectOption(locale);
+  await expect(page.locator("html")).toHaveAttribute("lang",locale);
+  await expect(page.locator("#veltro-identity-title")).toContainText(heading);
+  await expect(page.locator("[data-veltro-filter='all']")).toContainText(filter);
+ }
+});
