@@ -61,6 +61,29 @@ const demo=win.VELTRO_DEMO;
 assert.equal(demo.active,true);
 assert.equal(demo.services.length,13);
 assert.equal(demo.barbers.length,2);
+const expected=[
+["Barba",2500,20],["Corte",3000,20],["Corte + Barba",5500,40],
+["Corte + Graxa",5000,40],["Corte + Hidratação",4500,20],
+["Corte + Sobrancelha",4000,20],["Corte + Barba + Sobrancelha",6500,40],
+["Corte + Barba + Sobrancelha + Limpeza de Pele",11000,80],
+["Corte + Bigode",4000,20],["Corte + Bigode + Sobrancelha",4500,20],
+["Corte + Sobrancelha + Limpeza de Pele",8500,40],
+["Graxa",2000,20],["Limpeza de Pele",5000,20]
+];
+assert.equal(JSON.stringify(demo.services.map(s=>[s.name,s.price_cents,s.duration_minutes])),JSON.stringify(expected),"historical service catalog changed");
+for(const [name,price,minutes] of expected){
+ assert(page.includes(name),name+": missing from static fallback");
+ const brl="R$ "+(price/100).toFixed(2).replace(".",",");
+ assert(page.includes(brl),brl+": missing from historical fallback");
+}
+assert.equal(demo.gallery.length,10);
+assert.equal(new Set(demo.gallery.map(p=>p.image_url.split("?")[0])).size,10,"portfolio photos must be distinct");
+assert(demo.gallery.every(p=>p.credit_url?.startsWith("https://unsplash.com/photos/")),"every photo must have an individually verified source");
+assert.match(page,/veltro-experience\.js/);
+assert.match(page,/veltro-v4\.css/);
+assert.match(page,/id="tecnologia"/);
+assert.match(page,/id="perguntas"/);
+
 assert(demo.services.every(x=>x.price_cents>0&&x.duration_minutes>0));
 (async()=>{
 const list=await demo.rpc("get_public_site_config");
@@ -70,7 +93,7 @@ const next=new Date();
 next.setUTCDate(next.getUTCDate()+3);
 while(next.getUTCDay()===0)next.setUTCDate(next.getUTCDate()+1);
 const testDate=next.toISOString().slice(0,10);
-const params={p_privacy_acknowledged:true,p_barber_id:barber,p_service:"Corte Essencial",
+const params={p_privacy_acknowledged:true,p_barber_id:barber,p_service:"Corte",
  p_booking_date:testDate,p_booking_time:"10:00",p_customer_name:"Pessoa Fictícia",p_customer_phone:"61999999999"};
 await demo.rpc("create_booking_request_by_barber_privacy_v1",params);
 assert.equal(demo.read().length,1);
@@ -79,7 +102,7 @@ await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",
 await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_booking_date:"2026-11-01"}),/domingos/);
 await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_booking_date:"2000-01-01"}),/datas passadas/);
 await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_booking_time:"20:00"}),/horário não respeita/);
-await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_service:"Combo Premium",p_booking_time:"19:00"}),/horário não respeita/);
+await assert.rejects(()=>demo.rpc("create_booking_request_by_barber_privacy_v1",{...params,p_service:"Corte + Barba + Sobrancelha + Limpeza de Pele",p_booking_time:"19:00"}),/horário não respeita/);
 await assert.rejects(()=>demo.rpc("admin_cash_summary"),/Supabase exclusivo/);
 console.log("PASS — VELTRO identity, no production Supabase, local demo bookings, fictional records, Sunday rejection and safe admin boundary");
 })().catch(e=>{console.error(e);process.exitCode=1});
