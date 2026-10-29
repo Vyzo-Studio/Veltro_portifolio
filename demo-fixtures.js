@@ -5,20 +5,86 @@
 (function(){
 "use strict";
 const KEY="veltro_demo_bookings_v1",LIMIT=35;
+// Restored historical 13-service catalogue; shared by live demo table and booking form.
 const services=[
-["Corte Essencial",3900,35,"Corte clássico com acabamento de precisão."],
-["Fade Studio",4500,45,"Degradê personalizado com finalização."],
-["Barba Ritual",3500,30,"Modelagem, toalha quente e acabamento."],
-["Corte + Barba",7000,70,"Experiência completa de cabelo e barba."],
-["Corte Tesoura",4700,45,"Técnica na tesoura e styling."],
-["Navalhado",4700,45,"Precisão com acabamento navalhado."],
-["Acabamento",1900,20,"Contornos e manutenção do visual."],
-["Sobrancelha",1700,15,"Desenho e alinhamento."],
-["Hidratação",3000,25,"Tratamento capilar demonstrativo."],
-["Camuflagem",5000,45,"Uniformização visual de fios."],
-["Pigmentação",3800,35,"Acabamento de cor demonstrativo."],
-["Combo Premium",8900,90,"Corte, barba e cuidado especial."],
-["Kids Style",3500,30,"Corte infantil com atenção individual."]
+  [
+    "Barba",
+    2500,
+    20,
+    "Acabamento de barba, contornos e alinhamento."
+  ],
+  [
+    "Corte",
+    3000,
+    20,
+    "Corte masculino clássico ou contemporâneo."
+  ],
+  [
+    "Corte + Barba",
+    5500,
+    40,
+    "Cabelo e barba na mesma sessão."
+  ],
+  [
+    "Corte + Graxa",
+    5000,
+    40,
+    "Corte com finalização usando graxa capilar."
+  ],
+  [
+    "Corte + Hidratação",
+    4500,
+    20,
+    "Corte com cuidado hidratante capilar."
+  ],
+  [
+    "Corte + Sobrancelha",
+    4000,
+    20,
+    "Corte e alinhamento de sobrancelhas."
+  ],
+  [
+    "Corte + Barba + Sobrancelha",
+    6500,
+    40,
+    "Conjunto de corte, barba e sobrancelhas."
+  ],
+  [
+    "Corte + Barba + Sobrancelha + Limpeza de Pele",
+    11000,
+    80,
+    "Experiência completa com cuidados de pele."
+  ],
+  [
+    "Corte + Bigode",
+    4000,
+    20,
+    "Corte e modelagem de bigode."
+  ],
+  [
+    "Corte + Bigode + Sobrancelha",
+    4500,
+    20,
+    "Corte, bigode e sobrancelhas."
+  ],
+  [
+    "Corte + Sobrancelha + Limpeza de Pele",
+    8500,
+    40,
+    "Corte, sobrancelhas e limpeza de pele."
+  ],
+  [
+    "Graxa",
+    2000,
+    20,
+    "Finalização capilar com graxa."
+  ],
+  [
+    "Limpeza de Pele",
+    5000,
+    20,
+    "Higienização e cuidados de pele."
+  ]
 ].map((x,i)=>({id:"service-demo-"+(i+1),name:x[0],price_cents:x[1],duration_minutes:x[2],description:x[3],sort_order:i+1,active:true}));
 const barbers=[
 {id:"11111111-2222-4333-8444-111111111111",name:"Leo Avelar (personagem fictício)",active:true,sort_order:1},
