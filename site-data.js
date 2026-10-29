@@ -28,6 +28,25 @@
       : hours + "h";
   }
 
+  // Use optimized, resolution-aware variants only for the verified Unsplash CDN.
+  // Custom/admin-uploaded files retain their original addresses unchanged.
+  function photoSourceSet(src, sizes) {
+    try {
+      const url = new URL(String(src || ""), window.location.href);
+      if (url.protocol !== "https:" || url.hostname !== "images.unsplash.com" ||
+          !/^\/photo-[\w-]+$/.test(url.pathname)) return "";
+      const variants = [420, 720, 1100].map(function(width) {
+        const candidate = new URL(url.toString());
+        candidate.searchParams.set("w", String(width));
+        candidate.searchParams.set("auto", "format");
+        return candidate.toString() + " " + width + "w";
+      });
+      return 'srcset="' + escapeHtml(variants.join(", ")) + '" sizes="' + escapeHtml(sizes) + '"';
+    } catch (error) {
+      return "";
+    }
+  }
+
   function normalizeDigits(value) {
     return String(value || "").replace(/\D/g, "");
   }
@@ -339,6 +358,7 @@
       return `
         <figure class="portfolio-photo ${index === 0 ? "portfolio-large" : ""}">
           <img src="${escapeHtml(item.image_url)}"
+               ${photoSourceSet(item.image_url, "(max-width: 680px) 92vw, (max-width: 1024px) 49vw, 34vw")}
                alt="${escapeHtml(item.alt_text || item.caption || "Trabalho VELTRO Barber Atelier")}"
                loading="lazy" decoding="async">
           <figcaption>
