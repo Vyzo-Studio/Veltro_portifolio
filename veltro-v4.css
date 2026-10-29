@@ -1,0 +1,119 @@
+/* VYZO Studio / VELTRO Barber Atelier — V4 editorial enhancement layer.
+   Respect existing design tokens, theme persistence and operative selectors. */
+:root {
+  --veltro-v4-ink:#172A43;
+  --veltro-v4-champagne:#C38B4E;
+  --veltro-v4-divider:rgba(23,42,67,.16);
+}
+.veltro-identity,.veltro-tech-showcase,.veltro-faq {scroll-margin-top:100px;}
+.veltro-identity {padding:clamp(52px,7vw,112px) 0;background:var(--bone);}
+.veltro-identity-grid {display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(24px,7vw,92px);align-items:end;}
+.veltro-identity h2,.veltro-tech-showcase h2,.veltro-faq h2 {font-family:"Bebas Neue",Impact,sans-serif;font-size:clamp(2.7rem,5.6vw,5.8rem);line-height:.99;letter-spacing:.015em;color:var(--navy-deep);margin:0;}
+.veltro-identity-copy {max-width:57ch;}
+.veltro-identity-copy p {color:var(--text);line-height:1.78;font-size:clamp(.94rem,1.2vw,1.06rem);}
+.veltro-text-link {display:inline-flex;align-items:center;gap:12px;margin-top:13px;border-bottom:1px solid var(--orange);padding:0 0 7px;font-weight:800;color:var(--navy-deep);}
+.veltro-text-link span {transition:transform .25s ease;}
+.veltro-text-link:hover span {transform:translate(3px,-3px);}
+.veltro-marquee {overflow:hidden;min-width:0;background:#0C1523;color:#F5F6FA;border-top:1px solid rgba(195,139,78,.35);border-bottom:1px solid rgba(195,139,78,.35);}
+.veltro-marquee-track {display:flex;width:max-content;animation:veltro-marquee 48s linear infinite;}
+.veltro-marquee-track span {flex:0 0 auto;display:inline-block;padding:16px 0;font:700 clamp(.72rem,1.1vw,.93rem)/1.2 Inter,Arial,sans-serif;letter-spacing:.17em;white-space:nowrap;}
+.veltro-marquee-track b {color:#D3A571;padding:0 clamp(12px,1.8vw,30px);}
+@keyframes veltro-marquee {to{transform:translateX(-50%)}}
+.veltro-tech-showcase {background:var(--ice);}
+.veltro-tech-showcase .section-head {margin-bottom:28px;}
+.veltro-tech-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+.veltro-tech-grid article {background:var(--white);border:1px solid var(--line);border-radius:20px;padding:clamp(17px,2.2vw,30px);box-shadow:var(--shadow-soft);min-width:0;}
+.veltro-tech-grid article > span {display:block;color:#A16D35;font-size:.68rem;font-weight:800;letter-spacing:.13em;}
+.veltro-tech-grid h3 {margin:25px 0 11px;font-size:clamp(1.06rem,1.7vw,1.3rem);color:var(--ink);line-height:1.3;}
+.veltro-tech-grid p {margin:0;color:var(--muted);font-size:.89rem;line-height:1.6;}
+.veltro-tech-disclaimer {max-width:88ch;color:var(--muted);font-size:.79rem;line-height:1.7;margin:24px 0 0;}
+.veltro-faq {background:var(--bone);}
+.veltro-faq-grid {display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(20px,7vw,90px);}
+.veltro-faq-grid > div > p:last-child {color:var(--muted);line-height:1.65;max-width:35ch;}
+.veltro-faq-items {display:grid;align-content:start;gap:10px;}
+.veltro-faq details {background:var(--white);border:1px solid var(--line);border-radius:14px;padding:0 19px;box-shadow:var(--shadow-soft);}
+.veltro-faq summary {list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 0;font-weight:750;color:var(--ink);line-height:1.45;}
+.veltro-faq summary::-webkit-details-marker {display:none;}
+.veltro-faq summary::after {content:"+";flex:0 0 20px;font-size:1.35rem;font-weight:400;color:var(--orange);}
+.veltro-faq details[open] summary::after {content:"−";}
+.veltro-faq details p {padding:0 0 19px;margin:0;color:var(--muted);font-size:.93rem;line-height:1.68;}
+.veltro-faq summary:focus-visible,.veltro-photo-close:focus-visible,.veltro-photo-expand:focus-visible,.veltro-gallery-filters button:focus-visible {outline:3px solid #C38B4E;outline-offset:3px;}
+/* Larger galleries: intentional card rhythm, no forced two-row limit. */
+#portfolio .portfolio-grid {grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:minmax(215px,auto);gap:14px;}
+#portfolio .portfolio-photo {min-height:235px;isolation:isolate;}
+#portfolio .portfolio-large {grid-row:span 2;}
+#portfolio .portfolio-photo img {transition:transform .56s cubic-bezier(.22,.74,.24,1),filter .35s ease;filter:saturate(.88) contrast(1.02);}
+@media (hover:hover) and (pointer:fine) {#portfolio .portfolio-photo:hover img {transform:scale(1.045);filter:saturate(.96) contrast(1.03);}}
+#portfolio .portfolio-photo figcaption {pointer-events:none;}
+#portfolio .portfolio-photo figcaption strong {color:#FFFFFF;}
+#portfolio .portfolio-photo-expand {position:absolute;inset:0;z-index:3;background:transparent;border:0;color:transparent;font-size:0;cursor:zoom-in;border-radius:inherit;}
+#portfolio .portfolio-photo-expand:focus-visible {outline-offset:-5px;}
+#portfolio .portfolio-photo[hidden] {display:none !important;}
+.veltro-gallery-filters {display:flex;gap:9px;flex-wrap:wrap;margin:0 0 22px;}
+.veltro-gallery-filters button {min-height:42px;padding:8px 16px;border:1px solid rgba(220,233,248,.35);border-radius:999px;background:rgba(245,246,250,.075);color:#E0E8F2;font:700 .81rem Inter,Arial,sans-serif;cursor:pointer;transition:background .2s,border-color .2s,transform .2s;}
+.veltro-gallery-filters button:hover {border-color:#C38B4E;transform:translateY(-1px);}
+.veltro-gallery-filters button[aria-pressed="true"] {background:#F5F6FA;color:#172A43;border-color:#F5F6FA;}
+.veltro-gallery-filters button[hidden] {display:none !important;}
+.veltro-photo-dialog {width:min(1040px,calc(100vw - 26px));max-height:92dvh;max-height:92vh;overflow:auto;padding:12px 12px 20px;border:1px solid #74859B;border-radius:20px;background:#121E30;color:#F5F6FA;box-shadow:0 30px 100px rgba(0,0,0,.5);}
+.veltro-photo-dialog::backdrop {background:rgba(4,10,20,.82);}
+.veltro-photo-dialog > img {display:block;width:100%;max-height:72vh;object-fit:contain;border-radius:11px;background:#101824;}
+.veltro-photo-close {position:sticky;float:right;top:7px;right:8px;z-index:2;display:grid;place-items:center;margin-bottom:-46px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(12,21,35,.9);color:#fff;font-size:1.8rem;cursor:pointer;}
+.veltro-photo-meta {display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:14px 9px 0;align-items:center;}
+.veltro-photo-meta strong {font-size:1rem;color:#F5F6FA;}
+.veltro-photo-meta p {margin:0;font-size:.77rem;color:#D1DCE9;}
+/* Content should remain visible when JS is disabled or motion is reduced. */
+@media (prefers-reduced-motion:no-preference) {
+  .veltro-reveal {opacity:0;transform:translate3d(0,18px,0);filter:blur(1px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1),filter .65s ease;}
+  .veltro-reveal.veltro-revealed {opacity:1;transform:none;filter:none;}
+}
+.site-header {transition:box-shadow .32s ease,border-color .32s ease,background-color .32s ease;}
+.site-header.veltro-header-scrolled {box-shadow:0 10px 28px rgba(12,21,35,.13);}
+.main-nav a.veltro-nav-active:not(.nav-cta) {border-bottom:2px solid var(--orange);padding-bottom:5px;}
+/* Admin surfaces share the visual language; no accounting styles overridden. */
+.admin-page .admin-section-nav {border-radius:16px;}
+.admin-page .admin-stat-card,.admin-page .management-card,.admin-page .report-card {box-shadow:var(--shadow-soft);border-radius:18px;}
+.admin-page .admin-primary-button {transition:background-color .25s ease,box-shadow .25s ease,transform .25s ease;}
+.admin-page .admin-primary-button:hover:not(:disabled) {transform:translateY(-1px);box-shadow:0 10px 24px rgba(12,21,35,.18);}
+html[data-theme="dark"] .veltro-tech-showcase {background:#172A43;}
+html[data-theme="dark"] .veltro-identity,html[data-theme="dark"] .veltro-faq {background:#0C1523;}
+html[data-theme="dark"] .veltro-identity h2,html[data-theme="dark"] .veltro-tech-showcase h2,html[data-theme="dark"] .veltro-faq h2 {color:#F5F6FA;}
+html[data-theme="dark"] .veltro-tech-grid article,html[data-theme="dark"] .veltro-faq details {background:#1C2F47;border-color:#526A83;}
+html[data-theme="dark"] .veltro-tech-grid h3,html[data-theme="dark"] .veltro-faq summary {color:#F5F6FA;}
+html[data-theme="dark"] .veltro-identity-copy p,html[data-theme="dark"] .veltro-tech-grid p,html[data-theme="dark"] .veltro-faq p {color:#C0CCD9;}
+html[data-theme="dark"] .veltro-text-link {color:#F5F6FA;}
+html[data-theme="dark"] .veltro-tech-grid article > span {color:#E4B987;}
+@media (max-width:1024px) {
+  .veltro-tech-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #portfolio .portfolio-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  #portfolio .portfolio-large {grid-row:auto;grid-column:span 2;min-height:340px;}
+}
+@media (max-width:680px) {
+  .veltro-identity-grid,.veltro-faq-grid {grid-template-columns:1fr;gap:20px;}
+  .veltro-identity,.veltro-faq {padding:48px 0;}
+  .veltro-tech-grid {grid-template-columns:1fr;gap:11px;}
+  .veltro-tech-grid article {padding:19px;}
+  .veltro-tech-grid h3 {margin:13px 0 7px;}
+  #portfolio .portfolio-grid {grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(180px,auto);gap:9px;}
+  #portfolio .portfolio-large {min-height:265px;}
+  #portfolio .portfolio-photo {min-height:180px;}
+  #portfolio .portfolio-note {min-height:210px;}
+  #portfolio .portfolio-photo figcaption {bottom:10px;left:11px;right:10px;display:block;}
+  #portfolio .portfolio-photo figcaption span {display:block;font-size:.68rem;}
+  #portfolio .portfolio-photo figcaption strong {font-size:.75rem;line-height:1.3;display:block;}
+  .veltro-gallery-filters {flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain;padding-bottom:8px;}
+  .veltro-gallery-filters button {white-space:nowrap;flex:0 0 auto;}
+  .veltro-faq details {padding:0 14px;}
+  .veltro-faq summary {padding:16px 0;font-size:.92rem;}
+  .veltro-marquee-track span {padding:13px 0;}
+}
+@media (max-width:374px) {
+  #portfolio .portfolio-grid {grid-template-columns:1fr;}
+  #portfolio .portfolio-large {grid-column:auto;min-height:245px;}
+  #portfolio .portfolio-photo {min-height:240px;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .veltro-marquee-track {animation:none;}
+  .veltro-reveal {opacity:1;transform:none;filter:none;transition:none;}
+  .site-header,.main-nav a,.veltro-text-link span,.veltro-gallery-filters button,.admin-page .admin-primary-button {transition:none !important;}
+  #portfolio .portfolio-photo img {transition:none !important;}
+}
