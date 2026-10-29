@@ -47,6 +47,7 @@ test("VELTRO curated gallery filters, expands, dismisses and retains source meta
  await expect(dialog).toBeVisible();
  await expect(dialog.locator("img")).toHaveAttribute("alt",/barbeiro/i);
  await expect(dialog.locator(".veltro-photo-meta")).toContainText("Mr Shave");
+ await expect(dialog.locator(".veltro-photo-source")).toHaveAttribute("href",/unsplash\.com\/photos\/barber-trimming-beard/);
  await page.keyboard.press("Escape");
  await expect(dialog).toBeHidden();
  await page.locator("[data-veltro-filter='all']").click();
