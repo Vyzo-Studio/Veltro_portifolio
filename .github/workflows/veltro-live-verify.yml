@@ -32,7 +32,7 @@ jobs:
           base=https://vyzo-studio.github.io/gng_barbearia
           for attempt in $(seq 1 48); do
             synced=true
-            for file in index.html admin.html privacidade.html termos.html config.js demo-fixtures.js assets/veltro-logo-dark.svg assets/veltro-logo-light.svg; do
+            for file in index.html admin.html privacidade.html termos.html config.js demo-fixtures.js demo-brand.css theme.js assets/veltro-grain.svg assets/veltro-logo-dark.svg assets/veltro-logo-light.svg; do
               target="/tmp/veltro-${file//\//_}"
               if ! curl --silent --show-error --fail --max-time 12 \
                     -H 'Cache-Control: no-cache' \
