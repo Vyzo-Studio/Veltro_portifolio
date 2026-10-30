@@ -48,6 +48,8 @@ html[data-theme="dark"] .hero .quick-info :is(strong,.important-number) {color:#
 }
 .veltro-service-filters button[aria-pressed="true"]{background:#172A43;color:#F5F6FA;border-color:#172A43;}
 .veltro-service-filters button:hover:not([aria-pressed="true"]){border-color:#A87B4B;background:rgba(195,139,78,.065);}
+.veltro-service-status{margin-left:auto;color:var(--muted);font:700 .76rem "Inter",sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap;}
+html[data-theme="dark"] .veltro-service-status{color:#C0CCD9;}
 .veltro-service-filters button:focus-visible{outline:3px solid var(--v5-champagne);outline-offset:3px;}
 #servicos .price-table-shell {border-radius:var(--v5-radius-lg);overflow:hidden;box-shadow:var(--v5-shadow);}
 #servicos .price-table tr[hidden]{display:none !important;}
@@ -131,6 +133,7 @@ html[data-theme="dark"] .veltro-faq details {background:#1C2F47;}
  .hero .quick-info span{font-size:.55rem;letter-spacing:.04em;}
  .veltro-service-filters{flex-wrap:nowrap;overflow:auto hidden;scrollbar-width:none;padding:1px 0 11px;overscroll-behavior-x:contain;}
  .veltro-service-filters button{flex:0 0 auto;white-space:nowrap;min-height:42px;padding:9px 13px;font-size:.78rem;}
+ .veltro-service-status{position:sticky;right:0;align-self:center;padding:8px 0 8px 10px;background:var(--bone);}html[data-theme="dark"] .veltro-service-status{background:#0C1523;}
  .veltro-booking-progress {gap:5px;}
  .veltro-booking-progress span {padding:6px 9px;font-size:.66rem;}
  #portfolio .portfolio-grid {grid-auto-rows:minmax(190px,auto);}
