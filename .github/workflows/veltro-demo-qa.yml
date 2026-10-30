@@ -2,7 +2,7 @@ name: VELTRO Independent Demo QA
 
 on:
   push:
-    branches: [work/vyzo-independent-demo-v2, work/veltro-premium-grain-v1, work/veltro-v4-experience, main]
+    branches: [work/vyzo-independent-demo-v2, work/veltro-premium-grain-v1, work/veltro-v4-experience, work/veltro-v5-singularity, main]
   workflow_dispatch:
 
 permissions:
@@ -44,7 +44,7 @@ jobs:
       - name: Verify public site, disconnected admin, legal pages and viewports
         run: |
           mkdir -p artifacts
-          npx playwright test tests/veltro-demo-browser.spec.cjs tests/veltro-grain-visual.spec.cjs tests/veltro-v4-experience.spec.cjs --reporter=line --workers=1
+          npx playwright test tests/veltro-demo-browser.spec.cjs tests/veltro-grain-visual.spec.cjs tests/veltro-v4-experience.spec.cjs tests/veltro-v5-singularity.spec.cjs --reporter=line --workers=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
