@@ -29,10 +29,10 @@ jobs:
             echo "Original establishment data found in demo." >&2
             exit 1
           fi
-          base=https://vyzo-studio.github.io/gng_barbearia
+          base=https://vyzo-studio.github.io/Veltro_portifolio
           for attempt in $(seq 1 48); do
             synced=true
-            for file in index.html admin.html privacidade.html termos.html config.js demo-fixtures.js demo-brand.css veltro-v4.css site-data.js veltro-experience.js veltro-v4-i18n.js theme.js assets/veltro-grain.svg assets/veltro-logo-dark.svg assets/veltro-logo-light.svg; do
+            for file in index.html admin.html privacidade.html termos.html config.js demo-fixtures.js demo-brand.css veltro-v4.css veltro-v5.css site-data.js veltro-experience.js veltro-v4-i18n.js theme.js assets/veltro-grain.svg assets/veltro-logo-dark.svg assets/veltro-logo-light.svg; do
               target="/tmp/veltro-${file//\//_}"
               if ! curl --silent --show-error --fail --max-time 12 \
                     -H 'Cache-Control: no-cache' \
