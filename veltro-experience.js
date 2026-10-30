@@ -118,11 +118,11 @@
 
  // Progressive category navigation: preserve original table rows and booking event handlers.
  const serviceWords={
-  "pt-BR":["Todos","Cortes","Barba","Combinações","Cuidados","Filtrar serviços","Serviço","Profissional","Data","Horário"],
-  en:["All","Haircuts","Beard","Combos","Care","Filter services","Service","Barber","Date","Time"],
-  es:["Todos","Cortes","Barba","Combinaciones","Cuidados","Filtrar servicios","Servicio","Profesional","Fecha","Hora"],
-  ja:["すべて","カット","ひげ","セット","ケア","サービスを絞り込む","サービス","担当者","日付","時間"],
-  de:["Alle","Haarschnitte","Bart","Kombinationen","Pflege","Leistungen filtern","Leistung","Barber","Datum","Uhrzeit"]
+  "pt-BR":["Todos","Cortes","Barba","Combinações","Cuidados","Filtrar serviços","Serviço","Profissional","Data","Horário","Etapas do agendamento"],
+  en:["All","Haircuts","Beard","Combos","Care","Filter services","Service","Barber","Date","Time","Booking progress"],
+  es:["Todos","Cortes","Barba","Combinaciones","Cuidados","Filtrar servicios","Servicio","Profesional","Fecha","Hora","Pasos de reserva"],
+  ja:["すべて","カット","ひげ","セット","ケア","サービスを絞り込む","サービス","担当者","日付","時間","予約の進行状況"],
+  de:["Alle","Haarschnitte","Bart","Kombinationen","Pflege","Leistungen filtern","Leistung","Barber","Datum","Uhrzeit","Buchungsfortschritt"]
  };
  const categoryKeys=["all","cuts","beard","combos","care"];
  let selectedCategory="all",serviceFilterBar=null;
@@ -189,11 +189,12 @@
      progress=document.createElement("div");
      progress.className="veltro-booking-progress";
      progress.setAttribute("role","group");
-     progress.setAttribute("aria-label","Etapas do agendamento");
+     progress.setAttribute("aria-label",serviceWordsForLocale()[10]);
      const layout=booking.querySelector(".booking-layout");
      layout?.parentElement.insertBefore(progress,layout);
    }
-   const labels=serviceWordsForLocale().slice(6);
+   progress.setAttribute("aria-label",serviceWordsForLocale()[10]);
+   const labels=serviceWordsForLocale().slice(6,10);
    progress.replaceChildren(...labels.map((label,i)=>{
      const span=document.createElement("span");span.textContent=(i+1)+". "+label;
      span.dataset.bookingProgress=String(i+1);return span;
