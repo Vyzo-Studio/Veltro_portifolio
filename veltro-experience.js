@@ -150,12 +150,13 @@
    const mobileToggle=document.getElementById("mobile-services-toggle");
    if(selectedCategory==="all"){
      for(const {row} of rows){row.hidden=false;}
-     if(mobileToggle){mobileToggle.hidden=false;window.dispatchEvent(new Event("resize"));}
    }else{
      for(const {row,group} of rows){row.hidden=group!==selectedCategory;}
-     if(mobileToggle)mobileToggle.hidden=true;
    }
+   // The old mobile "show more" control conflicts with accessible category tabs.
+   if(mobileToggle){mobileToggle.hidden=true;mobileToggle.style.display="none";}
    serviceFilterBar?.querySelectorAll("button").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.serviceCategory===selectedCategory)));
+   const hint=document.querySelector("#servicos .veltro-service-status");if(hint){const count=rows.filter(x=>!x.row.hidden).length;hint.textContent=String(count)+" / "+String(rows.length); }
  }
  function initServiceFilters(){
    const section=document.getElementById("servicos"),target=section?.querySelector(".price-table-shell");
@@ -165,15 +166,18 @@
      serviceFilterBar.className="veltro-service-filters";
      serviceFilterBar.setAttribute("role","group");
      target.parentElement.insertBefore(serviceFilterBar,target);
+     const count=document.createElement("span");count.className="veltro-service-status";count.setAttribute("role","status");count.setAttribute("aria-live","polite");serviceFilterBar.appendChild(count);
    }
    serviceFilterBar.setAttribute("aria-label",serviceWordsForLocale()[5]);
    const words=serviceWordsForLocale();
+   const countElement=serviceFilterBar.querySelector(".veltro-service-status");
    serviceFilterBar.replaceChildren(...categoryKeys.map((key,i)=>{
       const button=document.createElement("button");
       button.type="button";button.dataset.serviceCategory=key;button.textContent=words[i];
       button.addEventListener("click",()=>{selectedCategory=key;applyServiceFilter();});
       return button;
    }));
+   if(countElement)serviceFilterBar.appendChild(countElement);
    applyServiceFilter();
  }
  let bookingObserver=null;
@@ -215,7 +219,7 @@
    sync();
  }
 
- function init(){watchHeader();enhanceGallery();initServiceFilters();initBookingProgress();scanReveals()}
+ function init(){watchHeader();enhanceGallery();initServiceFilters();initBookingProgress();scanReveals();window.addEventListener("resize",applyServiceFilter,{passive:true});}
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
  window.addEventListener("gng:site-data-ready",()=>{enhanceGallery();initServiceFilters();initBookingProgress();});
  window.addEventListener("gng:locale-changed",()=>{enhanceGallery();initServiceFilters();initBookingProgress();});
