@@ -115,8 +115,108 @@
    el.classList.add("veltro-reveal");galleryObserver.observe(el);
   });
  }
- function init(){watchHeader();enhanceGallery();scanReveals()}
+
+ // Progressive category navigation: preserve original table rows and booking event handlers.
+ const serviceWords={
+  "pt-BR":["Todos","Cortes","Barba","Combinações","Cuidados","Filtrar serviços","Serviço","Profissional","Data","Horário"],
+  en:["All","Haircuts","Beard","Combos","Care","Filter services","Service","Barber","Date","Time"],
+  es:["Todos","Cortes","Barba","Combinaciones","Cuidados","Filtrar servicios","Servicio","Profesional","Fecha","Hora"],
+  ja:["すべて","カット","ひげ","セット","ケア","サービスを絞り込む","サービス","担当者","日付","時間"],
+  de:["Alle","Haarschnitte","Bart","Kombinationen","Pflege","Leistungen filtern","Leistung","Barber","Datum","Uhrzeit"]
+ };
+ const categoryKeys=["all","cuts","beard","combos","care"];
+ let selectedCategory="all",serviceFilterBar=null;
+ function serviceWordsForLocale(){return serviceWords[locale()]||serviceWords["pt-BR"]}
+ function groupFor(name){
+   const value=String(name||"").toLowerCase();
+   if(value.includes("+"))return "combos";
+   if(value==="corte")return "cuts";
+   if(value==="barba")return "beard";
+   return "care";
+ }
+ function serviceRows(){return [...document.querySelectorAll("#servicos .price-table tbody tr")].filter(row=>row.querySelector(".table-action a"))}
+ function serviceCategoryMap(){
+   const configured=window.VELTRO_DEMO?.services||[];
+   const names=configured.map(x=>x.name);
+   return serviceRows().map((row,i)=>{
+     const serviceName=row.querySelector("[data-dynamic-service-link]")?.getAttribute("data-dynamic-service-link")||
+       row.querySelector("[data-service-link]")?.getAttribute("data-service-link")||names[i]||
+       row.querySelector("td")?.textContent?.trim()||"";
+     return {row,group:groupFor(serviceName)};
+   });
+ }
+ function applyServiceFilter(){
+   const rows=serviceCategoryMap();
+   const mobileToggle=document.getElementById("mobile-services-toggle");
+   if(selectedCategory==="all"){
+     for(const {row} of rows){row.hidden=false;}
+     if(mobileToggle){mobileToggle.hidden=false;window.dispatchEvent(new Event("resize"));}
+   }else{
+     for(const {row,group} of rows){row.hidden=group!==selectedCategory;}
+     if(mobileToggle)mobileToggle.hidden=true;
+   }
+   serviceFilterBar?.querySelectorAll("button").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.serviceCategory===selectedCategory)));
+ }
+ function initServiceFilters(){
+   const section=document.getElementById("servicos"),target=section?.querySelector(".price-table-shell");
+   if(!target||!serviceRows().length)return;
+   if(!serviceFilterBar){
+     serviceFilterBar=document.createElement("div");
+     serviceFilterBar.className="veltro-service-filters";
+     serviceFilterBar.setAttribute("role","group");
+     target.parentElement.insertBefore(serviceFilterBar,target);
+   }
+   serviceFilterBar.setAttribute("aria-label",serviceWordsForLocale()[5]);
+   const words=serviceWordsForLocale();
+   serviceFilterBar.replaceChildren(...categoryKeys.map((key,i)=>{
+      const button=document.createElement("button");
+      button.type="button";button.dataset.serviceCategory=key;button.textContent=words[i];
+      button.addEventListener("click",()=>{selectedCategory=key;applyServiceFilter();});
+      return button;
+   }));
+   applyServiceFilter();
+ }
+ let bookingObserver=null;
+ function initBookingProgress(){
+   const booking=document.getElementById("agendamento"),steps=booking?.querySelector(".booking-main");
+   if(!steps)return;
+   let progress=booking.querySelector(".veltro-booking-progress");
+   if(!progress){
+     progress=document.createElement("div");
+     progress.className="veltro-booking-progress";
+     progress.setAttribute("role","group");
+     progress.setAttribute("aria-label","Etapas do agendamento");
+     const layout=booking.querySelector(".booking-layout");
+     layout?.parentElement.insertBefore(progress,layout);
+   }
+   const labels=serviceWordsForLocale().slice(6);
+   progress.replaceChildren(...labels.map((label,i)=>{
+     const span=document.createElement("span");span.textContent=(i+1)+". "+label;
+     span.dataset.bookingProgress=String(i+1);return span;
+   }));
+   function sync(){
+     const hasService=Boolean(document.getElementById("booking-service")?.value);
+     const hasBarber=Boolean(document.getElementById("booking-barber")?.value);
+     const hasDate=Boolean(booking.querySelector("#booking-days [aria-pressed='true']"));
+     const hasTime=Boolean(booking.querySelector("#booking-times [aria-pressed='true']"));
+     const done=[hasService,hasBarber,hasDate,hasTime];
+     const current=Math.min(3,Math.max(0,done.findIndex(v=>!v)===-1?3:done.findIndex(v=>!v)));
+     progress.querySelectorAll("span").forEach((el,i)=>{
+       el.classList.toggle("is-complete",i<current);
+       el.classList.toggle("is-active",i===current);
+     });
+   }
+   booking.addEventListener("change",sync,{capture:true});
+   booking.addEventListener("click",()=>requestAnimationFrame(sync),{capture:true});
+   if(!bookingObserver){
+     bookingObserver=new MutationObserver(sync);
+     bookingObserver.observe(steps,{attributes:true,childList:true,subtree:true,attributeFilter:["aria-pressed"]});
+   }
+   sync();
+ }
+
+ function init(){watchHeader();enhanceGallery();initServiceFilters();initBookingProgress();scanReveals()}
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init,{once:true});else init();
- window.addEventListener("gng:site-data-ready",enhanceGallery);
- window.addEventListener("gng:locale-changed",enhanceGallery);
+ window.addEventListener("gng:site-data-ready",()=>{enhanceGallery();initServiceFilters();initBookingProgress();});
+ window.addEventListener("gng:locale-changed",()=>{enhanceGallery();initServiceFilters();initBookingProgress();});
 })();
