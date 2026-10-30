@@ -3,6 +3,7 @@
 O portfólio utiliza fotografias independentes publicadas na Unsplash sob a [Licença Unsplash](https://unsplash.com/license). A licença permite uso comercial sem atribuição obrigatória, mas fotos com pessoas e marcas não devem sugerir endosso ou vínculo com a VELTRO ou VYZO Studio.
 
 | ID | Uso | Autor | Link verificado |
+| V5 hero (exclusivo) | Abertura editorial — barbeiro em atendimento, sem vínculo com VELTRO | André Reis | https://unsplash.com/photos/a-man-getting-a-haircut-at-a-barber-shop-z0Cyh9nGLFY |
 |---|---|---|---|
 | photo-demo-1 | Portfólio — ofício | mehdi pezhvak | https://unsplash.com/photos/a-barber-is-cutting-hair-in-a-salon-NATMVNvlB_c |
 | photo-demo-2 | Portfólio — corte | Chris Knight | https://unsplash.com/photos/person-trimming-mans-hair-vI3m5UnZ0aQ |
