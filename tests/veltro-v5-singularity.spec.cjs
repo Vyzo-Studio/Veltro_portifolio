@@ -14,7 +14,7 @@ test("V5 independent repo, documentary hero, CTA and section hierarchy",async({p
  expect(order.indexOf("portfolio")).toBeLessThan(order.indexOf("agendamento"));
  await expect(page.locator(".final-cta h2")).toContainText("IMAGINE ESSA EXPERIÊNCIA");
  const sales=page.locator(".final-cta .veltro-sales-link");
- await expect(sales).toHaveAttribute("href",/wa.me\/556185154156/);
+ await expect(sales).toHaveAttribute("href",/(?:wa\.me\/556185154156|web\.whatsapp\.com\/send\?phone=556185154156)/);
  await expect(page.locator(".final-cta a[href='#agendamento']")).toBeVisible();
  await expect(page.locator(".veltro-demo-ribbon")).toContainText("PROJETO DEMONSTRATIVO");
 });
@@ -67,7 +67,7 @@ for(const theme of ["light","dark"]){
    expect(data.scroll,"horizontal overflow "+theme+" "+width).toBeLessThanOrEqual(4);
    expect(data.width).toBeGreaterThan(250);
    expect(data.visibleHero).toBe(true);
-   expect(data.button).toContain("wa.me");
+   expect(data.button).toMatch(/(?:wa\.me\/556185154156|web\.whatsapp\.com\/send\?phone=556185154156)/);
    expect(data.buttons).toBe(5);
    if(width===390||width===1366)await page.screenshot({path:"artifacts/veltro-v5-"+theme+"-"+width+".png",fullPage:false});
   });
