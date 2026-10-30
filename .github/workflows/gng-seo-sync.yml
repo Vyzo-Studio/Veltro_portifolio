@@ -1,7 +1,7 @@
 name: VELTRO Demo SEO Validation
 on:
   push:
-    branches: [work/vyzo-independent-demo-v2]
+    branches: [work/veltro-v5-singularity, main]
     paths:
       - 'scripts/sync-seo.cjs'
       - 'index.html'
