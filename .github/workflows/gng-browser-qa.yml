@@ -36,7 +36,7 @@ jobs:
           for attempt in $(seq 1 45); do
             if curl --retry 2 --silent --show-error --fail --max-time 12 \
               -H 'Cache-Control: no-cache' \
-              "https://vyzo-studio.github.io/gng_barbearia/?qa=${GITHUB_SHA}-${attempt}" \
+              "https://vyzo-studio.github.io/Veltro_portifolio/?qa=${GITHUB_SHA}-${attempt}" \
               -o /tmp/gng-live-index.html && grep -Fq "$expected" /tmp/gng-live-index.html; then
               echo "Published page uses the intended CSS version."
               exit 0
@@ -55,7 +55,7 @@ jobs:
               live="/tmp/gng-published-${file//\//_}"
               if ! curl --retry 2 --silent --show-error --fail --max-time 12 \
                 -H 'Cache-Control: no-cache' \
-                "https://vyzo-studio.github.io/gng_barbearia/${file}?qa=${GITHUB_SHA}-${attempt}" \
+                "https://vyzo-studio.github.io/Veltro_portifolio/${file}?qa=${GITHUB_SHA}-${attempt}" \
                 -o "$live" || ! cmp -s "$file" "$live"; then
                 match=false
                 break

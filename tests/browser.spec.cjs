@@ -1,6 +1,6 @@
 const {test,expect}=require('@playwright/test');
 const path=require('node:path');
-const base='https://vyzo-studio.github.io/gng_barbearia/';
+const base='https://vyzo-studio.github.io/Veltro_portifolio/';
 const sizes=[320,375,390,430,768,1366,1920];
 const business={settings:{
   business_name:'GNG Barbearia',primary_color:'#22334f',secondary_color:'#142238',

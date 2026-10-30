@@ -11,7 +11,7 @@ function businessDaysLabel(days) {
   if (days.join(",")==="1,2,3,4,5,6,7") return "Todos os dias";
   return "Atendimento: " + days.map(day=>DAYS_PT[day]).join(", ");
 }
-const BASE = "https://vyzo-studio.github.io/gng_barbearia/";
+const BASE = "https://vyzo-studio.github.io/Veltro_portifolio/";
 function escapeAttr(value) {
   return String(value).replace(/&/g,"&amp;").replace(/"/g,"&quot;")
     .replace(/</g,"&lt;").replace(/>/g,"&gt;");

@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const AxeBuilder=require('@axe-core/playwright').default;
-const base='https://vyzo-studio.github.io/gng_barbearia/';
+const base='https://vyzo-studio.github.io/Veltro_portifolio/';
 test.use({bypassCSP:true});
 for (const target of ['index.html','admin.html']) {
   for (const width of [390,1366]) {

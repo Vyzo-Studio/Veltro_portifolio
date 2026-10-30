@@ -1,5 +1,5 @@
 const {test,expect}=require('@playwright/test');
-const base='https://vyzo-studio.github.io/gng_barbearia/';
+const base='https://vyzo-studio.github.io/Veltro_portifolio/';
 const languages=[
  ["pt-BR","Enviar solicitação","Política de Privacidade","Termos de Serviço"],
  ["en","Send request","Privacy Policy","Terms of Service"],

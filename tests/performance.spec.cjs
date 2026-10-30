@@ -1,7 +1,7 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const path=require('node:path');
-const base='https://vyzo-studio.github.io/gng_barbearia/';
+const base='https://vyzo-studio.github.io/Veltro_portifolio/';
 test('real Chromium performance measurements, public site and login',async({page})=>{
   const records=[];
   for(const target of ['index.html','admin.html']){

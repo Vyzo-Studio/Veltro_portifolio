@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /gng_barbearia/
-Disallow: /gng_barbearia/admin.html
-Sitemap: https://vyzo-studio.github.io/gng_barbearia/sitemap.xml
+Allow: /Veltro_portifolio/
+Disallow: /Veltro_portifolio/admin.html
+Sitemap: https://vyzo-studio.github.io/Veltro_portifolio/sitemap.xml
