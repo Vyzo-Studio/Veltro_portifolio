@@ -39,5 +39,15 @@
  ["Como ter uma solução personalizada para meu negócio?","How can I get a customized solution for my business?","¿Cómo consigo una solución personalizada para mi negocio?","自分の事業向けにカスタマイズできますか？","Wie erhalte ich eine individuelle Lösung für mein Unternehmen?"],
  ["Converse com a VYZO Studio pelo WhatsApp comercial. O projeto pode ser adaptado à identidade, serviços e rotina do seu negócio.","Contact VYZO Studio via business WhatsApp. The project can be adapted to your brand, services and operations.","Contacta con VYZO Studio por WhatsApp comercial. El proyecto puede adaptarse a tu marca, servicios y operaciones.","VYZO StudioのビジネスWhatsAppにお問い合わせください。ブランド、サービス、運営に合わせたカスタマイズが可能です。","Kontaktieren Sie VYZO Studio per Business-WhatsApp. Das Projekt kann an Ihre Marke, Leistungen und Abläufe angepasst werden."]
  ];
+ rows.push(
+ ["Corte, barba e cuidados masculinos em uma experiência digital de precisão. Conceito fictício desenvolvido pela VYZO Studio.","Haircuts, beard care and men's grooming in a precise digital experience. A fictional concept developed by VYZO Studio.","Corte, barba y cuidado masculino en una experiencia digital precisa. Concepto ficticio desarrollado por VYZO Studio.","カット、ひげ、メンズケアを洗練されたデジタル体験に。VYZO Studioによる架空のコンセプトです。","Haarschnitt, Bartpflege und Herrengrooming in einem präzisen digitalen Erlebnis. Ein fiktives Konzept von VYZO Studio."],
+ ["Ver serviços","View services","Ver servicios","サービスを見る","Leistungen ansehen"],
+ ["IMAGINE ESSA EXPERIÊNCIA COM A IDENTIDADE DO SEU NEGÓCIO.","IMAGINE THIS EXPERIENCE WITH YOUR BUSINESS'S IDENTITY.","IMAGINA ESTA EXPERIENCIA CON LA IDENTIDAD DE TU NEGOCIO.","あなたのブランドらしい体験を想像してください。","STELLEN SIE SICH DIESES ERLEBNIS IM STIL IHRES UNTERNEHMENS VOR."],
+ ["Design personalizado, agendamento digital e ferramentas de gestão em uma solução desenvolvida para a sua empresa.","Custom design, digital booking and management tools in a solution developed for your business.","Diseño personalizado, reservas digitales y herramientas de gestión en una solución para tu negocio.","カスタムデザイン、オンライン予約、管理ツールを一つに。あなたの事業に合わせたソリューションです。","Individuelles Design, Online-Buchung und Verwaltungstools in einer Lösung für Ihr Unternehmen."],
+ ["Explorar a demonstração","Explore the demo","Explorar la demostración","デモを見る","Demo entdecken"],
+ ["QUERO UM SITE COMO ESTE","I WANT A WEBSITE LIKE THIS","QUIERO UNA WEB COMO ESTA","このようなサイトを依頼する","ICH MÖCHTE SO EINE WEBSITE"],
+ ["Barbeiro realizando corte de cabelo com acabamento de precisão","Barber giving a precise haircut","Barbero realizando un corte preciso","丁寧にヘアカットを行う理容師","Barber bei einem präzisen Haarschnitt"],
+ ["Fotografia ilustrativa de barbeiro profissional realizando corte em cliente, por André Reis (Unsplash)","Illustrative photograph of a barber cutting a client's hair by André Reis (Unsplash)","Fotografía ilustrativa de un barbero cortando el pelo de un cliente, de André Reis (Unsplash)","理容師が客を散髪するイメージ写真。撮影：André Reis (Unsplash)","Illustratives Foto eines Barbers beim Haarschnitt von André Reis (Unsplash)"]
+ );
  window.GNG_I18N?.extend?.(rows);
 })();
