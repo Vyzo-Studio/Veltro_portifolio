@@ -109,13 +109,13 @@ open_time:"09:00",close_time:"19:30",open_weekdays:[1,2,3,4,5,6],slot_interval_m
 primary_color:"#172A43",secondary_color:"#0C1523",accent_color:"#C38B4E",
 logo_url:"assets/veltro-logo-dark.svg",instagram_url:"",
 site_texts:{
-hero_title:"PRECISÃO",hero_subtitle:"EM CADA DETALHE.",
-hero_lead:"Uma experiência fictícia de grooming para apresentar o poder de um site e sistema de gestão criados pela VYZO Studio.",
+hero_title:"PRESENÇA",hero_subtitle:"COMEÇA NO CUIDADO.",
+hero_lead:"Corte, barba e cuidados masculinos em uma experiência digital de precisão. Conceito fictício desenvolvido pela VYZO Studio.",
 services_title:"Serviços do conceito",services_intro:"Valores fictícios — apenas demonstração, sem contratação.",
 portfolio_title:"Direção criativa",portfolio_intro:"Fotografias licenciadas e ilustrativas, sem vínculo com estabelecimento real.",
 space_title:"Um ambiente imaginado",space_intro:"Imagens de referência: a VELTRO não possui endereço ou unidade física.",
 memberships_title:"Assinaturas de exemplo",memberships_intro:"Planos demonstrativos sem cobrança ou contratação.",
-location_title:"Um conceito, não um endereço",final_cta_title:"Transforme a presença da sua marca.",final_cta_text:"Esta experiência foi desenvolvida pela VYZO Studio. Solicite um projeto para o seu negócio."
+location_title:"Um conceito, não um endereço",final_cta_title:"IMAGINE ESSA EXPERIÊNCIA COM A IDENTIDADE DO SEU NEGÓCIO.",final_cta_text:"Design personalizado, agendamento digital e ferramentas de gestão em uma solução desenvolvida para a sua empresa."
 }};
 function read(){
  try{const value=JSON.parse(sessionStorage.getItem(KEY)||"[]");return Array.isArray(value)?value.filter(x=>x&&typeof x==="object").slice(-LIMIT):[]}
