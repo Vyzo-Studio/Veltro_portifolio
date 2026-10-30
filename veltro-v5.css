@@ -1,0 +1,153 @@
+/* VELTRO SINGULARITY V5 · premium editorial refinement
+   Additive tokens and layers; no booking/payment backend changes. */
+:root{
+ --v5-ivory:#FAF8F4;--v5-pearl:#EDF1F5;--v5-navy:#172A43;--v5-night:#0C1523;
+ --v5-champagne:#C38B4E;--v5-blue:#D6E0EC;
+ --v5-radius:17px;--v5-radius-lg:26px;
+ --v5-shadow:0 15px 42px rgba(12,21,35,.08);
+}
+html {scroll-padding-top:100px;}
+body {text-wrap:pretty;}
+.hero {padding:clamp(45px,6vw,88px) 0 clamp(52px,6vw,88px);}
+.hero-grid {grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);gap:clamp(28px,5vw,80px);}
+.hero-content {min-width:0;}
+.hero h1 {max-width:12ch;font-size:clamp(4rem,7.4vw,7.65rem);line-height:.96;letter-spacing:.002em;text-wrap:balance;}
+.hero h1 span {max-width:13ch;}
+.hero-lead {max-width:49ch;}
+.hero-media {min-height:clamp(470px,48vw,680px);width:100%;}
+.hero .photo-main {position:absolute;inset:0;border-radius:clamp(18px,2vw,28px);box-shadow:0 22px 65px rgba(12,21,35,.15);}
+.hero .photo-main img {object-fit:cover;object-position:50% 37%;filter:saturate(.77) contrast(1.055);}
+.hero .photo-main::after {content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(12,21,35,.35));pointer-events:none;}
+.hero .photo-secondary {display:none;}
+.hero .hero-brand-card,html[data-theme="dark"] .hero .hero-brand-card {
+ position:absolute;right:clamp(-8px,-.5vw,0px);bottom:clamp(15px,3vw,32px);
+ width:min(70%,270px);min-height:120px;padding:21px;gap:12px;
+ border:1px solid rgba(195,139,78,.36);
+ background:rgba(250,248,244,.965);color:#172A43;
+ box-shadow:0 18px 48px rgba(12,21,35,.16);border-radius:17px;
+}
+.hero .hero-brand-card img {width:min(100%,148px);height:auto;max-height:56px;object-fit:contain;object-position:left center;}
+.hero .hero-brand-card p {font-size:clamp(.72rem,1vw,.86rem);margin:4px 0 0;letter-spacing:.065em;line-height:1.4;}
+html[data-theme="dark"] .hero .hero-brand-card p {color:#172A43;}
+.hero .quick-info {gap:8px;margin-top:32px;}
+.hero .quick-info div {border-radius:var(--v5-radius);box-shadow:none;}
+html:not([data-theme="dark"]) .hero .quick-info div {background:rgba(255,255,255,.56);}
+html[data-theme="dark"] .hero .quick-info div {background:rgba(23,42,67,.57);border-color:rgba(214,224,236,.26);}
+html[data-theme="dark"] .hero .quick-info :is(strong,.important-number) {color:#F5F6FA !important;}
+.hero .hero-actions .btn {min-height:52px;}
+.hero .btn-primary {box-shadow:0 11px 26px rgba(12,21,35,.15);}
+.veltro-demo-ribbon {font-size:.82rem;}
+/* Compact, genuinely navigable price catalog, never decorative service boxes. */
+.veltro-service-filters {display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:3px 0 24px;}
+.veltro-service-filters button {
+ appearance:none;border:1px solid rgba(23,42,67,.22);border-radius:999px;
+ background:transparent;color:var(--navy-deep);padding:9px 17px;
+ min-height:43px;font:700 .82rem "Inter",sans-serif;
+ transition:background-color .2s ease,border-color .2s ease,transform .2s ease;
+ cursor:pointer;
+}
+.veltro-service-filters button[aria-pressed="true"]{background:#172A43;color:#F5F6FA;border-color:#172A43;}
+.veltro-service-filters button:hover:not([aria-pressed="true"]){border-color:#A87B4B;background:rgba(195,139,78,.065);}
+.veltro-service-filters button:focus-visible{outline:3px solid var(--v5-champagne);outline-offset:3px;}
+#servicos .price-table-shell {border-radius:var(--v5-radius-lg);overflow:hidden;box-shadow:var(--v5-shadow);}
+#servicos .price-table tr[hidden]{display:none !important;}
+#servicos .price-table tbody tr{transition:background-color .18s ease;}
+#servicos .price-table .table-action a {min-height:40px;display:inline-flex;align-items:center;justify-content:center;}
+/* Booking as a progressive stepper, without hiding or replacing functional inputs. */
+.veltro-booking-progress {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 24px;}
+.veltro-booking-progress span {display:inline-flex;gap:7px;align-items:center;font:750 .76rem "Inter",sans-serif;color:var(--muted);padding:8px 12px;border-radius:999px;border:1px solid var(--line);}
+.veltro-booking-progress span::before {content:"";width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#A4ADBB;}
+.veltro-booking-progress span.is-complete {color:var(--navy-deep);background:rgba(195,139,78,.1);border-color:rgba(195,139,78,.36);}
+.veltro-booking-progress span.is-complete::before {background:var(--v5-champagne);}
+.veltro-booking-progress span.is-active {color:#FFFFFF;background:#172A43;border-color:#172A43;}
+.veltro-booking-progress span.is-active::before {background:#E4B887;}
+.booking-step {border-radius:var(--v5-radius);scroll-margin-top:110px;}
+.booking-summary {border-radius:var(--v5-radius-lg);}
+.booking-section .section-head p {max-width:54ch;}
+/* Card surfaces, rhythm and typography. */
+.section-head {gap:24px;}
+.section-head h2,.veltro-identity h2,.veltro-faq h2,.veltro-tech-showcase h2{text-wrap:balance;}
+#portfolio .portfolio-grid {grid-auto-rows:minmax(248px,auto);}
+#portfolio .portfolio-photo {border-radius:var(--v5-radius);overflow:hidden;}
+#portfolio .portfolio-photo figcaption {z-index:2;text-shadow:0 1px 10px rgba(0,0,0,.32);}
+.veltro-identity-grid {align-items:center;}
+.veltro-identity-copy {border-left:2px solid rgba(195,139,78,.38);padding-left:clamp(15px,3vw,34px);}
+.veltro-tech-grid article {border-radius:var(--v5-radius);background:var(--white);box-shadow:none;}
+.veltro-tech-grid article:hover{border-color:rgba(195,139,78,.4);}
+.veltro-tech-grid h3 {font-weight:750;letter-spacing:-.02em;}
+#assinaturas .plan-card {border-radius:var(--v5-radius-lg);}
+#assinaturas .plans-grid {gap:18px;}
+.veltro-faq details {box-shadow:none;}
+/* VYZO Studio sales: two distinct honest paths. */
+.final-cta-inner {display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:18px;padding:clamp(26px,5vw,55px);}
+.final-cta h2 {max-width:12ch;font-size:clamp(2.5rem,4.8vw,5rem);line-height:.97;text-wrap:balance;}
+.final-cta-inner .btn {white-space:normal;max-width:240px;min-height:58px;padding:12px 20px;text-align:center;font-size:.88rem;}
+.final-cta-inner .veltro-sales-link {background:#C38B4E;color:#0C1523 !important;border:1px solid #C38B4E;font-weight:800;}
+.final-cta-inner .veltro-sales-link:hover {background:#E3B989;color:#0C1523 !important;}
+/* Flat surfaces for tables and controls; independently designed dark mode. */
+html[data-theme="dark"] .veltro-service-filters button {color:#E4ECF6;border-color:rgba(214,224,236,.32);}
+html[data-theme="dark"] .veltro-service-filters button[aria-pressed="true"]{background:#E6EBF2;border-color:#E6EBF2;color:#172A43;}
+html[data-theme="dark"] .veltro-booking-progress span.is-complete{color:#E7D0B4;background:rgba(195,139,78,.13);border-color:rgba(195,139,78,.39);}
+html[data-theme="dark"] .veltro-booking-progress span.is-active{background:#E6EBF2;border-color:#E6EBF2;color:#172A43;}
+html[data-theme="dark"] .veltro-identity-copy{border-color:rgba(195,139,78,.43);}
+html[data-theme="dark"] .veltro-tech-grid article {background:#1C2F47;border-color:rgba(214,224,236,.24);}
+html[data-theme="dark"] #assinaturas .plan-card:not(.plan-featured){background:#1C2F47;border-color:rgba(214,224,236,.24);}
+html[data-theme="dark"] #assinaturas .plan-card:not(.plan-featured) :is(h3,p,li){color:#F5F6FA;}
+html[data-theme="dark"] .veltro-tech-grid article:hover{border-color:rgba(195,139,78,.48);}
+html[data-theme="dark"] .veltro-faq details {background:#1C2F47;}
+/* Keep admin as a functional UI, with shared visual language. */
+.admin-page .login-card,.admin-page .management-card,.admin-page .admin-stat-card,.admin-page .report-card {border-radius:var(--v5-radius);}
+.admin-page input,.admin-page textarea,.admin-page select{accent-color:var(--v5-champagne);}
+.admin-page :is(input,textarea,select,button,a):focus-visible {outline:3px solid #C38B4E;outline-offset:2px;}
+@media(max-width:1180px){
+ .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+ .hero-media{min-height:540px;}
+ .final-cta-inner{grid-template-columns:minmax(0,1fr) auto;}
+ .final-cta-inner > div{grid-column:1/-1;}
+ .final-cta-inner .btn{max-width:none;}
+}
+@media(max-width:830px){
+ .hero-grid{grid-template-columns:1fr;gap:32px;}
+ .hero-media{min-height:min(80vw,610px);max-width:650px;}
+ .hero h1{font-size:clamp(4.1rem,11vw,7.5rem);}
+ .hero .quick-info{grid-template-columns:repeat(3,minmax(0,1fr));}
+ .final-cta-inner{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:680px){
+ html {scroll-padding-top:72px;}
+ .hero {padding:32px 0 50px;}
+ .hero-grid {gap:24px;}
+ .hero h1{font-size:clamp(3.55rem,13vw,5.8rem);line-height:.94;max-width:12.5ch;}
+ .hero-lead {font-size:.97rem;line-height:1.55;margin-top:18px;}
+ .hero-media{min-height:clamp(320px,105vw,490px);width:100%;}
+ .hero .hero-brand-card,html[data-theme="dark"] .hero .hero-brand-card{min-height:90px;padding:12px 15px;bottom:12px;right:12px;width:min(63%,208px);}
+ .hero .hero-brand-card img{max-height:37px;width:112px;}
+ .hero .hero-brand-card p{font-size:.65rem;line-height:1.35;}
+ .hero .hero-actions .btn{font-size:.84rem;min-height:48px;padding:9px 13px;}
+ .hero .quick-info{gap:6px;margin-top:19px;grid-template-columns:repeat(3,minmax(0,1fr));}
+ .hero .quick-info div{padding:11px 9px;min-width:0;}
+ .hero .quick-info strong{overflow-wrap:anywhere;font-size:.72rem;}
+ .hero .quick-info .important-number{font-size:.8rem !important;}
+ .hero .quick-info span{font-size:.55rem;letter-spacing:.04em;}
+ .veltro-service-filters{flex-wrap:nowrap;overflow:auto hidden;scrollbar-width:none;padding:1px 0 11px;overscroll-behavior-x:contain;}
+ .veltro-service-filters button{flex:0 0 auto;white-space:nowrap;min-height:42px;padding:9px 13px;font-size:.78rem;}
+ .veltro-booking-progress {gap:5px;}
+ .veltro-booking-progress span {padding:6px 9px;font-size:.66rem;}
+ #portfolio .portfolio-grid {grid-auto-rows:minmax(190px,auto);}
+ .veltro-identity-copy{padding-left:17px;}
+ .final-cta-inner{grid-template-columns:1fr;gap:11px;}
+ .final-cta-inner>div{grid-column:auto;}
+ .final-cta-inner .btn{width:100%;min-height:49px;}
+ .final-cta h2{font-size:clamp(2.6rem,9.5vw,4.3rem);}
+}
+@media(max-width:374px){
+ .hero h1{font-size:clamp(3.15rem,12.3vw,4rem);}
+ .hero .quick-info {grid-template-columns:1fr;}
+ .hero .quick-info div{padding:9px 12px;}
+ .hero .quick-info .important-number{font-size:.88rem !important;}
+ .veltro-booking-progress span {font-size:.62rem;}
+}
+@media(prefers-reduced-motion:reduce){
+ .veltro-service-filters button{transition:none;}
+ .site-header,.hero .photo-main img{transition:none;}
+}
